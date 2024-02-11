@@ -17,25 +17,25 @@
                         .key Сумма с комиссией
                         .value 280 руб
                 .buttons
-                    app-button(@click="$emit('pay')") Я оплатил
-                    app-button(type="secondary") Не удается перевести по реквизитам
+                    v-button(@click="$emit('pay')") Я оплатил
+                    v-button(type="secondary") Не удается перевести по реквизитам
 
         .qr-code(v-if="false")
             .title Для того чтобы оплатить
             .subtitle Отсканируйте QR-код в мобильном приложении банка или штатной камерой телефона
             img.code(src="/images/code.png")
-            app-button.button(@click="$emit('pay')") Я оплатил
+            v-button.button(@click="$emit('pay')") Я оплатил
 
 </template>
 
 <script>
-import AppButton from '@/components/common/AppButton.vue';
+import VButton from '@/components/common/VButton.vue';
 
 export default {
     name: 'PaymentWindow',
 
     components: {
-        AppButton,
+        VButton,
     },
 
     props: {

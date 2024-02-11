@@ -27,7 +27,7 @@ import { converBytesToSize } from '@/helpers/file.js';
 import { sliceStringAddDot } from '@/helpers/string.js';
 
 export default {
-    name: 'AppFileLoader',
+    name: 'VFileLoader',
 
     emits: ['change'],
 

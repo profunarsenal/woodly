@@ -1,6 +1,19 @@
 <template lang="pug">
     router-view
+    v-modal
 </template>
+
+<script>
+import VModal from '@/components/common/VModal.vue';
+
+export default {
+    name: 'App',
+
+    components: {
+        VModal,
+    },
+};
+</script>
 
 <style lang="sass">
 #app

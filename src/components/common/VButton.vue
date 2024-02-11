@@ -4,22 +4,22 @@
         :disabled="isLoading || isDisabled"
         @click="$emit('click')"
     )
-        app-loader(v-if="isLoading")
+        v-loader(v-if="isLoading")
         template(v-else)
             slot
             slot(name="icon")
 </template>
 
 <script>
-import AppLoader from '@/components/common/AppLoader.vue';
+import VLoader from '@/components/common/VLoader.vue';
 
 export default {
-    name: 'AppButton',
+    name: 'VButton',
 
     emits: ['click'],
 
     components: {
-        AppLoader,
+        VLoader,
     },
 
     props: {
