@@ -38,10 +38,4 @@ export const PAYMENT_SYSTEMS = [
         title: 'Тинькофф',
         type: 'tinkoff',
     },
-    {
-        id: 4,
-        icon: '',
-        title: 'Другой банк',
-        type: 'other',
-    },
 ];

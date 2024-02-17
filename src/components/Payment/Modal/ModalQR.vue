@@ -2,25 +2,20 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title Отменить пополнение?
-        .text Если вы уже перевели деньги, после отмены обратитесь в поддержку. При частой отмене система может временно приостановить возможность пополнения.
-        .buttons
-            v-button(
-                type="negative"
-                @click="cancelPayment"
-            ) Отменить
-            v-button(
-                type="secondary"
-                @click="close"
-            ) Назад
+        .title Отсканируйте QR-код
+        .text Это можно сделать в мобильном приложении банка или штатной камерой телефона
+        img.code(src="/images/code.png")
+        v-button(
+            type="secondary"
+            @click="close"
+        ) Закрыть
 </template>
 
 <script>
 import VButton from '@/components/common/VButton.vue';
-import { PAYMENT_STATUSES } from '@/helpers/constants.js';
 
 export default {
-    name: 'ModalCancelPayment',
+    name: 'ModalQR',
 
     components: {
         VButton,
@@ -30,18 +25,15 @@ export default {
         close() {
             this.$store.commit('modal/close');
         },
-
-        cancelPayment() {
-            this.$store.commit('payment/setStatus', PAYMENT_STATUSES.canceled);
-            this.close();
-        },
     },
 };
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .wrapper
     position: relative
+    display: flex
+    flex-direction: column
     width: 44.2rem
     padding: 2rem 2.4rem 2.4rem 2.4rem
     background-color: $color-white
@@ -69,10 +61,6 @@ export default {
         line-height: 2rem
         color: $color-gray-dark
         margin-bottom: 4rem
-    .buttons
-        display: flex
-        align-items: center
-        gap: 0.8rem
-        &:deep(.button)
-            flex: 1
+    .code
+        margin-bottom: 4rem
 </style>

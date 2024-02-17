@@ -1,16 +1,27 @@
 <template lang="pug">
-    router-view
+    component(:is="layout")
     v-modal
 </template>
 
 <script>
 import VModal from '@/components/common/VModal.vue';
+import MainLayout from '@/layouts/MainLayout.vue';
+import EmptyLayout from '@/layouts/EmptyLayout.vue';
 
 export default {
     name: 'App',
 
     components: {
+        MainLayout,
+        EmptyLayout,
         VModal,
+    },
+
+    computed: {
+        layout() {
+            const layoutName = this.$route.meta.layout || 'main';
+            return `${layoutName}-layout`;
+        },
     },
 };
 </script>

@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VLoader from '@/components/common/VLoader.vue';
 import VButton from '@/components/common/VButton.vue';
 import VFileLoader from '@/components/common/VFileLoader.vue';
@@ -51,21 +52,12 @@ export default {
     },
 
     computed: {
-        isLoadingStatus() {
-            return this.status === PAYMENT_STATUSES.loading;
-        },
-
-        isSuccessStatus() {
-            return this.status === PAYMENT_STATUSES.success;
-        },
-
-        isFailStatus() {
-            return this.status === PAYMENT_STATUSES.fail;
-        },
-
-        isCanceledStatus() {
-            return this.status === PAYMENT_STATUSES.canceled;
-        },
+        ...mapGetters({
+            isLoadingStatus: 'payment/isLoadingStatus',
+            isSuccessStatus: 'payment/isSuccessStatus',
+            isFailStatus: 'payment/isFailStatus',
+            isCanceledStatus: 'payment/isCanceledStatus',
+        }),
 
         icon() {
             return {

@@ -19,6 +19,10 @@ export default {
 
     components: {
         ModalCancelPayment: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalCancel.vue')),
+        ModalInsurance: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalInsurance.vue')),
+        ModalQR: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalQR.vue')),
+        ModalMoreInfo: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalMoreInfo.vue')),
+        ModalCardQiwi: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalCardQiwi.vue')),
     },
 
     computed: {
@@ -54,10 +58,18 @@ export default {
     width: 100%
     height: 100%
     background-color: rgba(0, 0, 0, 0.6)
+    padding-top: 4rem
+    overflow-y: auto
+    .wrapper
+        margin: 0 auto
     &.center
         display: flex
         align-items: center
         justify-content: center
+        padding: 0
+        overflow-y: hidden
+        .wrapper
+            margin: 0
 
 .modal-enter-active,
 .modal-leave-active
