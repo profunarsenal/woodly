@@ -42,7 +42,7 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .button-copy
     display: flex
     gap: 0.8rem

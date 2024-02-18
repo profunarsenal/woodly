@@ -4,8 +4,7 @@ export default {
     state: {
         component: '',
         componentData: {},
-        // positionCenter: true,
-        positionCenter: false,
+        positionCenter: true,
     },
 
     mutations: {

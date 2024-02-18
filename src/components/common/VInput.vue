@@ -6,6 +6,7 @@
             :type="type"
             :placeholder="placeholder"
             @input="input"
+            :disabled="isDisabled"
         )
 </template>
 
@@ -35,17 +36,22 @@ export default {
             type: String,
             default: '',
         },
+
+        isDisabled: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     methods: {
-        input() {
+        input(event) {
             this.$emit('update:modelValue', event.target.value);
         },
     },
 };
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .input-wrapper
     display: flex
     flex-direction: column
@@ -61,7 +67,17 @@ export default {
         height: 4.8rem
         &::placeholder
             font-size: 1.6rem
+            color: $color-gray-dark
+        &:not(:disabled)
+            &:hover
+                border: 0.1rem solid $color-gray-100
+            &:focus,
+            &:active
+                border: 0.1rem solid $color-violet-100
+        &:disabled
             color: $color-silver-light
+            &::placeholder
+                color: $color-silver-light
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button
             -webkit-appearance: none

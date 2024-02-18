@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .wrapper
     position: relative
     display: flex

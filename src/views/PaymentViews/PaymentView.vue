@@ -60,11 +60,14 @@
                     inline-svg.icon(src="/icons/info.svg")
                     ul.menu(v-if="isVisibleMenuInstructions")
                         li.menu-item(
-                            v-for="item in menuInstructions.card"
+                            v-for="item in menuInstructions.sbp"
                             :key="item.modal"
                             @click="openModalInstructions(item.modal)"
                         )
-                            inline-svg.icon(:src="`/icons/pay/${item.icon}.svg`")
+                            inline-svg.icon(
+                                :src="`/icons/pay/${item.icon}.svg`"
+                                :class="`icon-${item.icon}`"
+                            )
                             .text {{ item.text }}
 </template>
 
@@ -89,11 +92,34 @@ const MENU_INSTRUCTIONS = {
             text: 'Оплата на карту c Yoomoney',
             icon: 'yoomoney',
             modal: {
-                component: '',
+                component: 'ModalCardYoomoney',
             },
         },
     ],
-    sbp: [],
+    sbp: [
+        {
+            text: 'Оплата через СБП',
+            icon: 'sbp',
+            modal: {
+                component: 'ModalSbp',
+                positionCenter: true,
+            },
+        },
+        {
+            text: 'Оплата с Qiwi через СБП',
+            icon: 'qiwi',
+            modal: {
+                component: 'ModalSbpQiwi',
+            },
+        },
+        {
+            text: 'Оплата с Yoomoney через СБП',
+            icon: 'yoomoney',
+            modal: {
+                component: 'ModalSbpYoomoney',
+            },
+        },
+    ],
 };
 
 export default {
@@ -283,12 +309,12 @@ export default {
             bottom: calc( 100% - -0.4rem )
             right: 0
             padding: 0.8rem
-            min-width: 24rem
+            min-width: max-content
             background-color: $color-white
             border: 0.1rem solid $color-gray-100
             border-radius: 1.2rem
-            box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04)
-            box-shadow: 0px 4px 32px 0px rgba(0, 0, 0, 0.16)
+            box-shadow: 0 0 0.4rem 0 rgba(0, 0, 0, 0.04)
+            box-shadow: 0 0.4 3.2 0 rgba(0, 0, 0, 0.16)
             .menu-item
                 display: flex
                 gap: 0.6rem
@@ -299,4 +325,8 @@ export default {
                     line-height: 1.8rem
                 .icon
                     flex: 0 0 1.6rem
+                    height: 1.6rem
+                    &-sbp
+                        box-shadow: 0 0 0.8rem 0 rgba(0, 0, 0, 0.12)
+                        border-radius: 50%
 </style>

@@ -23,6 +23,10 @@ export default {
         ModalQR: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalQR.vue')),
         ModalMoreInfo: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalMoreInfo.vue')),
         ModalCardQiwi: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalCardQiwi.vue')),
+        ModalCardYoomoney: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalCardYoomoney.vue')),
+        ModalSbp: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbp.vue')),
+        ModalSbpYoomoney: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbpYoomoney.vue')),
+        ModalSbpQiwi: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbpQiwi.vue')),
     },
 
     computed: {
