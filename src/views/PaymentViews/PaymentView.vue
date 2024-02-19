@@ -41,7 +41,10 @@
                             v-button(@click="pay") Я оплатил
                             v-button(type="secondary") Не удается перевести по реквизитам
 
-        template(#buttons)
+        template(
+            v-if="hasBottomButtons"
+            #buttons
+        )
             .buttons-info(:class="buttonsClasses")
                 button.button(@click="openModalInsurance")
                     span.text Страхование платежа
@@ -53,7 +56,7 @@
                     span.text Больше информации
                     inline-svg.icon(src="/icons/info.svg")
                 button.button(
-                    v-if="selectedSystem"
+                    v-if="isVisibleButtonInstructions"
                     @click="openMenuInstructions"
                 )
                     span.text Инструкции по оплате
@@ -72,11 +75,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import PaymentWrapper from '@/components/Payment/PaymentWrapper.vue';
 import PaymentStatus from '@/components/Payment/PaymentStatus.vue';
 import VButton from '@/components/common/VButton.vue';
 import VButtonCopy from '@/components/common/VButtonCopy.vue';
+import { PAYMENT_STATUSES } from '@/helpers/constants.js';
+
 import { PAYMENT_SYSTEMS } from '@/helpers/testData';
 
 const MENU_INSTRUCTIONS = {
@@ -147,12 +152,27 @@ export default {
             status: ({ payment }) => payment.status,
         }),
 
+        ...mapGetters({
+            isCanceledStatus: 'payment/isCanceledStatus',
+            isLoadingStatus: 'payment/isLoadingStatus',
+            isSuccessStatus: 'payment/isSuccessStatus',
+            isFailStatus: 'payment/isFailStatus',
+        }),
+
         buttonsClasses() {
             return { row: this.selectedSystem };
         },
 
         isVisibleSystems() {
             return this.paymentSystems.length && !this.selectedSystem;
+        },
+
+        isVisibleButtonInstructions() {
+            return this.selectedSystem && !this.isLoadingStatus && !this.isSuccessStatus;
+        },
+
+        hasBottomButtons() {
+            return !this.isCanceledStatus && !this.isFailStatus;
         },
     },
 
@@ -162,7 +182,11 @@ export default {
         },
 
         pay() {
-            console.log("PAY")
+            this.$store.commit('payment/setStatus', PAYMENT_STATUSES.loading);
+
+            setTimeout(() => {
+                this.$store.commit('payment/setStatus', PAYMENT_STATUSES.fail);
+            }, 1000)
         },
 
         openModalInsurance() {

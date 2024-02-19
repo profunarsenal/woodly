@@ -3,16 +3,21 @@
         input.input(
             id="file-input"
             type="file"
-            ref="file"
+            ref="files"
+            multiple
             @change="upload"
         )
-        .file(v-if="file")
-            inline-svg.icon-file(src="/icons/file.svg")
-            .info
-                .name {{ fileName }}
-                .weight {{ fileSize }}
-            button.remove(@click="remove")
-                inline-svg.icon-close(src="/icons/close.svg")
+        template(v-if="files.length")
+            .file(
+                v-for="file in files"
+                :key="file"
+            )
+                inline-svg.icon-file(src="/icons/file.svg")
+                .info
+                    .name {{ setFileName(file) }}
+                    .weight {{ setFileSize(file) }}
+                button.remove(@click="remove(file.name)")
+                    inline-svg.icon-close(src="/icons/close.svg")
         label.loader(
             v-else
             for="file-input"
@@ -33,32 +38,48 @@ export default {
 
     data() {
         return {
-            file: null,
+            files: [],
         };
-    },
-
-    computed: {
-        fileName() {
-            const MAX_LENGTH = 35;
-            return sliceStringAddDot(this.file?.name, MAX_LENGTH);
-        },
-
-        fileSize() {
-            return converBytesToSize(this.file?.size);
-        },
     },
 
     methods: {
         upload(event) {
             const { files } = event.target;
-            this.file = files[0];
-            this.$emit('change', this.file);
+            this.files = files;
+            this.$emit('change', this.files);
         },
 
-        remove() {
-            this.$refs.file.value = null;
-            this.file = null;
-            this.$emit('change', this.file);
+        remove(name) {
+            const files = [...this.files];
+            const filteredFiles = files.filter(file => file.name !== name);
+
+            if (filteredFiles.length) {
+                const dt = new DataTransfer();
+
+                filteredFiles.forEach(item => {
+                    const file = new File([item], item.name);
+                    dt.items.add(file);
+                })
+
+                this.$refs.files.files = dt.files;
+                this.files = dt.files;
+                this.$emit('change', this.files);
+
+                return;
+            }
+
+            this.$refs.files.value = null;
+            this.files = [];
+            this.$emit('change', this.files);
+        },
+
+        setFileName(file) {
+            const MAX_LENGTH = 35;
+            return sliceStringAddDot(file?.name, MAX_LENGTH);
+        },
+
+        setFileSize(file) {
+            return converBytesToSize(file?.size);
         },
     },
 };
@@ -134,4 +155,7 @@ export default {
         line-height: 1.8rem
     .weight
         color: $color-gray-dark
+
+.file + .file
+    margin-top: 0.6rem
 </style>
