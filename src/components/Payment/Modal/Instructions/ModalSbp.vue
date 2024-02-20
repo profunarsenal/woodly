@@ -8,7 +8,10 @@
             img.image(src="/images/logo-sbp.png")
             .content
                 .text(v-html="informerText")
-                button.bank-list Список банков с оплатой через СБП
+                a.bank-list(
+                    href="https://sbp.nspk.ru/participants"
+                    target="_blank"
+                ) Список банков с оплатой через СБП
         
         ul.instructions
             li.item(
