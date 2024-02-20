@@ -19,7 +19,7 @@
         template(v-if="isFailStatus")
             v-button.button(type="secondary") Начать заново
             .or или
-            v-file-loader.file-loader
+            v-file-loader.file-loader(:extensions="imageExtensions")
             v-button.button(disabled) Отправить на проверку
 
         v-button.button(
@@ -49,6 +49,12 @@ export default {
             type: String,
             default: '',
         },
+    },
+
+    data() {
+        return {
+            imageExtensions: '.jpg, .gif, .jpeg, .png, .webp',
+        };
     },
 
     computed: {

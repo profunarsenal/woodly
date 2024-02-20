@@ -4,6 +4,7 @@
             id="file-input"
             type="file"
             ref="files"
+            :accept="extensions"
             multiple
             @change="upload"
         )
@@ -19,8 +20,9 @@
                 button.remove(@click="remove(file.name)")
                     inline-svg.icon-close(src="/icons/close.svg")
         label.loader(
-            v-else
             for="file-input"
+            @dragover.prevent="dragover"
+            @drop.prevent="drop"
         )
             span.text Выберите файл
             span.text.sub или перетащите сюда
@@ -35,6 +37,13 @@ export default {
     name: 'VFileLoader',
 
     emits: ['change'],
+
+    props: {
+        extensions: {
+            type: String,
+            default: '',
+        },
+    },
 
     data() {
         return {
@@ -80,6 +89,16 @@ export default {
 
         setFileSize(file) {
             return converBytesToSize(file?.size);
+        },
+
+        dragover(event) {
+            event.dataTransfer.dropEffect = 'copy';
+        },
+
+        drop(event) {
+            const files = event.dataTransfer.files;
+            this.files = files;
+            this.$emit('change', this.files);
         },
     },
 };
@@ -156,6 +175,7 @@ export default {
     .weight
         color: $color-gray-dark
 
-.file + .file
+.file + .file,
+.file + .loader
     margin-top: 0.6rem
 </style>

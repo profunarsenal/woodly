@@ -7,6 +7,8 @@
             component(
                 :is="component"
                 :componentData="componentData"
+                class="test"
+                v-click-outside="close"
             )
 </template>
 
