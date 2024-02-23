@@ -10,6 +10,11 @@ const router = createRouter({
             component: HomeView,
         },
         {
+            path: '/profile/cards',
+            name: 'ProfileCards',
+            component: () => import('@/views/Profile/ProfileCards.vue'),
+        },
+        {
             path: '/payment',
             name: 'PaymentView',
             component: () => import('@/views/PaymentViews/PaymentView.vue'),

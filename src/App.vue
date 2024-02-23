@@ -5,21 +5,21 @@
 
 <script>
 import VModal from '@/components/common/VModal.vue';
-import MainLayout from '@/layouts/MainLayout.vue';
+import ProfileLayout from '@/layouts/ProfileLayout.vue';
 import EmptyLayout from '@/layouts/EmptyLayout.vue';
 
 export default {
     name: 'App',
 
     components: {
-        MainLayout,
+        ProfileLayout,
         EmptyLayout,
         VModal,
     },
 
     computed: {
         layout() {
-            const layoutName = this.$route.meta.layout || 'main';
+            const layoutName = this.$route.meta.layout || 'profile';
             return `${layoutName}-layout`;
         },
     },

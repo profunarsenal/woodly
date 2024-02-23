@@ -6,7 +6,7 @@
         template(v-else)
             .content
                 .logo
-                    img(src="/images/logo.png")
+                    inline-svg(src="/images/logo.svg")
 
                 .timer(v-if="!isCanceledStatus")
                     .text Осталось времени на оплату
@@ -142,9 +142,10 @@ export default {
 .logo
     margin-bottom: 1.6rem
     text-align: center
-    img
+    svg
         width: 13.4rem
         height: 3.2rem
+        fill: $color-violet-100
 
 .timer
     position: absolute

@@ -7,7 +7,7 @@ export default {
     name: 'HomeView',
 
     mounted() {
-        this.$router.push('/payment');
+        this.$router.push('/profile/cards');
     },
 };
 </script>
