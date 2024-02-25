@@ -1,20 +1,20 @@
 <template lang="pug">
-    .tabs
-        .tab(
-            v-for="tab in tabs"
-            :key="tab.id"
-            :class="setActiveClass(tab.id)"
-            @click="setActiveTab(tab.id)"
+    .controls
+        .control(
+            v-for="control in controls"
+            :key="control.id"
+            :class="setActiveClass(control.id)"
+            @click="setActiveControl(control.id)"
         )
-            .text {{ tab.value }}
+            .text {{ control.value }}
 </template>
 
 <script>
 export default {
-    name: 'VTabs',
+    name: 'VSegmentControl',
 
     props: {
-        tabs: {
+        controls: {
             type: Array,
             default: () => [],
         },
@@ -30,7 +30,7 @@ export default {
             return { active: this.modelValue === id };
         },
 
-        setActiveTab(id) {
+        setActiveControl(id) {
             this.$emit('update:modelValue', id)
         },
     },
@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.tabs
+.controls
     display: flex
     align-items: center
     justify-content: space-between
@@ -47,7 +47,7 @@ export default {
     padding: 0.3rem
     height: 5rem
     background-color: $color-gray-light
-    .tab
+    .control
         position: relative
         display: flex
         align-items: center

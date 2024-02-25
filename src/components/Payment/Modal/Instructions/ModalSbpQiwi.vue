@@ -4,9 +4,9 @@
             inline-svg.icon(src="/icons/close.svg")
         .title Инструкция по оплате с QIWI через СБП
 
-        v-tabs.tabs(
+        v-segment-control.controls(
             v-model="currentTab"
-            :tabs="tabs"
+            :controls="controls"
         )
 
         ul.instructions
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import VTabs from '@/components/common/VTabs.vue';
+import VSegmentControl from '@/components/common/VSegmentControl.vue';
 
 const INSTRUCTIONS = [
     [
@@ -104,7 +104,7 @@ export default {
     name: 'ModalSbpQiwi',
 
     components: {
-        VTabs,
+        VSegmentControl,
     },
 
     data() {
@@ -121,7 +121,7 @@ export default {
 
     created() {
         this.instructions = INSTRUCTIONS;
-        this.tabs = [
+        this.controls = [
             { id: 0, value: 'Сайт' },
             { id: 1, value: 'Мобильное приложение' },
         ];
@@ -154,7 +154,7 @@ export default {
         font-weight: 600
         line-height: 2.8rem
         margin-bottom: 4rem
-    .tabs
+    .controls
         margin-bottom: 4rem
     .instructions
         display: flex
