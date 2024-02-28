@@ -13,6 +13,8 @@
 export default {
     name: 'VSegmentControl',
 
+    emits: ['update:modelValue'],
+
     props: {
         controls: {
             type: Array,

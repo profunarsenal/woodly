@@ -5,10 +5,10 @@
         v-if="isOpen"
         v-click-outside="closeMenu"
     )
-        button.menu-item
+        button.menu-item(@click="openModalLimit")
             inline-svg.menu-icon(src="/icons/settings.svg")
             .menu-text Установить лимит
-        button.menu-item
+        button.menu-item(@click="openModalEdit")
             inline-svg.menu-icon(src="/icons/edit.svg")
             .menu-text Редактировать карту
         button.menu-item
@@ -46,6 +46,19 @@ export default {
 
         closeMenu() {
             this.isOpen = false;
+        },
+
+        openModalLimit() {
+            this.$store.commit('modal/open', {
+                component: 'ModalSetLimit',
+                positionCenter: true,
+            });
+        },
+
+        openModalEdit() {
+            this.$store.commit('modal/open', {
+                component: 'ModalCard',
+            });
         },
     },
 }

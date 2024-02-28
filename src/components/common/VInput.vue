@@ -65,6 +65,8 @@ export default {
         background-color: $color-gray-light
         border-radius: 1.2rem
         height: 4.8rem
+        font-size: 1.6rem
+        line-height: 2.4rem
         &::placeholder
             font-size: 1.6rem
             color: $color-gray-dark

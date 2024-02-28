@@ -39,3 +39,30 @@ export const PAYMENT_SYSTEMS = [
         type: 'tinkoff',
     },
 ];
+
+export const BANKS = [
+    {
+        id: 1,
+        title: 'Сбербанк',
+    },
+    {
+        id: 2,
+        title: 'Тинькофф',
+    },
+    {
+        id: 3,
+        title: 'Райффайзен',
+    },
+    {
+        id: 4,
+        title: 'Альфабанк',
+    },
+    {
+        id: 5,
+        title: 'Газпромбанк',
+    },
+    {
+        id: 6,
+        title: 'Каспи (KZ)',
+    },
+];

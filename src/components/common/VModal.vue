@@ -29,6 +29,8 @@ export default {
         ModalSbp: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbp.vue')),
         ModalSbpYoomoney: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbpYoomoney.vue')),
         ModalSbpQiwi: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbpQiwi.vue')),
+        ModalSetLimit: defineAsyncComponent(() => import('@/components/Profile/ProfileCards/Modal/ModalSetLimit.vue')),
+        ModalCard: defineAsyncComponent(() => import('@/components/Profile/ProfileCards/Modal/ModalCard.vue')),
     },
 
     computed: {
@@ -64,7 +66,7 @@ export default {
     width: 100%
     height: 100%
     background-color: rgba(0, 0, 0, 0.6)
-    padding-top: 4rem
+    padding: 4rem 0
     overflow-y: auto
     .wrapper
         margin: 0 auto

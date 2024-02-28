@@ -214,6 +214,11 @@ export default {
             this.isVisibleMenuInstructions = !this.isVisibleMenuInstructions;
         },
     },
+
+    async mounted() {
+        const response = await this.$api.payment.createTransactions();
+        console.log(response)
+    },
 };
 </script>
 
