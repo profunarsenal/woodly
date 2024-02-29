@@ -4,3 +4,36 @@
 
 html
     font-size: 62.5%
+
+// TABLE
+.thead-row
+    position: sticky
+    z-index: 10
+    top: 0
+    left: 0
+    .thead-item
+        position: relative
+        text-align: left
+        border: none
+        padding: 1rem 1.2rem
+        background-color: $color-gray-light-2
+        border: 0.1rem solid $color-gray-100
+
+.thead-row:first-child .thead-item:first-child
+  border-top-left-radius: 1rem
+
+.thead-row:first-child .thead-item:last-child
+  border-top-right-radius: 1rem
+
+.tbody-row
+    .tbody-item
+        font-size: 1.4rem
+        line-height: 2rem
+        padding: 0.8rem 1.2rem
+        border: 0.1rem solid $color-gray-100
+
+.tbody-row:last-child .tbody-item:first-child
+  border-bottom-left-radius: 1rem
+
+.tbody-row:last-child .tbody-item:last-child
+  border-bottom-right-radius: 1rem

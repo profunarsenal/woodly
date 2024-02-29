@@ -47,7 +47,6 @@
                     v-model="checkbox"
                     id="qiwi"
                     label="Разрешить перевод с QIWI"
-                    isDisabled
                 )
                 v-checkbox(
                     v-model="checkbox1"
@@ -130,6 +129,10 @@ export default {
         flex-direction: column
         gap: 2rem
         margin-bottom: 4rem
+    .checkboxes
+        display: flex
+        flex-direction: column
+        gap: 1.6rem
     .button
         width: 100%
 </style>

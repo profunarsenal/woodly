@@ -15,6 +15,16 @@ const router = createRouter({
             component: () => import('@/views/Profile/ProfileCards.vue'),
         },
         {
+            path: '/auto-payments/:id',
+            name: 'AutoPayments',
+            component: () => import('@/views/Profile/AutoPayments.vue'),
+        },
+        {
+            path: '/card-messages/:id',
+            name: 'CardMessages',
+            component: () => import('@/views/Profile/CardMessages.vue'),
+        },
+        {
             path: '/payment',
             name: 'PaymentView',
             component: () => import('@/views/PaymentViews/PaymentView.vue'),

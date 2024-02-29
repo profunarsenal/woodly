@@ -29,8 +29,8 @@ export default {
         ModalSbp: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbp.vue')),
         ModalSbpYoomoney: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbpYoomoney.vue')),
         ModalSbpQiwi: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbpQiwi.vue')),
-        ModalSetLimit: defineAsyncComponent(() => import('@/components/Profile/ProfileCards/Modal/ModalSetLimit.vue')),
-        ModalCard: defineAsyncComponent(() => import('@/components/Profile/ProfileCards/Modal/ModalCard.vue')),
+        ModalSetLimit: defineAsyncComponent(() => import('@/components/Profile/Cards/Modal/ModalSetLimit.vue')),
+        ModalCard: defineAsyncComponent(() => import('@/components/Profile/Cards/Modal/ModalCard.vue')),
     },
 
     computed: {

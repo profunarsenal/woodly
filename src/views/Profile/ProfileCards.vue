@@ -22,17 +22,17 @@
                 ) Включить сделки
         .table-wrapper
             v-table.table(
-                :headItems="headItems"
-                :bodyItems="bodyItems"
+                :headers="headItems"
+                :items="bodyItems"
             )
                 template(#status="{ item }")
                     inline-svg.status(
                         :class="setIcon(item.status).class"
                         :src="setIcon(item.status).src"
                     )
-                template(#head)
-                    th.head-item
-                template(#body="{ item }")
+                template(#thead)
+                    th.thead-item
+                template(#tbody="{ item }")
                     td.body-item
                         profile-card-menu(:item="item")
 
@@ -42,7 +42,7 @@
 <script>
 import AppPagination from '@/components/Pagination/AppPagination.vue';
 import VTable from '@/components/common/VTable.vue';
-import ProfileCardMenu from '@/components/Profile/ProfileCards/CardMenu.vue';
+import ProfileCardMenu from '@/components/Profile/Cards/CardMenu.vue';
 import VButton from '@/components/common/VButton.vue';
 
 export default {

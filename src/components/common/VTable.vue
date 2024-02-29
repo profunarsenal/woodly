@@ -1,74 +1,52 @@
 <template lang="pug">
-    table.table(
-        cellspacing="0"
-    )
-        thead.head
-            tr.head-row
-                th.head-item(
-                    v-for="headItem in headItems"
-                    :key="headItem.key"
-                )
-                    table-search(
-                        v-if="headItem.searchable"
-                        v-model="searchFields[headItem.key]"
-                        :item="headItem"
-                    )
-                    slot(
-                        v-else
-                        :name="`column-${headItem.key}`"
-                        :item="headItem"
-                    )
-                        .content
-                            .title {{ headItem.title }}
-                            .subtitle(v-if="headItem.subtitle") {{ headItem.subtitle }}
-
-                slot(name="head")
-        tbody.body
-            tr.body-row(
-                v-for="(bodyItem, bodyItemIndex) in bodyItems"
-                :key="bodyItemIndex"
+    table.table(cellspacing="0")
+        table-header(:headers="headers")
+            template(#thead)
+                slot(name="thead")
+        tbody.tbody
+            table-item(
+                v-for="(item, index) in items"
+                :key="index"
+                :item="item"
+                :headers="headers"
             )
-                td.body-item(
-                    v-for="(item, index)  in Object.entries(bodyItem)"
-                    :key="index"
+                template(
+                    v-for="header in headers"
+                    :key="header.key"
+                    v-slot:[header.key]
                 )
                     slot(
-                        :name="item[0]"
-                        :item="getTableItem(item)"
+                        :name="header.key"
+                        :item="item[header.key]"
                     )
-                        .title {{ item[1] }}
-
-                slot(
-                    name="body"
-                    :item="bodyItem"
-                )
+                template(#tbody)
+                    slot(
+                        name="tbody"
+                        :item="item"
+                    )
 </template>
 
 <script>
-import TableSearch from '@/components/Table/TableSearch.vue';
+import TableHeader from '@/components/common/Table/TableHeader.vue';
+import TableItem from '@/components/common/Table/TableItem.vue';
 
 export default {
     name: 'VTable',
 
     components: {
-        TableSearch,
+        TableHeader,
+        TableItem,
     },
 
     props: {
-        headItems: {
+        headers: {
             type: Array,
             defaul: () => [],
         },
-        bodyItems: {
+        items: {
             type: Array,
             defaul: () => [],
         },
-    },
-
-    data() {
-        return {
-            searchFields: {},
-        };
     },
 
     methods: {
@@ -81,54 +59,9 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .table
     width: 100%
     border: none
     border-collapse: separate
-    .head-row
-        position: sticky
-        z-index: 10
-        top: 0
-        left: 0
-        .head-item
-            position: relative
-            text-align: left
-            border: none
-            padding: 1rem 1.2rem
-            background-color: $color-gray-light-2
-            border: 0.1rem solid $color-gray-100
-            .content
-                display: flex
-                align-items: center
-                gap: 0.6rem
-                .title
-                    font-weight: 500
-                    font-size: 1.4rem
-                    line-height: 2rem
-                .subtitle
-                    font-weight: 400
-                    font-size: 1.2rem
-                    line-height: 1.8rem
-                    color: $color-gray-dark
-                    align-self: flex-end
-    .body-row
-        .body-item
-            font-size: 1.4rem
-            line-height: 2rem
-            padding: 0.8rem 1.2rem
-            border: 0.1rem solid $color-gray-100
-
-.head-row:first-child .head-item:first-child
-  border-top-left-radius: 1rem
-
-.head-row:first-child .head-item:last-child
-  border-top-right-radius: 1rem
-
-.body-row:last-child .body-item:first-child
-  border-bottom-left-radius: 1rem
-
-.body-row:last-child .body-item:last-child
-  border-bottom-right-radius: 1rem
-
 </style>

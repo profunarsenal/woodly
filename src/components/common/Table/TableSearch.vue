@@ -65,6 +65,10 @@ export default {
     &:hover
         .icon-search
             fill: $color-gray-dark
+    .title
+        font-weight: 500
+        font-size: 1.4rem
+        line-height: 2rem
     .icon-search,
     .icon-close
         width: 2rem

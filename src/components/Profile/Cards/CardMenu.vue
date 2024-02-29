@@ -11,10 +11,10 @@
         button.menu-item(@click="openModalEdit")
             inline-svg.menu-icon(src="/icons/edit.svg")
             .menu-text Редактировать карту
-        button.menu-item
+        button.menu-item(@click="openAutoPayments")
             inline-svg.menu-icon(src="/icons/cards.svg")
             .menu-text Автоплатежи
-        button.menu-item
+        button.menu-item(@click="openCardMessages")
             inline-svg.menu-icon(src="/icons/message.svg")
             .menu-text Общие СМС
         button.menu-item.negative
@@ -59,6 +59,14 @@ export default {
             this.$store.commit('modal/open', {
                 component: 'ModalCard',
             });
+        },
+
+        openAutoPayments() {
+            this.$router.push('/auto-payments/123');
+        },
+
+        openCardMessages() {
+            this.$router.push('/card-messages/123');
         },
     },
 }
