@@ -59,7 +59,8 @@ export default {
         fill: $color-white
 
 .sidebar
-    width: 22rem
+    min-width: 22rem
+    max-width: 22rem
     padding: 3.2rem 1.6rem 2.4rem
     display: flex
     flex-direction: column

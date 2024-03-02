@@ -33,7 +33,7 @@ export default {
         },
 
         setActiveControl(id) {
-            this.$emit('update:modelValue', id)
+            this.$emit('update:modelValue', id);
         },
     },
 };

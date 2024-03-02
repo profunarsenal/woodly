@@ -31,6 +31,8 @@ export default {
         ModalSbpQiwi: defineAsyncComponent(() => import('@/components/Payment/Modal/Instructions/ModalSbpQiwi.vue')),
         ModalSetLimit: defineAsyncComponent(() => import('@/components/Profile/Cards/Modal/ModalSetLimit.vue')),
         ModalCard: defineAsyncComponent(() => import('@/components/Profile/Cards/Modal/ModalCard.vue')),
+        ModalCardDelete: defineAsyncComponent(() => import('@/components/Profile/Cards/Modal/ModalCardDelete.vue')),
+        ModalCardRecovery: defineAsyncComponent(() => import('@/components/Profile/Cards/Modal/ModalCardRecovery.vue')),
     },
 
     computed: {

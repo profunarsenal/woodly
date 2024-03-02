@@ -5,7 +5,7 @@
             :key="header.key"
         )
             slot(:name="header.key")
-                .title {{ item[header.key] }}
+                .tbody-title {{ item[header.key] }}
 
         slot(name="tbody")
 </template>

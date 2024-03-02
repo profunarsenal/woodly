@@ -1,9 +1,9 @@
 <template lang="pug">
     .profile
-        app-sidebar(:items="sidebarItems")
+        app-sidebar.sidebar(:items="sidebarItems")
         .content
             router-view
-            app-footer
+            app-footer.footer
 </template>
 
 <script>
@@ -36,4 +36,17 @@ export default {
         display: flex
         flex-direction: column
         width: 100%
+        margin-left: 22rem
+    .sidebar
+        position: fixed
+        top: 0
+        left: 0
+        z-index: 50
+        height: 100%
+    .footer
+        position: fixed
+        bottom: 0
+        right: 0
+        width: calc( 100% - 22rem )
+        z-index: 50
 </style>

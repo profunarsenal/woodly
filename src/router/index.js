@@ -15,6 +15,11 @@ const router = createRouter({
             component: () => import('@/views/Profile/ProfileCards.vue'),
         },
         {
+            path: '/profile/sale',
+            name: 'ProfileSale',
+            component: () => import('@/views/Profile/ProfileSale.vue'),
+        },
+        {
             path: '/auto-payments/:id',
             name: 'AutoPayments',
             component: () => import('@/views/Profile/AutoPayments.vue'),

@@ -88,6 +88,6 @@ export default {
                 &:hover
                     background-color: $color-gray-100
             .icon
-                width: 2rem
-                height: 2rem
+                width: 1.8rem
+                height: 1.8rem
 </style>

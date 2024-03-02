@@ -17,7 +17,7 @@
                 )
                     slot(
                         :name="header.key"
-                        :item="item[header.key]"
+                        :item="item"
                     )
                 template(#tbody)
                     slot(

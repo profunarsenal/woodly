@@ -6,6 +6,7 @@
                 iconSrc="/icons/plus.svg"
                 type="outline"
                 size="small"
+                @click="openModalCard"
             ) Добавить
             .toggle-buttons
                 v-button(
@@ -20,30 +21,50 @@
                     size="small"
                     @click="onTransactions"
                 ) Включить сделки
-        .table-wrapper
-            v-table.table(
-                :headers="headItems"
-                :items="bodyItems"
-            )
-                template(#status="{ item }")
-                    inline-svg.status(
-                        :class="setIcon(item.status).class"
-                        :src="setIcon(item.status).src"
+        v-tabs.table-tabs(
+            v-model="activeTab"
+            :tabs="tableTabs"
+        )
+        v-table.table(
+            :headers="tableHeaders"
+            :items="cards"
+        )
+            template(#bankType="{ item }")
+                .bank {{ setBankType(item.bankType) }}
+            template(#transactionsLimit="{ item }")
+                .limit {{ `${item.paymentMin}-${item.paymentMax}` }}
+            template(#status="{ item }")
+                inline-svg.status(
+                    :class="setIcon(item.status).class"
+                    :src="setIcon(item.status).src"
+                )
+            template(#thead)
+                th.thead-item
+            template(#tbody="{ item }")
+                td.tbody-item
+                    v-action-menu(
+                        :controls="tableControls"
+                        :item="item"
                     )
-                template(#thead)
-                    th.thead-item
-                template(#tbody="{ item }")
-                    td.body-item
-                        profile-card-menu(:item="item")
-
-    app-pagination
+                        template(#button)
+                            button-mini(type="option")
+    app-pagination.pagination
 </template>
 
 <script>
 import AppPagination from '@/components/Pagination/AppPagination.vue';
 import VTable from '@/components/common/VTable.vue';
-import ProfileCardMenu from '@/components/Profile/Cards/CardMenu.vue';
 import VButton from '@/components/common/VButton.vue';
+import VTabs from '@/components/common/VTabs.vue';
+import VActionMenu from '@/components/common/VActionMenu.vue';
+import ButtonMini from '@/components/app/ButtonMini.vue';
+import { CARDS_TABLE_HEADERS } from '@/helpers/table';
+import { CARD_STATUSES, BANK_TYPES } from '@/helpers/catalogs';
+
+const TAB_KEYS = {
+    active: 'active',
+    deleted: 'deleted',
+};
 
 export default {
     name: 'ProfileCards',
@@ -51,262 +72,129 @@ export default {
     components: {
         AppPagination,
         VTable,
-        ProfileCardMenu,
         VButton,
+        VTabs,
+        VActionMenu,
+        ButtonMini,
     },
 
     data() {
         return {
-            headItems: [
-                {
-                    title: 'ID карты',
-                    key: 'id',
-                },
-                {
-                    title: 'Название',
-                    key: 'title',
-                },
-                {
-                    title: 'Номер карты',
-                    key: 'cardNumber',
-                    searchable: true,
-                },
-                {
-                    title: 'Банк',
-                    key: 'bank',
-                },
-                {
-                    title: 'Оборот',
-                    key: 'turnover',
-                    subtitle: 'сегодня',
-                },
-                {
-                    title: 'Лимит',
-                    key: 'limitToday',
-                    subtitle: 'сегодня',
-                },
-                {
-                    title: 'Лимит',
-                    key: 'paymentLimit',
-                    subtitle: 'на платеж',
-                },
-                {
-                    title: 'Статус',
-                    key: 'status',
-                },
+            tableHeaders: CARDS_TABLE_HEADERS,
+            tableTabs: [
+                { key: TAB_KEYS.active, title: 'Активные' },
+                { key: TAB_KEYS.deleted, title: 'Удаленные' },
             ],
-            bodyItems: [
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-                {
-                    id: 22157,
-                    title: 'Судоргина 56 №16',
-                    cardNumber: '2202 2062 5064 6689',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: false,
-                },
-                {
-                    id: 22158,
-                    title: 'Судоргина 57 №16',
-                    cardNumber: '2232 2062 5064 6687',
-                    bank: 'Сбербанк',
-                    turnover: '0 / 0',
-                    limitToday: '1 000 000 / 1 000',
-                    paymentLimit: '100 – 1 000 000',
-                    status: true,
-                },
-            ],
+            activeTab: TAB_KEYS.active,
             isActiveTransactions: false,
+            cards: [],
         }
+    },
+
+    computed: {
+        tableControlsTabActive() {
+            return [
+                {
+                    key: 'limit',
+                    icon: '/icons/settings.svg',
+                    title: 'Установить лимит',
+                    callback: (item) => {
+                        this.openModal('ModalSetLimit', true);
+                    },
+                },
+                {
+                    key: 'edit',
+                    icon: '/icons/edit.svg',
+                    title: 'Редактировать карту',
+                    callback: (item) => {
+                        this.openModal({
+                            component: 'ModalCard',
+                            item,
+                        });
+                    },
+                },
+                {
+                    key: 'auto',
+                    icon: '/icons/cards.svg',
+                    title: 'Автоплатежи',
+                    callback: (item) => {
+                        this.$router.push('/auto-payments/123');
+                    },
+                },
+                {
+                    key: 'message',
+                    icon: '/icons/message.svg',
+                    title: 'Общие СМС',
+                    callback: (item) => {
+                        this.$router.push('/card-messages/123');
+                    },
+                },
+                {
+                    key: 'delete',
+                    icon: '/icons/delete.svg',
+                    title: 'Удалить карту',
+                    type: 'negative',
+                    callback: (item) => {
+                        this.openModal('ModalCardDelete', true);
+                    },
+                },
+            ];
+        },
+
+        tableControlsTabDeleted() {
+            return [
+                {
+                    key: 'auto',
+                    icon: '/icons/cards.svg',
+                    title: 'Автоплатежи',
+                    callback: (item) => {
+                        this.$router.push('/auto-payments/123');
+                    },
+                },
+                {
+                    key: 'recovery',
+                    icon: '/icons/rotate.svg',
+                    title: 'Восстановить карту',
+                    type: 'positive',
+                    callback: (item) => {
+                        this.openModal('ModalCardRecovery', true);
+                    },
+                },
+            ];
+        },
+
+        tableControls() {
+            return this.isEnabledTabActive ? this.tableControlsTabActive : this.tableControlsTabDeleted;
+        },
+
+        isEnabledTabActive() {
+            return this.activeTab === TAB_KEYS.active;
+        },
+
+        isEnabledTabDeleted() {
+            return this.activeTab === TAB_KEYS.deleted;
+        },
     },
 
     methods: {
         setIcon(status) {
-            return {
-                src: status ? '/icons/checkmark-circle.svg' : '/icons/close-circle.svg',
-                class: status ? 'success' : 'fail',
+            switch (status) {
+                case CARD_STATUSES.active:
+                    return {
+                        src: '/icons/checkmark-circle.svg',
+                        class: 'active',
+                    };
+                case CARD_STATUSES.deleted:
+                    return {
+                        src: '/icons/close-circle.svg',
+                        class: 'deleted',
+                    };
             };
+        },
+
+        setBankType(type) {
+            const bank = BANK_TYPES.find(item => item.id === type);
+            return bank?.title || '';
         },
 
         offTransactions() {
@@ -316,6 +204,25 @@ export default {
         onTransactions() {
             this.isActiveTransactions = true;
         },
+
+        openModal(modal) {
+            this.$store.commit('modal/open', {
+                component: modal.component,
+                positionCenter: modal.positionCenter ?? false,
+                componentData: modal.item,
+            });
+        },
+
+        openModalCard() {
+            this.openModal({
+                component: 'ModalCard',
+            });
+        },
+    },
+
+    async created() {
+        const { data: cards } = await this.$api.cards.getCards();
+        this.cards = cards;
     },
 };
 </script>
@@ -325,7 +232,7 @@ export default {
     display: flex
     flex-direction: column
     margin-top: 0.8rem
-    padding: 2.4rem 3.2rem
+    padding: 2.4rem 3.2rem 9.8rem 3.2rem
     background-color: $color-white
     border-radius: 2rem 0 0 0
     width: 100%
@@ -344,9 +251,8 @@ export default {
     .toggle-buttons
         margin-left: auto
 
-.table-wrapper
-    height: calc( 100vh - 230px )
-    overflow-y: scroll
+.table-tabs
+    margin-bottom: 0.8rem
 
 .status
     width: 2rem
@@ -355,12 +261,19 @@ export default {
     align-items: center
     justify-content: center
     margin: 0 auto
-    &.success
+    &.active
         fill: $color-green
-    &.fail
+    &.deleted
         fill: $color-red-dark
 
 .table
-    .body-item
+    .tbody-item
         position: relative
+
+.pagination
+    position: fixed
+    bottom: 3.8rem
+    right: 0
+    width: calc( 100% - 22rem )
+    z-index: 50
 </style>

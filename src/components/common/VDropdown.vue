@@ -30,10 +30,7 @@ export default {
     props: {
         modelValue: {
             type: Object,
-            default: {
-                id: 0,
-                title: '',
-            },
+            default: null,
         },
 
         label: {

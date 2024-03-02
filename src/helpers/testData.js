@@ -66,3 +66,48 @@ export const BANKS = [
         title: 'Каспи (KZ)',
     },
 ];
+
+export const PROCESS_METHODS = [
+    {
+        id: 1,
+        title: 'SMS',
+    },
+    {
+        id: 2,
+        title: 'GATE',
+    },
+    {
+        id: 3,
+        title: 'API',
+    },
+    {
+        id: 4,
+        title: 'ЛК',
+    },
+];
+
+export const CURRENСIES = [
+    {
+        id: 1,
+        title: 'RUB',
+    },
+    {
+        id: 2,
+        title: 'KZT',
+    },
+    {
+        id: 3,
+        title: 'UZS',
+    },
+];
+
+export const SLOTS_SIM = [
+    {
+        id: 1,
+        title: 'SIM 1',
+    },
+    {
+        id: 2,
+        title: 'SIM 2',
+    },
+];
