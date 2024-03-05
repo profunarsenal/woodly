@@ -14,9 +14,11 @@
     "vue": "^3.4.15",
     "vue-inline-svg": "^3.1.2",
     "vue-router": "^4.2.5",
+    "vue-the-mask": "^0.11.1",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/vue-the-mask": "^0.11.5",
     "@vitejs/plugin-vue": "^5.0.3",
     "pug": "^3.0.2",
     "sass": "^1.70.0",
