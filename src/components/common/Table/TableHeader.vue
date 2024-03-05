@@ -5,14 +5,8 @@
                 v-for="header in headers"
                 :key="header.key"
             )
-                table-search(
-                    v-if="header.searchable"
-                    v-model="searchFields[header.key]"
-                    :item="header"
-                )
                 slot(
-                    v-else
-                    :name="header.key"
+                    :name="`thead-${header.key}`"
                     :item="header"
                 )
                     .content
@@ -23,26 +17,14 @@
 </template>
 
 <script>
-import TableSearch from '@/components/common/Table/TableSearch.vue';
-
 export default {
     name: 'TableHeader',
-
-    components: {
-        TableSearch,
-    },
 
     props: {
         headers: {
             type: Array,
             default: () => [],
         },
-    },
-
-    data() {
-        return {
-            searchFields: {},
-        };
     },
 };
 </script>

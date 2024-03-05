@@ -1,10 +1,20 @@
 <template lang="pug">
-    inline-svg.loader(src="/icons/loader.svg")
+    inline-svg.loader(
+        :class="size"
+        src="/icons/loader.svg"
+    )
 </template>
 
 <script>
 export default {
     name: 'VLoader',
+
+    props: {
+        size: {
+            type: String,
+            default: '',
+        },
+    },
 };
 </script>
 
@@ -13,6 +23,9 @@ export default {
     width: 2.4rem
     height: 2.4rem
     animation: spin 1s infinite linear
+    &.big
+        width: 6.4rem
+        height: 6.4rem
 
 @keyframes spin
     0%

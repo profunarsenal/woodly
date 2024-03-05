@@ -29,7 +29,7 @@ export default {
 
     props: {
         modelValue: {
-            type: Object,
+            type: Number,
             default: null,
         },
 
@@ -62,7 +62,8 @@ export default {
 
     computed: {
         title() {
-            return this.modelValue?.title || '';
+            const currentItem = this.list.find(item => item.id === this.modelValue);
+            return currentItem?.title || '';
         },
 
         dropdownClasses() {
@@ -83,7 +84,7 @@ export default {
         },
 
         select(item) {
-            this.$emit('update:modelValue', item);
+            this.$emit('update:modelValue', item.id);
             this.isOpenList = false;
         },
 

@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import modal from '@/store/modal/modal';
 import payment from '@/store/payment/payment';
+import cards from '@/store/cards/cards';
 
 export default createStore({
     state: {
@@ -14,5 +15,6 @@ export default createStore({
     modules: {
         modal,
         payment,
+        cards,
     },
 });

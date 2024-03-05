@@ -3,7 +3,7 @@
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
         .title Восстановление карты
-        .text Вы уверены, что хотите восстановить карту Судоргина 56 №16 · 2202 2062 5064 6689?
+        .text {{ cardText }}
         .buttons
             v-button(
                 type="secondary"
@@ -11,6 +11,7 @@
             ) Отменить
             v-button(
                 type="positive"
+                @click="recoveryCard"
             ) Восстановить
 </template>
 
@@ -24,9 +25,43 @@ export default {
         VButton,
     },
 
+    props: {
+        componentData: {
+            type: Object,
+            default: null,
+        },
+    },
+
+    computed: {
+        cardId() {
+            return this.componentData?.cardId || 0;
+        },
+
+        cardName() {
+            return this.componentData?.title || '';
+        },
+
+        cardNumber() {
+            return this.componentData?.cardNumber || '';
+        },
+
+        cardText() {
+            return `Вы уверены, что хотите восстановить карту ${this.cardName} · ${this.cardNumber}?`
+        },
+    },
+
     methods: {
         close() {
             this.$store.commit('modal/close');
+        },
+
+        async recoveryCard() {
+            await this.$api.cards.changeCardStatus({
+                cardId: this.cardId,
+                status: true,
+            });
+            this.close();
+            this.$store.dispatch('cards/getCards', this.$route.query);
         },
     },
 };

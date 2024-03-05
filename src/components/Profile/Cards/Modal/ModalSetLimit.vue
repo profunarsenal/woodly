@@ -4,11 +4,27 @@
             inline-svg.icon(src="/icons/close.svg")
         .title Установка лимитов
         .form
-            v-input(label="Суточный оборот")
-            v-input(label="Максимальное количество платежей (сутки)")
-            v-input(label="Минимальный платеж")
-            v-input(label="Максимальный платеж")
-        v-button.button Подтвердить
+            v-input(
+                v-model="form.turnover"
+                label="Суточный оборот"
+                type="number"
+            )
+            v-input(
+                v-model="form.transactionsLimitPerDay"
+                label="Максимальное количество платежей (сутки)"
+                type="number"
+            )
+            v-input(
+                v-model="form.paymentMin"
+                label="Минимальный платеж"
+                type="number"
+            )
+            v-input(
+                v-model="form.paymentMax"
+                label="Максимальный платеж"
+                type="number"
+            )
+        v-button.button(@click="saveLimit") Подтвердить
 </template>
 
 <script>
@@ -23,10 +39,63 @@ export default {
         VButton,
     },
 
+    props: {
+        componentData: {
+            type: Object,
+            default: null,
+        },
+    },
+
+    data() {
+        return {
+            form: {
+                turnover: 0,
+                transactionsLimitPerDay: 0,
+                paymentMin: 0,
+                paymentMax: 0,
+            },
+        };
+    },
+
+    computed: {
+        cardId() {
+            return this.componentData?.cardId || 0;
+        },
+    },
+
     methods: {
         close() {
             this.$store.commit('modal/close');
         },
+
+        getLimits() {
+            const formKeys = Object.keys(this.form);
+
+            formKeys.forEach((key) => {
+                if (this.componentData.hasOwnProperty(key)) {
+                    this.form[key] = this.componentData[key];
+                }
+            });
+        },
+
+        async saveLimit() {
+            const form = {
+                turnover: +this.form.turnover,
+                transactionsLimitPerDay: +this.form.transactionsLimitPerDay,
+                paymentMin: +this.form.paymentMin,
+                paymentMax: +this.form.paymentMax,
+            };
+            await this.$api.cards.setLimit({
+                ...form,
+                cardId: this.cardId,
+            });
+            this.close();
+            this.$store.dispatch('cards/getCards', this.$route.query);
+        },
+    },
+
+    mounted() {
+        this.getLimits();
     },
 };
 </script>

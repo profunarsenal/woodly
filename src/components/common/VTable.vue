@@ -3,6 +3,15 @@
         table-header(:headers="headers")
             template(#thead)
                 slot(name="thead")
+            template(
+                v-for="item in headerSlotsKeys"
+                :key="item.headerKey"
+                v-slot:[item.headerKey]
+            )
+                slot(
+                    :name="item.headerKey"
+                    :item="item"
+                )
         tbody.tbody
             table-item(
                 v-for="(item, index) in items"
@@ -46,6 +55,17 @@ export default {
         items: {
             type: Array,
             defaul: () => [],
+        },
+    },
+
+    computed: {
+        headerSlotsKeys() {
+            return this.headers.map((item) => {
+                return {
+                    ...item,
+                    headerKey: `thead-${item.key}`,
+                };
+            });
         },
     },
 

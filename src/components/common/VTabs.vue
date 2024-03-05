@@ -17,7 +17,7 @@
 export default {
     name: 'VTabs',
 
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'select'],
 
     props: {
         tabs: {
@@ -34,6 +34,7 @@ export default {
     methods: {
         selectTab(key) {
             this.$emit('update:modelValue', key);
+            this.$emit('select');
         },
     },
 };

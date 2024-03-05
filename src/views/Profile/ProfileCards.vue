@@ -24,11 +24,20 @@
         v-tabs.table-tabs(
             v-model="activeTab"
             :tabs="tableTabs"
+            @select="toggleTable"
         )
         v-table.table(
+            v-if="cards.length && !this.isLoadingCards"
             :headers="tableHeaders"
             :items="cards"
         )
+            template(#thead-cardNumber="{ item }")
+                table-search(
+                    v-if="item.searchable"
+                    v-model="searchByCardNumber"
+                    @input="searchCard"
+                    :item="item"
+                )
             template(#bankType="{ item }")
                 .bank {{ setBankType(item.bankType) }}
             template(#transactionsLimit="{ item }")
@@ -48,18 +57,25 @@
                     )
                         template(#button)
                             button-mini(type="option")
+        v-loader.loader(
+            v-else
+            size="big"
+        )
     app-pagination.pagination
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import AppPagination from '@/components/Pagination/AppPagination.vue';
 import VTable from '@/components/common/VTable.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VActionMenu from '@/components/common/VActionMenu.vue';
+import VLoader from '@//components/common/VLoader.vue';
+import TableSearch from '@/components/common/Table/TableSearch.vue';
 import ButtonMini from '@/components/app/ButtonMini.vue';
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
-import { CARD_STATUSES, BANK_TYPES } from '@/helpers/catalogs';
+import { BANK_TYPES } from '@/helpers/catalogs';
 
 const TAB_KEYS = {
     active: 'active',
@@ -75,7 +91,9 @@ export default {
         VButton,
         VTabs,
         VActionMenu,
+        VLoader,
         ButtonMini,
+        TableSearch,
     },
 
     data() {
@@ -85,13 +103,19 @@ export default {
                 { key: TAB_KEYS.active, title: 'Активные' },
                 { key: TAB_KEYS.deleted, title: 'Удаленные' },
             ],
+            urlParams: Object.assign({}, this.$route.query),
             activeTab: TAB_KEYS.active,
             isActiveTransactions: false,
-            cards: [],
-        }
+            isLoadingCards: false,
+            searchByCardNumber: '',
+        };
     },
 
     computed: {
+        ...mapState({
+            cards: ({ cards }) => cards.cards,
+        }),
+
         tableControlsTabActive() {
             return [
                 {
@@ -99,7 +123,11 @@ export default {
                     icon: '/icons/settings.svg',
                     title: 'Установить лимит',
                     callback: (item) => {
-                        this.openModal('ModalSetLimit', true);
+                        this.openModal({
+                            component: 'ModalSetLimit',
+                            positionCenter: true,
+                            item,
+                        });
                     },
                 },
                 {
@@ -135,7 +163,11 @@ export default {
                     title: 'Удалить карту',
                     type: 'negative',
                     callback: (item) => {
-                        this.openModal('ModalCardDelete', true);
+                        this.openModal({
+                            component: 'ModalCardDelete',
+                            positionCenter: true,
+                            item,
+                        });
                     },
                 },
             ];
@@ -157,7 +189,11 @@ export default {
                     title: 'Восстановить карту',
                     type: 'positive',
                     callback: (item) => {
-                        this.openModal('ModalCardRecovery', true);
+                        this.openModal({
+                            component: 'ModalCardRecovery',
+                            positionCenter: true,
+                            item,
+                        });
                     },
                 },
             ];
@@ -177,19 +213,31 @@ export default {
     },
 
     methods: {
+        async getCards() {
+            this.isLoadingCards = true;
+
+            try {
+                this.$store.dispatch('cards/getCards', this.urlParams);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                 this.isLoadingCards = false;
+            }
+        },
+
         setIcon(status) {
-            switch (status) {
-                case CARD_STATUSES.active:
-                    return {
-                        src: '/icons/checkmark-circle.svg',
-                        class: 'active',
-                    };
-                case CARD_STATUSES.deleted:
-                    return {
-                        src: '/icons/close-circle.svg',
-                        class: 'deleted',
-                    };
+            const STATUSES = {
+                active: {
+                    src: '/icons/checkmark-circle.svg',
+                    class: 'active',
+                },
+                deleted: {
+                    src: '/icons/close-circle.svg',
+                    class: 'deleted',
+                },
             };
+
+            return status ? STATUSES.active : STATUSES.deleted;
         },
 
         setBankType(type) {
@@ -218,11 +266,41 @@ export default {
                 component: 'ModalCard',
             });
         },
+
+        toggleTable() {
+            if (this.activeTab === TAB_KEYS.deleted) {
+                this.urlParams.status = false;
+            } else {
+                delete this.urlParams.status;
+            }
+
+            this.$router.push({ query: this.urlParams });
+        },
+
+        searchCard(event) {
+            this.urlParams.cardNumber = event.target.value;
+            this.$router.push({ query: this.urlParams });
+        },
     },
 
-    async created() {
-        const { data: cards } = await this.$api.cards.getCards();
-        this.cards = cards;
+    watch: {
+        '$route.query': {
+            handler(query) {
+                this.urlParams = Object.assign({}, query);
+
+                this.getCards();
+            },
+            deep: true,
+            immediate: true,
+        },
+    },
+
+    created() {
+        if (this.urlParams.hasOwnProperty('status')) {
+            this.activeTab = TAB_KEYS.deleted;
+        }
+
+        this.getCards();
     },
 };
 </script>
@@ -253,6 +331,10 @@ export default {
 
 .table-tabs
     margin-bottom: 0.8rem
+
+.loader
+    margin: 0 auto
+    fill: $color-violet-100
 
 .status
     width: 2rem

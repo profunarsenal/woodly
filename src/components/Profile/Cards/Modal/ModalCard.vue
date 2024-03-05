@@ -11,6 +11,7 @@
             )
             v-input(
                 v-model="form.cardNumber"
+                v-mask="'####-####-####-####'"
                 label="Номер карты"
                 placeholder="0000-0000-0000-0000"
             )
@@ -66,6 +67,7 @@
                 )
             v-input(
                 v-model="form.phone"
+                v-mask="'+7(###)-###-##-##'"
                 label="СБП телефон"
                 placeholder="Введите телефон"
             )
@@ -74,7 +76,7 @@
                 label="СБП имя получателя"
                 placeholder="Введите имя получателя"
             )
-        v-button.button(@click="createCard") Сохранить
+        v-button.button(@click="saveCard") Сохранить
 </template>
 
 <script>
@@ -82,6 +84,7 @@ import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VDropdown from '@/components/common/VDropdown.vue';
 import VCheckbox from '@/components/common/VCheckbox.vue';
+import { mask } from 'vue-the-mask';
 
 import { BANKS, PROCESS_METHODS, CURRENСIES, SLOTS_SIM } from '@/helpers/testData';
 
@@ -102,9 +105,19 @@ export default {
         },
     },
 
+    directives: { mask },
+
     computed: {
+        isEdit() {
+            return !!this.componentData;
+        },
+
         title() {
-            return this.componentData ? 'Редактирование карты' : 'Добавление новой карты';
+            return this.isEdit ? 'Редактирование карты' : 'Добавление новой карты';
+        },
+
+        cardId() {
+            return this.componentData?.cardId || 0;
         },
     },
 
@@ -140,25 +153,36 @@ export default {
             this.$store.commit('modal/close');
         },
 
-        async createCard() {
-            const form = {
-                title: this.form.title,
-                cardNumber: this.form.cardNumber,
-                fio: this.form.fio,
-                bankType: this.form.bankType?.id,
-                processMethod: this.form.processMethod?.id,
-                currency: this.form.currency?.id,
-                deviceId: this.form.deviceId,
-                apiKey: this.form.apiKey,
-                slotSim: this.form.slotSim?.id,
-                isQiwi: this.form.isQiwi,
-                isSbp: this.form.isSbp,
-                phone: this.form.phone,
-                recipient: this.form.recipient,
+        async saveCard() {
+            if (this.isEdit) {
+                await this.$api.cards.editCard({
+                    ...this.form,
+                    cardId: this.cardId,
+                });
+                this.close();
+                return;
             }
 
-            await this.$api.cards.createCard(form);
+            await this.$api.cards.createCard(this.form);
+            this.close();
+            this.$store.dispatch('cards/getCards', this.$route.query);
         },
+
+        setCard() {
+            const formKeys = Object.keys(this.form);
+
+            formKeys.forEach((key) => {
+                if (this.componentData.hasOwnProperty(key)) {
+                    this.form[key] = this.componentData[key];
+                }
+            });
+        },
+    },
+
+    mounted() {
+        if (this.isEdit) {
+            this.setCard();
+        }
     },
 };
 </script>
