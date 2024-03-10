@@ -26,45 +26,46 @@
             :tabs="tableTabs"
             @select="toggleTable"
         )
-        v-table.table(
-            v-if="cards.length && !this.isLoadingCards"
-            :headers="tableHeaders"
-            :items="cards"
-        )
-            template(#thead-cardNumber="{ item }")
-                table-search(
-                    v-if="item.searchable"
-                    v-model="searchByCardNumber"
-                    @input="searchCard"
-                    :item="item"
-                )
-            template(#bankType="{ item }")
-                .bank {{ setBankType(item.bankType) }}
-            template(#transactionsLimit="{ item }")
-                .limit {{ `${item.paymentMin}-${item.paymentMax}` }}
-            template(#status="{ item }")
-                inline-svg.status(
-                    :class="setIcon(item.status).class"
-                    :src="setIcon(item.status).src"
-                )
-            template(#thead)
-                th.thead-item
-            template(#tbody="{ item }")
-                td.tbody-item
-                    v-action-menu(
-                        :controls="tableControls"
-                        :item="item"
-                    )
-                        template(#button)
-                            button-mini(type="option")
         v-loader.loader(
-            v-else
+            v-if="isLoadingCards"
             size="big"
         )
+        template(v-else)
+            v-table.table(
+                :headers="tableHeaders"
+                :items="cards"
+                @search="search"
+            )
+                template(#bankType="{ item }")
+                    .bank {{ setBankType(item.bankType) }}
+                template(#transactionsLimit="{ item }")
+                    .limit {{ `${item.paymentMin}-${item.paymentMax}` }}
+                template(#status="{ item }")
+                    inline-svg.status(
+                        :class="setIcon(item.status).class"
+                        :src="setIcon(item.status).src"
+                    )
+                template(#thead)
+                    th.thead-item
+                template(#tbody="{ item }")
+                    td.tbody-item
+                        v-action-menu(
+                            :controls="tableControls"
+                            :item="item"
+                        )
+                            template(#button)
+                                button-mini(type="option")
+                template(#empty)
+                    empty-form(
+                        :imageSrc="emptyForm.src"
+                        :title="emptyForm.title"
+                        :subtitle="emptyForm.subtitle"
+                    )
     app-pagination.pagination
 </template>
 
 <script>
+import debounce from 'lodash/debounce';
 import { mapState } from 'vuex';
 import AppPagination from '@/components/Pagination/AppPagination.vue';
 import VTable from '@/components/common/VTable.vue';
@@ -72,8 +73,8 @@ import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VActionMenu from '@/components/common/VActionMenu.vue';
 import VLoader from '@//components/common/VLoader.vue';
-import TableSearch from '@/components/common/Table/TableSearch.vue';
 import ButtonMini from '@/components/app/ButtonMini.vue';
+import EmptyForm from '@/components/app/EmptyForm.vue';
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
 import { BANK_TYPES } from '@/helpers/catalogs';
 
@@ -93,7 +94,7 @@ export default {
         VActionMenu,
         VLoader,
         ButtonMini,
-        TableSearch,
+        EmptyForm,
     },
 
     data() {
@@ -107,7 +108,7 @@ export default {
             activeTab: TAB_KEYS.active,
             isActiveTransactions: false,
             isLoadingCards: false,
-            searchByCardNumber: '',
+            search: debounce(this.searchTable, 500),
         };
     },
 
@@ -210,6 +211,24 @@ export default {
         isEnabledTabDeleted() {
             return this.activeTab === TAB_KEYS.deleted;
         },
+
+        emptyForm() {
+            if (this.isEnabledTabActive) {
+                return {
+                    src: '/images/empty/card-positive.png',
+                    title: 'У вас нет активных карт',
+                    subtitle: 'Здесь будут храниться карты, которые можно добавить нажав кнопку «Добавить» в верхней части страницы',
+                }
+            }
+
+            if (this.isEnabledTabDeleted) {
+                return {
+                    src: '/images/empty/card-negative.png',
+                    title: 'У вас нет удаленных карт',
+                    subtitle: 'Здесь будут храниться карты, которые вы удалили',
+                }
+            }
+        },
     },
 
     methods: {
@@ -217,11 +236,11 @@ export default {
             this.isLoadingCards = true;
 
             try {
-                this.$store.dispatch('cards/getCards', this.urlParams);
+                await this.$store.dispatch('cards/getCards', this.urlParams);
             } catch (error) {
                 console.log(error);
             } finally {
-                 this.isLoadingCards = false;
+                this.isLoadingCards = false;
             }
         },
 
@@ -277,8 +296,8 @@ export default {
             this.$router.push({ query: this.urlParams });
         },
 
-        searchCard(event) {
-            this.urlParams.cardNumber = event.target.value;
+        searchTable(value, key) {
+            this.urlParams[key] = value;
             this.$router.push({ query: this.urlParams });
         },
     },

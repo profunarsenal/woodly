@@ -46,11 +46,18 @@ export default {
         closeSearch() {
             this.isOpen = false;
             this.$emit('update:modelValue', '');
+            this.$emit('clear');
         },
 
         input(event) {
             this.$emit('update:modelValue', event.target.value);
         },
+    },
+
+    mounted() {
+        if (this.modelValue) {
+            this.isOpen = true;
+        }
     },
 };
 </script>

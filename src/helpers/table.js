@@ -8,3 +8,12 @@ export const CARDS_TABLE_HEADERS = [
     { title: 'Лимит', key: 'transactionsLimit', subtitle: 'на платеж' },
     { title: 'Статус', key: 'status' },
 ];
+
+export const TRANSACTIONS_TABLE_HEADERS = [
+    { title: 'ID сделки', key: 'transactionId', searchable: true },
+    { title: 'Название и номер карты', key: 'cardNumber', searchable: true },
+    { title: 'Сумма', key: 'amount', searchable: true },
+    { title: 'Статус', key: 'status' },
+    { title: 'Создан', key: 'dateCreate' },
+    { title: 'Закрытие', key: 'dateClose' },
+];

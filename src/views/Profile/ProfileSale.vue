@@ -10,28 +10,56 @@
         v-tabs.table-tabs(
             v-model="activeTab"
             :tabs="tableTabs"
+            @select="toggleTable"
         )
         v-table.table(
+            v-if="transactions.length"
             :headers="tableHeaders"
-            :items="tableItems"
+            :items="transactions"
         )
-            template(#card="{ item: card }")
-                .card-number {{ card.number }}
-                .card-name {{ card.name }}
-            template(#status="{ item: status }")
+            template(#cardNumber="{ item }")
+                .card-number {{ item.cardNumber }}
+                .card-name {{ item.title }}
+            template(#amount="{ item }")
+                .amount {{ `${item.amount}₽` }}
+            template(#status="{ item }")
                 .status
                     inline-svg.status-icon(
-                        :src="setStatus(status, 'icon')"
-                        :class="status"
+                        :src="setStatus(item.status, 'icon')"
+                        :class="setStatus(item.status, 'color')"
                     )
-                    .status-text {{ setStatus(status, 'title') }}
+                    .status-text {{ setStatus(item.status, 'transactionTitle') }}
+            template(#dateCreate="{ item }")
+                .date(v-if="item.dateCreate") {{ formatDate(item.dateCreate).date }} ·
+                    |
+                    span.time {{ formatDate(item.dateCreate).time }}
+            template(#dateClose="{ item }")
+                .date(v-if="item.dateClose") {{ formatDate(item.dateClose).date }} ·
+                    |
+                    span.time {{ formatDate(item.dateClose).time }}
             template(#thead)
                 th.thead-item(colspan="2")
             template(#tbody="{ item }")
-                td.tbody-item
-                    button-mini(type="receipt")
-                td.tbody-item
-                    button-mini(type="payout")
+                template(v-if="item.status === transactionsStatuses.successful.id")
+                    td.tbody-item(colspan="2")
+                template(v-else-if="item.status === transactionsStatuses.review.id")
+                    td.tbody-item
+                        .table-buttons
+                            .table-button
+                                button-mini(type="confirm")
+                                v-tooltip.table-tooltip(
+                                    position="right"
+                                    text="Подтвердить сделку"
+                                )
+                                window-confirm
+                            button-mini(type="decline")
+                    td.tbody-item
+                        button-mini(type="option")
+                template(v-else)
+                    td.tbody-item
+                        button-mini(type="confirm")
+                    td.tbody-item
+                        button-mini(type="edit")
     app-pagination.pagination
 </template>
 
@@ -40,37 +68,12 @@ import AppPagination from '@/components/Pagination/AppPagination.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
+import VTooltip from '@/components/common/VTooltip.vue'
 import ButtonMini from '@/components/app/ButtonMini.vue';
-
-const SALE_STATUSES = {
-    all: {
-        key: 'all',
-        title: 'Все сделки',
-    },
-    active: {
-        key: 'active',
-        icon: '/icons/activity.svg',
-        title: 'Активные',
-    },
-    review: {
-        key: 'review',
-        icon: '/icons/spinner.svg',
-        title: 'На проверке',
-        color: 'yellow',
-    },
-    canceled: {
-        key: 'canceled',
-        icon: '/icons/close.svg',
-        title: 'Отмененные',
-        color: 'red',
-    },
-    successful: {
-        key: 'successful',
-        icon: '/icons/checkbox-mark.svg',
-        title: 'Успешные',
-        color: 'green',
-    },
-};
+import WindowConfirm from '@/components/app/WindowConfirm.vue';
+import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
+import { TRANSACTIONS_TABLE_HEADERS } from '@/helpers/table';
+import { formatDate, formatTime } from '@/helpers/string';
 
 export default {
     name: 'ProfileSale',
@@ -80,83 +83,68 @@ export default {
         VButton,
         VTabs,
         VTable,
+        VTooltip,
         ButtonMini,
+        WindowConfirm,
     },
 
     data() {
         return {
-            activeTab: SALE_STATUSES.all.key,
-            tableTabs: Object.values(SALE_STATUSES),
-            tableHeaders: [
-                { title: 'ID сделки', key: 'id', searchable: true },
-                { title: 'Название и номер карты', key: 'card', searchable: true },
-                { title: 'Сумма', key: 'total', searchable: true },
-                { title: 'Статус', key: 'status' },
-                { title: 'Создан', key: 'dateCreated' },
-                { title: 'Закрытие', key: 'dateClosed' },
+            tableHeaders: TRANSACTIONS_TABLE_HEADERS,
+            tableTabs: [
+                { key: 'all', title: 'Все сделки' },
+                ...Object.values(TRANSACTIONS_STATUSES),
             ],
-            tableItems: [
-                {
-                    id: 22157,
-                    card: {
-                        number: '2202 2063 4369 7277',
-                        name: 'Горохова 7 №18',
-                    },
-                    total: '20 000.00₽',
-                    status: 'canceled',
-                    dateCreated: '24.05.2023',
-                    dateClosed: '24.05.2023',
-                },
-                {
-                    id: 22158,
-                    card: {
-                        number: '2202 2063 4369 7277',
-                        name: 'Горохова 7 №18',
-                    },
-                    total: '20 000.00₽',
-                    status: 'active',
-                    dateCreated: '24.05.2023',
-                    dateClosed: '24.05.2023',
-                },
-                {
-                    id: 22159,
-                    card: {
-                        number: '2202 2063 4369 7277',
-                        name: 'Горохова 7 №18',
-                    },
-                    total: '20 000.00₽',
-                    status: 'successful',
-                    dateCreated: '24.05.2023',
-                    dateClosed: '24.05.2023',
-                },
-                {
-                    id: 22160,
-                    card: {
-                        number: '2202 2063 4369 7277',
-                        name: 'Горохова 7 №18',
-                    },
-                    total: '20 000.00₽',
-                    status: 'review',
-                    dateCreated: '24.05.2023',
-                    dateClosed: '24.05.2023',
-                },
-            ],
+            transactionsStatuses: TRANSACTIONS_STATUSES,
+            activeTab: 'all',
+            transactions: [],
+            urlParams: Object.assign({}, this.$route.query),
         };
     },
 
     methods: {
-        setStatus(status, key) {
-            switch (status) {
-                case SALE_STATUSES.active.key:
-                    return SALE_STATUSES.active[key];
-                case SALE_STATUSES.review.key:
-                    return SALE_STATUSES.review[key];
-                case SALE_STATUSES.canceled.key:
-                    return SALE_STATUSES.canceled[key];
-                case SALE_STATUSES.successful.key:
-                    return SALE_STATUSES.successful[key];
-            }
+        async getTransactions() {
+            const { data } = await this.$api.transactions.getTransactions(this.urlParams);
+            this.transactions = data.transactions;
         },
+
+        setStatus(status, key) {
+            const statusItem = Object.values(TRANSACTIONS_STATUSES).find(item => item.id === status);
+            return statusItem[key] || '';
+        },
+
+        formatDate(date) {
+            return {
+                date: formatDate(date),
+                time: formatTime(date),
+            };
+        },
+
+        toggleTable() {
+            if (this.activeTab === 'all') {
+                delete this.urlParams.status;
+            } else {
+                const status = this.transactionsStatuses[this.activeTab];
+                this.urlParams.status = status.id;
+            }
+
+            this.$router.push({ query: this.urlParams });
+        },
+    },
+
+    watch: {
+        '$route.query': {
+            handler(query) {
+                this.urlParams = Object.assign({}, query);
+                this.getTransactions();
+            },
+            deep: true,
+            immediate: true,
+        },
+    },
+
+    created() {
+        this.getTransactions();
     },
 };
 </script>
@@ -187,6 +175,8 @@ export default {
     margin-bottom: 0.8rem
 
 .table
+    .tbody-item
+        padding: 1.6rem 1.2rem
     &:deep(.tbody-item)
         vertical-align: top
     .status
@@ -196,14 +186,36 @@ export default {
         &-icon
             width: 1.6rem
             height: 1.6rem
-            &.active
-                fill: $color-violet-100
-            &.review
+            fill: $color-violet-100
+            &.yellow
                 fill: $color-yellow-dark
-            &.canceled
+            &.red
                 fill: $color-red-dark
-            &.successful
+            &.green
                 fill: $color-green
+    .time
+        color: $color-gray-dark
+    .table-buttons
+        display: flex
+        gap: 0.8rem
+    .table-button
+        width: 2rem
+        height: 2rem
+        position: relative
+        @media(any-hover:hover)
+            &:hover
+                .table-tooltip
+                    opacity: 1
+                    visibility: visible
+                    pointer-events: all
+                    transition: 0.4s ease 0.4s
+    .table-tooltip
+        opacity: 0
+        visibility: hidden
+        pointer-events: none
+        right: calc( 100% + 0.8rem )
+        top: -0.3rem
+        transition: 0.2s ease
 
 .pagination
     position: fixed
