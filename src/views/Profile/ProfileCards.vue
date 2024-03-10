@@ -26,12 +26,10 @@
             :tabs="tableTabs"
             @select="toggleTable"
         )
-        v-loader.loader(
-            v-if="isLoadingCards"
-            size="big"
-        )
+        .loader(v-if="isLoadingCards")
+            v-loader(size="big")
         template(v-else)
-            v-table.table(
+            v-table.cards-table(
                 :headers="tableHeaders"
                 :items="cards"
                 @search="search"
@@ -310,7 +308,6 @@ export default {
                 this.getCards();
             },
             deep: true,
-            immediate: true,
         },
     },
 
@@ -352,7 +349,10 @@ export default {
     margin-bottom: 0.8rem
 
 .loader
-    margin: 0 auto
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 100%
     fill: $color-violet-100
 
 .status
@@ -367,7 +367,7 @@ export default {
     &.deleted
         fill: $color-red-dark
 
-.table
+.cards-table
     .tbody-item
         position: relative
 

@@ -1,59 +1,60 @@
 <template lang="pug">
-    table.table(
-        v-if="items.length || isSearch"
-        cellspacing="0"
-    )
-        table-header(:headers="headers")
-            template(#thead)
-                slot(name="thead")
-            template(
-                v-for="item in headerSlotsKeys"
-                :key="item.headerKey"
-                v-slot:[item.headerKey]
-            )
-                table-search(
-                    v-if="item.searchable"
-                    v-model="searchableFields[item.key]"
-                    :item="item"
-                    @input="search($event, item.key)"
-                    @clear="clearSearch(item.key)"
-                )
-                slot(
-                    v-else
-                    :name="item.headerKey"
-                    :item="item"
-                )
-        tbody.tbody
-            table-item(
-                v-for="(item, index) in items"
-                :key="index"
-                :item="item"
-                :headers="headers"
-            )
+    .wrapper
+        table.table(
+            v-if="items.length || isSearch"
+            cellspacing="0"
+        )
+            table-header(:headers="headers")
+                template(#thead)
+                    slot(name="thead")
                 template(
-                    v-for="header in headers"
-                    :key="header.key"
-                    v-slot:[header.key]
+                    v-for="item in headerSlotsKeys"
+                    :key="item.headerKey"
+                    v-slot:[item.headerKey]
                 )
+                    table-search(
+                        v-if="item.searchable"
+                        v-model="searchableFields[item.key]"
+                        :item="item"
+                        @input="search($event, item.key)"
+                        @clear="clearSearch(item.key)"
+                    )
                     slot(
-                        :name="header.key"
+                        v-else
+                        :name="item.headerKey"
                         :item="item"
                     )
-                template(#tbody)
-                    slot(
-                        name="tbody"
-                        :item="item"
+            tbody.tbody
+                table-item(
+                    v-for="(item, index) in items"
+                    :key="index"
+                    :item="item"
+                    :headers="headers"
+                )
+                    template(
+                        v-for="header in headers"
+                        :key="header.key"
+                        v-slot:[header.key]
                     )
-    slot(
-        v-if="!items.length && !isSearch"
-        name="empty"
-    )
-    empty-form(
-        v-if="!items.length && isSearch"
-        imageSrc="/images/empty/search.png"
-        title="Ничего не нашлось"
-        subtitle="Попробуйте изменить свой запрос"
-    )
+                        slot(
+                            :name="header.key"
+                            :item="item"
+                        )
+                    template(#tbody)
+                        slot(
+                            name="tbody"
+                            :item="item"
+                        )
+        slot(
+            v-if="!items.length && !isSearch"
+            name="empty"
+        )
+        empty-form(
+            v-if="!items.length && isSearch"
+            imageSrc="/images/empty/search.png"
+            title="Ничего не нашлось"
+            subtitle="Попробуйте изменить свой запрос"
+        )
 </template>
 
 <script>
@@ -135,6 +136,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.wrapper
+    height: 100%
 .table
     width: 100%
     border: none

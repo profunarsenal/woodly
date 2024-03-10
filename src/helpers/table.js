@@ -11,7 +11,7 @@ export const CARDS_TABLE_HEADERS = [
 
 export const TRANSACTIONS_TABLE_HEADERS = [
     { title: 'ID сделки', key: 'transactionId', searchable: true },
-    { title: 'Название и номер карты', key: 'cardNumber', searchable: true },
+    { title: 'Название и номер карты', key: 'cardNumberAndTitle', searchable: true },
     { title: 'Сумма', key: 'amount', searchable: true },
     { title: 'Статус', key: 'status' },
     { title: 'Создан', key: 'dateCreate' },

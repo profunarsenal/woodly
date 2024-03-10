@@ -12,12 +12,15 @@
             :tabs="tableTabs"
             @select="toggleTable"
         )
-        v-table.table(
-            v-if="transactions.length"
+        .loader(v-if="isLoading")
+            v-loader(size="big")
+        v-table.transactions-table(
+            v-else
             :headers="tableHeaders"
             :items="transactions"
+            @search="search"
         )
-            template(#cardNumber="{ item }")
+            template(#cardNumberAndTitle="{ item }")
                 .card-number {{ item.cardNumber }}
                 .card-name {{ item.title }}
             template(#amount="{ item }")
@@ -51,7 +54,7 @@
                                     position="right"
                                     text="Подтвердить сделку"
                                 )
-                                window-confirm
+                                //- window-confirm
                             button-mini(type="decline")
                     td.tbody-item
                         button-mini(type="option")
@@ -64,11 +67,13 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce';
 import AppPagination from '@/components/Pagination/AppPagination.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
-import VTooltip from '@/components/common/VTooltip.vue'
+import VTooltip from '@/components/common/VTooltip.vue';
+import VLoader from '@//components/common/VLoader.vue';
 import ButtonMini from '@/components/app/ButtonMini.vue';
 import WindowConfirm from '@/components/app/WindowConfirm.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
@@ -83,6 +88,7 @@ export default {
         VButton,
         VTabs,
         VTable,
+        VLoader,
         VTooltip,
         ButtonMini,
         WindowConfirm,
@@ -99,13 +105,23 @@ export default {
             activeTab: 'all',
             transactions: [],
             urlParams: Object.assign({}, this.$route.query),
+            isLoading: false,
+            search: debounce(this.searchTable, 500),
         };
     },
 
     methods: {
         async getTransactions() {
-            const { data } = await this.$api.transactions.getTransactions(this.urlParams);
-            this.transactions = data.transactions;
+            this.isLoading = true;
+
+            try {
+                const { data } = await this.$api.transactions.getTransactions(this.urlParams);
+                this.transactions = data.transactions;
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.isLoading = false;
+            }
         },
 
         setStatus(status, key) {
@@ -130,6 +146,11 @@ export default {
 
             this.$router.push({ query: this.urlParams });
         },
+
+        searchTable(value, key) {
+            this.urlParams[key] = value;
+            this.$router.push({ query: this.urlParams });
+        },
     },
 
     watch: {
@@ -139,7 +160,6 @@ export default {
                 this.getTransactions();
             },
             deep: true,
-            immediate: true,
         },
     },
 
@@ -171,10 +191,17 @@ export default {
         font-size: 3.2rem
         line-height: 3.2rem
 
+.loader
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 100%
+    fill: $color-violet-100
+
 .table-tabs
     margin-bottom: 0.8rem
 
-.table
+.transactions-table
     .tbody-item
         padding: 1.6rem 1.2rem
     &:deep(.tbody-item)
