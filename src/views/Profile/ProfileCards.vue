@@ -59,13 +59,17 @@
                         :title="emptyForm.title"
                         :subtitle="emptyForm.subtitle"
                     )
-    app-pagination.pagination
+    app-pagination.pagination(
+        :pages="pagination.page"
+        :count="pagination.count"
+        :total="pagination.total"
+    )
 </template>
 
 <script>
 import debounce from 'lodash/debounce';
 import { mapState } from 'vuex';
-import AppPagination from '@/components/Pagination/AppPagination.vue';
+import AppPagination from '@/components/app/AppPagination.vue';
 import VTable from '@/components/common/VTable.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
@@ -113,6 +117,7 @@ export default {
     computed: {
         ...mapState({
             cards: ({ cards }) => cards.cards,
+            pagination: ({ cards }) => cards.pagination,
         }),
 
         tableControlsTabActive() {

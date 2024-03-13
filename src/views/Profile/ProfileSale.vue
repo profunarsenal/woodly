@@ -68,7 +68,7 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import AppPagination from '@/components/Pagination/AppPagination.vue';
+import AppPagination from '@/components/app/AppPagination.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
