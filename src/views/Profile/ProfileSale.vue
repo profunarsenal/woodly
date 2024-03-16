@@ -74,7 +74,7 @@ import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
 import VLoader from '@//components/common/VLoader.vue';
-import ButtonMini from '@/components/app/ButtonMini.vue';
+import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import WindowConfirm from '@/components/app/WindowConfirm.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
 import { TRANSACTIONS_TABLE_HEADERS } from '@/helpers/table';

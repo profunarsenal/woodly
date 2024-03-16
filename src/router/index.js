@@ -20,6 +20,14 @@ const router = createRouter({
             component: () => import('@/views/Profile/ProfileSale.vue'),
         },
         {
+            path: '/profile/settings',
+            name: 'ProfileSettings',
+            component: () => import('@/views/Profile/ProfileSettings.vue'),
+            meta: {
+                needHideFooter: true,
+            },
+        },
+        {
             path: '/auto-payments/:id',
             name: 'AutoPayments',
             component: () => import('@/views/Profile/AutoPayments.vue'),
@@ -57,6 +65,14 @@ const router = createRouter({
             path: '/payment-acquiring',
             name: 'PaymentAcquiring',
             component: () => import('@/views/PaymentViews/PaymentAcquiring.vue'),
+            meta: {
+                layout: 'empty',
+            },
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'Error',
+            component: () => import('@/views/Error404.vue'),
             meta: {
                 layout: 'empty',
             },

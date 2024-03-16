@@ -3,14 +3,22 @@
         .label {{ label }}
         input.input(
             :value="modelValue"
-            :type="type"
+            :type="inputType"
             :placeholder="placeholder"
             @input="input"
             :disabled="isDisabled"
         )
+        inline-svg.icon-password(
+            v-if="isPassword"
+            :src="iconPassword"
+            @click="togglePasswordVisible"
+        )
 </template>
 
 <script>
+const TYPE_PASSWORD = 'password';
+const TYPE_TEXT = 'text';
+
 export default {
     name: 'VInput',
 
@@ -41,11 +49,34 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        isPassword: {
+            type: Boolean,
+            default: false,
+        },
+    },
+
+    data() {
+        return {
+            inputType: this.type,
+            isPasswordVisible: false,
+        };
+    },
+
+    computed: {
+        iconPassword() {
+            return this.isPasswordVisible ? '/icons/eye-hide.svg' : '/icons/eye.svg';
+        },
     },
 
     methods: {
         input(event) {
             this.$emit('update:modelValue', event.target.value);
+        },
+
+        togglePasswordVisible() {
+            this.isPasswordVisible = !this.isPasswordVisible;
+            this.inputType = this.isPasswordVisible ? TYPE_TEXT : TYPE_PASSWORD;
         },
     },
 };
@@ -53,6 +84,7 @@ export default {
 
 <style lang="sass" scoped>
 .input-wrapper
+    position: relative
     display: flex
     flex-direction: column
     gap: 0.6rem
@@ -60,6 +92,12 @@ export default {
         font-size: 1.4rem
         line-height: 2rem
         color: $color-gray-dark
+    .icon-password
+        position: absolute
+        bottom: 1.4rem
+        right: 1.2rem
+        fill: $color-silver
+        cursor: pointer
     .input
         padding: 1.2rem
         background-color: $color-gray-light
@@ -67,6 +105,7 @@ export default {
         height: 4.8rem
         font-size: 1.6rem
         line-height: 2.4rem
+        border: 0.1rem solid $color-gray-light
         &::placeholder
             font-size: 1.6rem
             color: $color-gray-dark

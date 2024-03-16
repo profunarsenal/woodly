@@ -1,7 +1,10 @@
 <template lang="pug">
     .auto-payments
         .header
-            button-arrow.back(@click="back")
+            square-button.back(
+                icon="/icons/arrow.svg"
+                @click="back"
+            )
             .title Автоплатежи по карте
             .subtitle Судоргина 56 №16
         .table-wrapper
@@ -12,14 +15,14 @@
 </template>
 
 <script>
-import ButtonArrow from '@/components/app/ButtonArrow.vue';
+import SquareButton from '@/components/common/Buttons/SquareButton.vue';
 import VTable from '@/components/common/VTable.vue';
 
 export default {
     name: 'AutoPayments',
 
     components: {
-        ButtonArrow,
+        SquareButton,
         VTable,
     },
 

@@ -1,11 +1,18 @@
 <template lang="pug">
     button.button(@click="$emit('click')")
-        inline-svg.arrow(src='/icons/arrow.svg')
+        inline-svg.arrow(:src='icon')
 </template>
 
 <script>
 export default {
-    name: 'ButtonArrow',
+    name: 'SquareButton',
+
+    props: {
+        icon: {
+            type: String,
+            required: true,
+        },
+    },
 };
 </script>
 

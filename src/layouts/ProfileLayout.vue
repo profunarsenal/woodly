@@ -3,7 +3,7 @@
         app-sidebar.sidebar(:items="sidebarItems")
         .content
             router-view
-            app-footer.footer
+            app-footer.footer(v-if="!needHideFooter")
 </template>
 
 <script>
@@ -23,6 +23,12 @@ export default {
         return {
             sidebarItems: PROFILE_SIDEBAR_ITEMS,
         };
+    },
+
+    computed: {
+        needHideFooter() {
+            return this.$route.meta.needHideFooter ?? false;
+        },
     },
 };
 </script>

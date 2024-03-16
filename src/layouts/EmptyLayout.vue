@@ -8,3 +8,8 @@ export default {
     name: 'EmptyLayout',
 };
 </script>
+
+<style lang="sass" scoped>
+.empty
+    height: 100vh
+</style>

@@ -75,7 +75,7 @@ import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VActionMenu from '@/components/common/VActionMenu.vue';
 import VLoader from '@//components/common/VLoader.vue';
-import ButtonMini from '@/components/app/ButtonMini.vue';
+import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
 import { BANK_TYPES } from '@/helpers/catalogs';
