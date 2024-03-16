@@ -28,6 +28,14 @@ const router = createRouter({
             },
         },
         {
+            path: '/profile/auth',
+            name: 'ProfileAuthorization',
+            component: () => import('@/views/Profile/ProfileAuthorization.vue'),
+            meta: {
+                layout: 'empty',
+            },
+        },
+        {
             path: '/auto-payments/:id',
             name: 'AutoPayments',
             component: () => import('@/views/Profile/AutoPayments.vue'),

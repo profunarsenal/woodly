@@ -1,6 +1,6 @@
 <template lang="pug">
     .input-wrapper
-        .label {{ label }}
+        .label(v-if="label") {{ label }}
         input.input(
             :value="modelValue"
             :type="inputType"
