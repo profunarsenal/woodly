@@ -36,7 +36,7 @@ const router = createRouter({
             },
         },
         {
-            path: '/auto-payments/:id',
+            path: '/cards/auto-payments/:id',
             name: 'AutoPayments',
             component: () => import('@/views/Profile/AutoPayments.vue'),
         },

@@ -17,6 +17,7 @@
 
 <script>
 import VButton from '@/components/common/VButton.vue';
+import { CARD_STATUSES } from '@/helpers/catalogs';
 
 export default {
     name: 'ModalCardDelete',
@@ -58,7 +59,7 @@ export default {
         async deleteCard() {
             await this.$api.cards.changeCardStatus({
                 cardId: this.cardId,
-                status: false,
+                status: CARD_STATUSES.deleted,
             });
             this.close();
             this.$store.dispatch('cards/getCards', this.$route.query);

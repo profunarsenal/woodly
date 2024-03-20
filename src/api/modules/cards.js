@@ -31,4 +31,9 @@ export default class Cards extends AbstractService {
         const response = await this.axios.patch('/cards/set-limit', payload);
         return response;
     };
+
+    async getAutoPayments(cardId) {
+        const response = await this.axios.get(`/cards/${cardId}/transactions`);
+        return response;
+    }
 };

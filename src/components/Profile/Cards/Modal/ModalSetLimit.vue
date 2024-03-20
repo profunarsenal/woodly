@@ -5,7 +5,7 @@
         .title Установка лимитов
         .form
             v-input(
-                v-model="form.turnover"
+                v-model="form.paymentsLimitPerDay"
                 label="Суточный оборот"
                 type="number"
             )
@@ -49,7 +49,7 @@ export default {
     data() {
         return {
             form: {
-                turnover: 0,
+                paymentsLimitPerDay: 0,
                 transactionsLimitPerDay: 0,
                 paymentMin: 0,
                 paymentMax: 0,
@@ -80,7 +80,7 @@ export default {
 
         async saveLimit() {
             const form = {
-                turnover: +this.form.turnover,
+                paymentsLimitPerDay: +this.form.paymentsLimitPerDay,
                 transactionsLimitPerDay: +this.form.transactionsLimitPerDay,
                 paymentMin: +this.form.paymentMin,
                 paymentMax: +this.form.paymentMax,

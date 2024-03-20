@@ -71,6 +71,17 @@ export default {
         back() {
             this.$router.push('/profile/cards');
         },
+
+        async getAutoPayments(cardId) {
+            const { data } = await this.$api.cards.getAutoPayments(cardId);
+            console.log(data)
+        }
+    },
+
+    async created() {
+        if (this.$route.params.id) {
+            this.getAutoPayments(this.$route.params.id)
+        }
     },
 };
 </script>

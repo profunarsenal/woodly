@@ -17,6 +17,7 @@
 
 <script>
 import VButton from '@/components/common/VButton.vue';
+import { CARD_STATUSES } from '@/helpers/catalogs';
 
 export default {
     name: 'ModalCardRecovery',
@@ -58,7 +59,7 @@ export default {
         async recoveryCard() {
             await this.$api.cards.changeCardStatus({
                 cardId: this.cardId,
-                status: true,
+                status: CARD_STATUSES.active,
             });
             this.close();
             this.$store.dispatch('cards/getCards', this.$route.query);

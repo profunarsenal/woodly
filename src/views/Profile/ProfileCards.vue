@@ -8,19 +8,11 @@
                 size="small"
                 @click="openModalCard"
             ) Добавить
-            .toggle-buttons
-                v-button(
-                    v-if="isActiveTransactions"
-                    type="negative"
-                    size="small"
-                    @click="offTransactions"
-                ) Выключить сделки
-                v-button(
-                    v-else
-                    type="positive"
-                    size="small"
-                    @click="onTransactions"
-                ) Включить сделки
+            v-button.button-transactions(
+                :type="buttonTransactions.type"
+                size="small"
+                @click="toggleTransactions"
+            ) {{ buttonTransactions.value }}
         v-tabs.table-tabs(
             v-model="activeTab"
             :tabs="tableTabs"
@@ -36,12 +28,19 @@
             )
                 template(#bankType="{ item }")
                     .bank {{ setBankType(item.bankType) }}
+                template(#turnover="{ item }")
+                    .turnover {{ `${item.turnoverPaymentsPerDay} / ${item.turnoverTransactionsPerDay}` }}
+                template(#limitToday="{ item }")
+                    .limit {{ `${item.paymentsLimitPerDay} / ${item.transactionsLimitPerDay}` }}
                 template(#transactionsLimit="{ item }")
                     .limit {{ `${item.paymentMin}-${item.paymentMax}` }}
                 template(#status="{ item }")
+                    span.status-text(v-if="item.status === cardStatuses.deleted") Удалена
                     inline-svg.status(
+                        v-else
                         :class="setIcon(item.status).class"
                         :src="setIcon(item.status).src"
+                        @click="changeStatus(item)"
                     )
                 template(#thead)
                     th.thead-item
@@ -60,9 +59,11 @@
                         :subtitle="emptyForm.subtitle"
                     )
     app-pagination.pagination(
-        :pages="pagination.page"
-        :count="pagination.count"
+        v-if="pagination.pages > 1"
+        :pages="pagination.pages"
+        :limit="pagination.limit"
         :total="pagination.total"
+        :count="cards.length"
     )
 </template>
 
@@ -78,12 +79,7 @@ import VLoader from '@//components/common/VLoader.vue';
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
-import { BANK_TYPES } from '@/helpers/catalogs';
-
-const TAB_KEYS = {
-    active: 'active',
-    deleted: 'deleted',
-};
+import { BANK_TYPES, CARD_STATUSES } from '@/helpers/catalogs';
 
 export default {
     name: 'ProfileCards',
@@ -103,12 +99,11 @@ export default {
         return {
             tableHeaders: CARDS_TABLE_HEADERS,
             tableTabs: [
-                { key: TAB_KEYS.active, title: 'Активные' },
-                { key: TAB_KEYS.deleted, title: 'Удаленные' },
+                { key: CARD_STATUSES.active, title: 'Активные' },
+                { key: CARD_STATUSES.deleted, title: 'Удаленные' },
             ],
             urlParams: Object.assign({}, this.$route.query),
-            activeTab: TAB_KEYS.active,
-            isActiveTransactions: false,
+            activeTab: CARD_STATUSES.active,
             isLoadingCards: false,
             search: debounce(this.searchTable, 500),
         };
@@ -118,6 +113,7 @@ export default {
         ...mapState({
             cards: ({ cards }) => cards.cards,
             pagination: ({ cards }) => cards.pagination,
+            isWorkTransactions: ({ cards }) => cards.isWorkTransactions,
         }),
 
         tableControlsTabActive() {
@@ -150,7 +146,12 @@ export default {
                     icon: '/icons/cards.svg',
                     title: 'Автоплатежи',
                     callback: (item) => {
-                        this.$router.push('/auto-payments/123');
+                        this.$router.push({
+                            name: 'AutoPayments',
+                            params: {
+                                id: item.cardId,
+                            },
+                        });
                     },
                 },
                 {
@@ -208,11 +209,11 @@ export default {
         },
 
         isEnabledTabActive() {
-            return this.activeTab === TAB_KEYS.active;
+            return this.activeTab === this.cardStatuses.active;
         },
 
         isEnabledTabDeleted() {
-            return this.activeTab === TAB_KEYS.deleted;
+            return this.activeTab === this.cardStatuses.deleted;
         },
 
         emptyForm() {
@@ -231,6 +232,13 @@ export default {
                     subtitle: 'Здесь будут храниться карты, которые вы удалили',
                 }
             }
+        },
+
+        buttonTransactions() {
+            return {
+                type: this.isWorkTransactions ? 'negative' : 'positive',
+                value: this.isWorkTransactions ? 'Выключить сделки' : 'Включить сделки',
+            };
         },
     },
 
@@ -253,13 +261,18 @@ export default {
                     src: '/icons/checkmark-circle.svg',
                     class: 'active',
                 },
-                deleted: {
+                notActive: {
                     src: '/icons/close-circle.svg',
-                    class: 'deleted',
+                    class: 'not-active',
                 },
             };
 
-            return status ? STATUSES.active : STATUSES.deleted;
+            switch(status) {
+                case this.cardStatuses.active:
+                    return STATUSES.active;
+                case this.cardStatuses.notActive:
+                    return STATUSES.notActive;
+            }
         },
 
         setBankType(type) {
@@ -267,12 +280,8 @@ export default {
             return bank?.title || '';
         },
 
-        offTransactions() {
-            this.isActiveTransactions = false;
-        },
-
-        onTransactions() {
-            this.isActiveTransactions = true;
+        toggleTransactions() {
+            this.$store.dispatch('cards/toggleTransactionsStatus');
         },
 
         openModal(modal) {
@@ -290,8 +299,8 @@ export default {
         },
 
         toggleTable() {
-            if (this.activeTab === TAB_KEYS.deleted) {
-                this.urlParams.status = false;
+            if (this.activeTab === this.cardStatuses.deleted) {
+                this.urlParams.status = this.cardStatuses.deleted;
             } else {
                 delete this.urlParams.status;
             }
@@ -302,6 +311,17 @@ export default {
         searchTable(value, key) {
             this.urlParams[key] = value;
             this.$router.push({ query: this.urlParams });
+        },
+
+        changeStatus(card) {
+            const newStatus = card.status === this.cardStatuses.active ?
+                this.cardStatuses.notActive :
+                this.cardStatuses.active;
+
+            this.$store.dispatch('cards/changeStatus', {
+                cardId: card.cardId,
+                status: newStatus,
+            });
         },
     },
 
@@ -317,11 +337,14 @@ export default {
     },
 
     created() {
+        this.cardStatuses = CARD_STATUSES;
+
         if (this.urlParams.hasOwnProperty('status')) {
-            this.activeTab = TAB_KEYS.deleted;
+            this.activeTab = this.cardStatuses.deleted;
         }
 
         this.getCards();
+        this.$store.dispatch('cards/getTransactionsStatus');
     },
 };
 </script>
@@ -347,7 +370,7 @@ export default {
         font-weight: 600
         font-size: 3.2rem
         line-height: 3.2rem
-    .toggle-buttons
+    .button-transactions
         margin-left: auto
 
 .table-tabs
@@ -367,10 +390,14 @@ export default {
     align-items: center
     justify-content: center
     margin: 0 auto
+    cursor: pointer
     &.active
         fill: $color-green
-    &.deleted
+    &.not-active
         fill: $color-red-dark
+
+.status-text
+    color: $color-red-dark
 
 .cards-table
     .tbody-item

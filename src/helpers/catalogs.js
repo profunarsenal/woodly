@@ -4,6 +4,12 @@ export const BANK_TYPES = [
     { id: 3, title: 'СБП' },
 ];
 
+export const CARD_STATUSES = {
+    active: 1,
+    notActive: 2,
+    deleted: 3,
+};
+
 export const TRANSACTIONS_STATUSES = {
     active: {
         key: 'active',

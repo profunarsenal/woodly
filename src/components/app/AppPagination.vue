@@ -8,11 +8,11 @@
         .navigation
             ul.items
                 li.item(
-                    v-for="page in pagesList"
-                    :key="page"
-                    :class="{ active: activePage === page }"
-                    @click="toPage(page)"
-                ) {{ page }}
+                    v-for="item in pagesList"
+                    :key="item"
+                    :class="setClass(item)"
+                    @click="toPage(item)"
+                ) {{ item }}
             button.next(
                 @click="nextPage"
                 :disabled="isLastPage"
@@ -28,15 +28,19 @@ export default {
     name: 'AppPagination',
 
     props: {
-        pages: {
-            type: Number,
-            default: 1,
-        },
         total: {
             type: Number,
             default: 1,
         },
+        limit: {
+            type: Number,
+            default: 16,
+        },
         count: {
+            type: Number,
+            default: 1,
+        },
+        pages: {
             type: Number,
             default: 1,
         },
@@ -44,13 +48,14 @@ export default {
 
     data() {
         return {
-            activePage: 1,
+            page: +this.$route.query?.page || 1,
+            urlParams: Object.assign({}, this.$route.query),
         };
     },
 
     computed: {
         isLastPage() {
-            return this.activePage === this.pages;
+            return this.page === this.pages;
         },
 
         pagesList() {
@@ -64,10 +69,10 @@ export default {
                 return this.pages;
             }
 
-            const countPagesToEnd = this.pages - this.activePage;
+            const countPagesToEnd = this.pages - this.page;
             const pagesList = [];
 
-            if (this.activePage <= VISIBLE_ELEMENTS_FROM_START) {
+            if (this.page <= VISIBLE_ELEMENTS_FROM_START) {
                 for (let item = FIRST_PAGE_ELEMENT; item <= VISIBLE_ELEMENTS_FROM_FINISH + 1; item++) {
                     pagesList.push(item)
                 }
@@ -78,11 +83,11 @@ export default {
                 return pagesList;
             }
 
-            if (this.activePage > VISIBLE_ELEMENTS_FROM_START && countPagesToEnd > VISIBLE_ELEMENTS_FROM_FINISH) {
+            if (this.page > VISIBLE_ELEMENTS_FROM_START && countPagesToEnd > VISIBLE_ELEMENTS_FROM_FINISH) {
                 pagesList.push(FIRST_PAGE_ELEMENT);
                 pagesList.push(DOTS);
 
-                for (let item = this.activePage - COUNT_EDGE_ELEMENTS; item <= this.activePage + COUNT_EDGE_ELEMENTS; item++) {
+                for (let item = this.page - COUNT_EDGE_ELEMENTS; item <= this.page + COUNT_EDGE_ELEMENTS; item++) {
                     pagesList.push(item)
                 }
 
@@ -107,21 +112,42 @@ export default {
         },
     },
 
+    watch: {
+        page(newValue) {
+            const FIRST_PAGE = 1;
+
+            if (this.page === FIRST_PAGE) {
+                delete this.urlParams.page;
+            } else {
+                this.urlParams.page = newValue;
+            }
+
+            this.$router.push({ query: this.urlParams });
+        },
+    },
+
     methods: {
         toPage(page) {
             if (page === DOTS) {
                 return;
             }
 
-            this.activePage = page;
+            this.page = page;
         },
 
         nextPage() {
-            if (this.pages === this.activePage) {
+            if (this.page === this.pages) {
                 return;
             }
 
-            this.activePage = this.activePage + 1;
+            this.page = this.page + 1;
+        },
+
+        setClass(item) {
+            return {
+                active: item === this.page,
+                dots: item === DOTS,
+            };
         },
     },
 };
@@ -168,11 +194,12 @@ export default {
             height: 2.8rem
             width: 2.8rem
             border-radius: 0.8rem
-            cursor: pointer
             background-color: $color-gray-light-2
-            @media(any-hover:hover)
-                &:hover
-                    background-color: $color-gray-100
+            &:not(.dots)
+                cursor: pointer
+                @media(any-hover:hover)
+                    &:hover
+                        background-color: $color-gray-100
             &.active
                 color: $color-white
                 background-color: $color-violet-100
