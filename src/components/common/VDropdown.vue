@@ -115,6 +115,7 @@ export default {
             cursor: pointer
             font-size: 1.6rem
             line-height: 2.4rem
+            border: 0.1rem solid $color-gray-light
             &::placeholder
                 font-size: 1.6rem
                 color: $color-gray-dark

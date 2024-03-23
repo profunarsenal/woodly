@@ -2,11 +2,21 @@
     .profile-sale
         .header
             .title Продажа
-            v-button(
-                type="outline"
-                iconSrc="/icons/download.svg"
-                size="small"
-            ) Экспорт
+            .export
+                v-button(
+                    type="outline"
+                    iconSrc="/icons/download.svg"
+                    size="small"
+                ) Экспорт
+                .export-window
+                    .pickers
+                        v-date-picker
+                        v-date-picker
+                    .buttons
+                        v-button(
+                            type="secondary"
+                        ) Сбросить
+                        v-button(isDisabled) Выгрузить
         v-tabs.table-tabs(
             v-model="activeTab"
             :tabs="tableTabs"
@@ -74,6 +84,7 @@ import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
 import VLoader from '@//components/common/VLoader.vue';
+import VDatePicker from '@/components/common/VDatePicker.vue';
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import WindowConfirm from '@/components/app/WindowConfirm.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
@@ -90,6 +101,7 @@ export default {
         VTable,
         VLoader,
         VTooltip,
+        VDatePicker,
         ButtonMini,
         WindowConfirm,
     },
@@ -190,6 +202,28 @@ export default {
         font-weight: 600
         font-size: 3.2rem
         line-height: 3.2rem
+    .export
+        position: relative
+        &-window
+            position: absolute
+            z-index: 99
+            top: calc( 100% + 0.8rem )
+            right: 0
+            min-width: 61.8rem
+            padding: 1.2rem 1.6rem
+            border-radius: 2rem
+            background-color: $color-white
+            border: 0.1rem solid $color-gray-100
+            display: flex
+            flex-direction: column
+            gap: 2.4rem
+            .pickers,
+            .buttons
+                display: flex
+                align-items: center
+                gap: 1.2rem
+                &:deep(.button)
+                    flex: 1
 
 .loader
     display: flex

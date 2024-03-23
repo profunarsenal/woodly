@@ -195,7 +195,7 @@ export default {
             width: 2.8rem
             border-radius: 0.8rem
             background-color: $color-gray-light-2
-            &:not(.dots)
+            &:not(.dots, .active)
                 cursor: pointer
                 @media(any-hover:hover)
                     &:hover

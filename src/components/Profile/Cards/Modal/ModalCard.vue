@@ -11,9 +11,9 @@
             )
             v-input(
                 v-model="form.cardNumber"
-                v-mask="'####-####-####-####'"
+                v-mask="'#### #### #### ####'"
                 label="Номер карты"
-                placeholder="0000-0000-0000-0000"
+                placeholder="0000 0000 0000 0000"
             )
             v-input(
                 v-model="form.fio"
