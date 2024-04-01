@@ -7,13 +7,24 @@
                     type="outline"
                     iconSrc="/icons/download.svg"
                     size="small"
+                    @click="openExport"
                 ) Экспорт
-                .export-window
+                .export-window(
+                    v-if="isOpenExport"
+                    v-click-outside="closeExport"
+                )
                     .pickers
-                        v-date-picker
-                        v-date-picker
+                        v-date-picker(
+                            v-model="dateExport.start"
+                            label="Дата от"
+                        )
+                        v-date-picker(
+                            v-model="dateExport.end"
+                            label="Дата до"
+                        )
                     .buttons
                         v-button(
+                            isDisabled
                             type="secondary"
                         ) Сбросить
                         v-button(isDisabled) Выгрузить
@@ -119,6 +130,11 @@ export default {
             urlParams: Object.assign({}, this.$route.query),
             isLoading: false,
             search: debounce(this.searchTable, 500),
+            isOpenExport: false,
+            dateExport: {
+                start: null,
+                end: null,
+            },
         };
     },
 
@@ -162,6 +178,14 @@ export default {
         searchTable(value, key) {
             this.urlParams[key] = value;
             this.$router.push({ query: this.urlParams });
+        },
+
+        openExport() {
+            this.isOpenExport = true;
+        },
+
+        closeExport() {
+            this.isOpenExport = false;
         },
     },
 
@@ -222,7 +246,8 @@ export default {
                 display: flex
                 align-items: center
                 gap: 1.2rem
-                &:deep(.button)
+                &:deep(.button),
+                &:deep(.datepicker)
                     flex: 1
 
 .loader

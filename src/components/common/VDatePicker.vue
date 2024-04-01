@@ -1,45 +1,78 @@
 <template lang="pug">
-    vue-date-picker(
-        v-model="date"
-        :enable-time-picker="false"
-        auto-apply
-        position="left"
-        locale="ru"
-        placeholder="ДД/ММ/ГГ"
-        menu-class-name="datepicker-menu"
-        input-class-name="datepicker-input"
-    )
-        template(#arrow-left)
-            inline-svg.arrow.arrow-left(src="/icons/chevron.svg")
-        template(#arrow-right)
-            inline-svg.arrow(src="/icons/chevron.svg")
-        template(#input-icon)
-            inline-svg.calendar(src="/icons/calendar.svg")
-        template(#clear-icon="{ clear }")
-            inline-svg.clear(
-                src="/icons/close.svg"
-                @click="clear"
-            )
+    .datepicker
+        .label(v-if="label") {{ label }}
+        vue-date-picker(
+            v-model="date"
+            :enable-time-picker="false"
+            :format="format"
+            auto-apply
+            position="left"
+            locale="ru"
+            placeholder="ДД/ММ/ГГ"
+            menu-class-name="datepicker-menu"
+            input-class-name="datepicker-input"
+        )
+            template(#arrow-left)
+                inline-svg.arrow.arrow-left(src="/icons/chevron.svg")
+            template(#arrow-right)
+                inline-svg.arrow(src="/icons/chevron.svg")
+            template(#input-icon)
+                inline-svg.calendar(src="/icons/calendar.svg")
+            template(#clear-icon="{ clear }")
+                inline-svg.clear(
+                    src="/icons/close.svg"
+                    @click="clear"
+                )
+            template(#calendar-icon)
+                inline-svg.calendar(src="/icons/calendar.svg")
 </template>
 
 <script>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import { formatDate } from '@/helpers/date';
 
 export default {
     name: 'VDatePicker',
 
     components: { VueDatePicker },
 
+    emits: ['update:modelValue'],
+
+    props: {
+        label: {
+            type: String,
+            default: '',
+        },
+
+        modelValue: {
+            type: [null, Date],
+            default: null,
+        },
+    },
+
     data() {
         return {
             date: null,
+            format: formatDate,
         };
-    }
+    },
+
+    watch: {
+        date(newDate) {
+            this.$emit('update:modelValue', newDate);
+        },
+    },
 };
 </script>
 
 <style lang="sass">
+.label
+    font-size: 1.4rem
+    line-height: 2rem
+    color: $color-gray-dark
+    margin-bottom: 0.6rem
+
 .datepicker-input
     height: 4.8rem
     border-radius: 1.2rem
