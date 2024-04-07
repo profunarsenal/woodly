@@ -17,7 +17,6 @@
                         v-model="searchableFields[item.key]"
                         :item="item"
                         @input="search($event, item.key)"
-                        @clear="clearSearch(item.key)"
                     )
                     slot(
                         v-else
@@ -108,12 +107,6 @@ export default {
     methods: {
         search(event, key) {
             this.$emit('search', event.target.value, key)
-        },
-
-        clearSearch(key) {
-            const urlParams = Object.assign({}, this.$route.query);
-            delete urlParams[key];
-            this.$router.push({ query: urlParams });
         },
 
         initSearchFields() {

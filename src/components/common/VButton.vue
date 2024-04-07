@@ -99,7 +99,9 @@ export default {
         &:deep(.loader)
             fill: $color-violet-100
         &:disabled
-            background-color: $color-gray
+            color: $color-gray-dark
+            .icon
+                fill: $color-gray-dark
         &:not(:disabled)
             @media(any-hover:hover)
                 &:hover

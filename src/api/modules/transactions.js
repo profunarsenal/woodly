@@ -13,4 +13,9 @@ export default class Transactions extends AbstractService {
         const response = await this.axios.get('/transactions', { params });
         return response;
     };
+
+    async exportTransactions(dateStart, dateEnd) {
+        const response = await this.axios.get(`/transactions/export?dateStart=${dateStart}&dateEnd=${dateEnd}`);
+        return response;
+    }
 };

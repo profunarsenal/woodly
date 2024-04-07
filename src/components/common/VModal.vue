@@ -35,6 +35,7 @@ export default {
         ModalCardRecovery: defineAsyncComponent(() => import('@/components/Profile/Cards/Modal/ModalCardRecovery.vue')),
         ModalSessions: defineAsyncComponent(() => import('@/components/Profile/Settings/Modal/ModalSessions.vue')),
         ModalSettingsQR: defineAsyncComponent(() => import('@/components/Profile/Settings/Modal/ModalQR.vue')),
+        ModalCorrection: defineAsyncComponent(() => import('@/components/Profile/Sale/Modal/ModalCorrection.vue')),
     },
 
     computed: {

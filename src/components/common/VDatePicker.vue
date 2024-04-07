@@ -5,6 +5,8 @@
             v-model="date"
             :enable-time-picker="false"
             :format="format"
+            :min-date="minDate"
+            :max-date="maxDate"
             auto-apply
             position="left"
             locale="ru"
@@ -49,16 +51,30 @@ export default {
             type: [null, Date],
             default: null,
         },
+
+        minDate: {
+            type: [Date],
+            default: null,
+        },
+
+        maxDate: {
+            type: [Date],
+            default: null,
+        },
     },
 
     data() {
         return {
-            date: null,
+            date: this.modelValue,
             format: formatDate,
         };
     },
 
     watch: {
+        modelValue(newDate) {
+            this.date = newDate;
+        },
+
         date(newDate) {
             this.$emit('update:modelValue', newDate);
         },

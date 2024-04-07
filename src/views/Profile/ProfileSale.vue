@@ -9,25 +9,11 @@
                     size="small"
                     @click="openExport"
                 ) Экспорт
-                .export-window(
+                export-window(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
+                    @unload="unloadTransactions"
                 )
-                    .pickers
-                        v-date-picker(
-                            v-model="dateExport.start"
-                            label="Дата от"
-                        )
-                        v-date-picker(
-                            v-model="dateExport.end"
-                            label="Дата до"
-                        )
-                    .buttons
-                        v-button(
-                            isDisabled
-                            type="secondary"
-                        ) Сбросить
-                        v-button(isDisabled) Выгрузить
         v-tabs.table-tabs(
             v-model="activeTab"
             :tabs="tableTabs"
@@ -64,27 +50,20 @@
             template(#thead)
                 th.thead-item(colspan="2")
             template(#tbody="{ item }")
-                template(v-if="item.status === transactionsStatuses.successful.id")
-                    td.tbody-item(colspan="2")
-                template(v-else-if="item.status === transactionsStatuses.review.id")
-                    td.tbody-item
-                        .table-buttons
-                            .table-button
-                                button-mini(type="confirm")
-                                v-tooltip.table-tooltip(
-                                    position="right"
-                                    text="Подтвердить сделку"
-                                )
-                                //- window-confirm
-                            button-mini(type="decline")
-                    td.tbody-item
-                        button-mini(type="option")
-                template(v-else)
-                    td.tbody-item
-                        button-mini(type="confirm")
-                    td.tbody-item
-                        button-mini(type="edit")
-    app-pagination.pagination
+                table-controls(:item="item")
+            template(#empty)
+                empty-form(
+                    :imageSrc="emptyForm.src"
+                    :title="emptyForm.title"
+                    :subtitle="emptyForm.subtitle"
+                )
+    app-pagination.pagination(
+        v-if="pagination.pages > 1"
+        :pages="pagination.pages"
+        :limit="pagination.limit"
+        :total="pagination.total"
+        :count="transactions.length"
+    )
 </template>
 
 <script>
@@ -93,14 +72,14 @@ import AppPagination from '@/components/app/AppPagination.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
-import VTooltip from '@/components/common/VTooltip.vue';
 import VLoader from '@//components/common/VLoader.vue';
-import VDatePicker from '@/components/common/VDatePicker.vue';
-import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
-import WindowConfirm from '@/components/app/WindowConfirm.vue';
+import EmptyForm from '@/components/app/EmptyForm.vue';
+import TableControls from '@/components/Profile/Sale/TableControls.vue';
+import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
 import { TRANSACTIONS_TABLE_HEADERS } from '@/helpers/table';
 import { formatDate, formatTime } from '@/helpers/string';
+import { downloadFile } from '@/helpers/file';
 
 export default {
     name: 'ProfileSale',
@@ -111,10 +90,9 @@ export default {
         VTabs,
         VTable,
         VLoader,
-        VTooltip,
-        VDatePicker,
-        ButtonMini,
-        WindowConfirm,
+        EmptyForm,
+        TableControls,
+        ExportWindow,
     },
 
     data() {
@@ -124,18 +102,53 @@ export default {
                 { key: 'all', title: 'Все сделки' },
                 ...Object.values(TRANSACTIONS_STATUSES),
             ],
-            transactionsStatuses: TRANSACTIONS_STATUSES,
             activeTab: 'all',
             transactions: [],
             urlParams: Object.assign({}, this.$route.query),
             isLoading: false,
-            search: debounce(this.searchTable, 500),
             isOpenExport: false,
-            dateExport: {
-                start: null,
-                end: null,
+            search: debounce(this.searchTable, 500),
+            pagination: {
+                limit: 0,
+                pages: 0,
+                total: 0
             },
         };
+    },
+
+    computed: {
+        emptyForm() {
+            const baseForm = {
+                src: '/images/empty/search.png',
+                title: 'Ничего не нашлось',
+            };
+
+            if (this.activeTab === 'all') {
+                return {
+                    src: '/images/empty/wallet.png',
+                    title: 'У вас еще нет сделок',
+                    subtitle: 'Здесь будут храниться все сделки по продаже',
+                };
+            }
+
+            if (this.activeTab === TRANSACTIONS_STATUSES.active.key) {
+                baseForm.subtitle = 'Здесь будут храниться все активные сделки';
+            }
+
+            if (this.activeTab === TRANSACTIONS_STATUSES.review.key) {
+                baseForm.subtitle = 'Здесь будут храниться все сделки на проверке';
+            }
+
+            if (this.activeTab === TRANSACTIONS_STATUSES.canceled.key) {
+                baseForm.subtitle = 'Здесь будут храниться все отмененные сделки';
+            }
+
+            if (this.activeTab === TRANSACTIONS_STATUSES.successful.key) {
+                baseForm.subtitle = 'Здесь будут храниться все успешные сделки';
+            }
+
+            return baseForm;
+        },
     },
 
     methods: {
@@ -145,6 +158,9 @@ export default {
             try {
                 const { data } = await this.$api.transactions.getTransactions(this.urlParams);
                 this.transactions = data.transactions;
+                this.pagination.limit = data.limit;
+                this.pagination.total = data.total;
+                this.pagination.pages = Math.ceil(data.total / data.limit);
             } catch (error) {
                 console.log(error)
             } finally {
@@ -168,7 +184,7 @@ export default {
             if (this.activeTab === 'all') {
                 delete this.urlParams.status;
             } else {
-                const status = this.transactionsStatuses[this.activeTab];
+                const status = TRANSACTIONS_STATUSES[this.activeTab];
                 this.urlParams.status = status.id;
             }
 
@@ -186,6 +202,18 @@ export default {
 
         closeExport() {
             this.isOpenExport = false;
+        },
+
+        async unloadTransactions(date) {
+            const { dateStart, dateEnd } = date;
+
+            try {
+                const { data } = await this.$api.transactions.exportTransactions(dateStart, dateEnd);
+                const filename = `${dateStart}-${dateEnd}`;
+                downloadFile(data, filename);
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
 
@@ -228,27 +256,6 @@ export default {
         line-height: 3.2rem
     .export
         position: relative
-        &-window
-            position: absolute
-            z-index: 99
-            top: calc( 100% + 0.8rem )
-            right: 0
-            min-width: 61.8rem
-            padding: 1.2rem 1.6rem
-            border-radius: 2rem
-            background-color: $color-white
-            border: 0.1rem solid $color-gray-100
-            display: flex
-            flex-direction: column
-            gap: 2.4rem
-            .pickers,
-            .buttons
-                display: flex
-                align-items: center
-                gap: 1.2rem
-                &:deep(.button),
-                &:deep(.datepicker)
-                    flex: 1
 
 .loader
     display: flex
@@ -281,27 +288,6 @@ export default {
                 fill: $color-green
     .time
         color: $color-gray-dark
-    .table-buttons
-        display: flex
-        gap: 0.8rem
-    .table-button
-        width: 2rem
-        height: 2rem
-        position: relative
-        @media(any-hover:hover)
-            &:hover
-                .table-tooltip
-                    opacity: 1
-                    visibility: visible
-                    pointer-events: all
-                    transition: 0.4s ease 0.4s
-    .table-tooltip
-        opacity: 0
-        visibility: hidden
-        pointer-events: none
-        right: calc( 100% + 0.8rem )
-        top: -0.3rem
-        transition: 0.2s ease
 
 .pagination
     position: fixed
