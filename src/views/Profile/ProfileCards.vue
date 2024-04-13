@@ -151,6 +151,9 @@ export default {
                             params: {
                                 id: item.cardId,
                             },
+                            query: {
+                                cardLastNumber: item.cardLastNumber,
+                            },
                         });
                     },
                 },
@@ -159,7 +162,15 @@ export default {
                     icon: '/icons/message.svg',
                     title: 'Общие СМС',
                     callback: (item) => {
-                        this.$router.push('/card-messages/123');
+                        this.$router.push({
+                            name: 'CardMessages',
+                            params: {
+                                id: item.cardId,
+                            },
+                            query: {
+                                cardLastNumber: item.cardLastNumber,
+                            },
+                        });
                     },
                 },
                 {

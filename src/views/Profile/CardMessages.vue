@@ -6,17 +6,23 @@
                 @click="back"
             )
             .title Общие СМС по карте
-            .subtitle Судоргина 56 №16
+            .subtitle {{ $route.query.cardLastNumber }}
         .table-wrapper
             v-table(
-                :headers="headItems"
-                :items="bodyItems"
+                :headers="headers"
+                :items="messages"
             )
+                template(#dateCreate="{ item }")
+                    .date {{ formatTableDate(item.dateCreate).date }} · 
+                        |
+                        span.time {{ formatTableDate(item.dateCreate).time }}
 </template>
 
 <script>
 import SquareButton from '@/components/common/Buttons/SquareButton.vue';
 import VTable from '@/components/common/VTable.vue';
+import { CARD_MESSAGES } from '@/helpers/table';
+import { formatDate, formatTime } from '@/helpers/string';
 
 export default {
     name: 'AutoPayments',
@@ -28,32 +34,8 @@ export default {
 
     data() {
         return {
-            headItems: [
-                {
-                    title: 'ID СМС',
-                    key: 'id',
-                },
-                {
-                    title: 'Отправитель',
-                    key: 'send',
-                },
-                {
-                    title: 'Описание',
-                    key: 'descr',
-                },
-                {
-                    title: 'Дата и время',
-                    key: 'date',
-                },
-            ],
-            bodyItems: [
-                {
-                    send: '900',
-                    descr: 'Ваша карта уже в офисе: г. Барнаул пр-т Красноармейский 58а/1 . Она хранится 6 месяцев. Чтобы получить карту, возьмите паспорт и телефон. Информация о получении sberbank.com',
-                    date: '12.02.2024 · 03:07:11',
-                    id: 32707571,
-                },
-            ],
+            headers: CARD_MESSAGES,
+            messages: [],
         };
     },
 
@@ -61,6 +43,29 @@ export default {
         back() {
             this.$router.push('/profile/cards');
         },
+
+        formatTableDate(date) {
+            return {
+                date: formatDate(date),
+                time: formatTime(date),
+            };
+        },
+
+        async getMessages() {
+            const params = {
+                cardLastNumber: this.$route.query.cardLastNumber,
+                page: this.$route.query.page,
+            };
+            const { data } = await this.$api.cards.getCardMessages(params);
+
+            this.messages = data.messages;
+        }
+    },
+
+    async created() {
+        if (this.$route.params.id) {
+            this.getMessages();
+        }
     },
 };
 </script>
@@ -85,4 +90,7 @@ export default {
             line-height: 3.2rem
         .subtitle
             color: $color-gray-dark
+
+.time
+    color: $color-gray-dark
 </style>

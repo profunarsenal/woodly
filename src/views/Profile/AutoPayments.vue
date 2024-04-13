@@ -6,17 +6,23 @@
                 @click="back"
             )
             .title Автоплатежи по карте
-            .subtitle Судоргина 56 №16
+            .subtitle {{ $route.query.cardLastNumber }}
         .table-wrapper
             v-table(
-                :headers="headItems"
-                :items="bodyItems"
+                :headers="headers"
+                :items="autopayments"
             )
+                template(#paymentTime="{ item }")
+                    .date {{ formatTableDate(item.paymentTime).date }} · 
+                        |
+                        span.time {{ formatTableDate(item.paymentTime).time }}
 </template>
 
 <script>
 import SquareButton from '@/components/common/Buttons/SquareButton.vue';
 import VTable from '@/components/common/VTable.vue';
+import { AUTOPAYMENTS } from '@/helpers/table';
+import { formatDate, formatTime } from '@/helpers/string';
 
 export default {
     name: 'AutoPayments',
@@ -28,42 +34,8 @@ export default {
 
     data() {
         return {
-            headItems: [
-                {
-                    title: 'ID платежа',
-                    key: 'id',
-                },
-                {
-                    title: 'Платеж',
-                    key: 'payment',
-                },
-                {
-                    title: 'Карта',
-                    key: 'card',
-                },
-                {
-                    title: 'Сумма',
-                    key: 'sum',
-                },
-                {
-                    title: 'Дата и время',
-                    key: 'date',
-                },
-                {
-                    title: 'Описание',
-                    key: 'descr',
-                },
-            ],
-            bodyItems: [
-                {
-                    id: 21367690,
-                    payment: 'Не найдено',
-                    card: '6554',
-                    sum: '4 300.00',
-                    date: '12.02.2024',
-                    descr: 'MIR-6554 · 03:06 · Перевод 4 300₽ от Артем А. · Баланс: 65 944.92₽',
-                },
-            ],
+            headers: AUTOPAYMENTS,
+            autopayments: [],
         };
     },
 
@@ -72,15 +44,27 @@ export default {
             this.$router.push('/profile/cards');
         },
 
-        async getAutoPayments(cardId) {
-            const { data } = await this.$api.cards.getAutoPayments(cardId);
-            console.log(data)
+        formatTableDate(date) {
+            return {
+                date: formatDate(date),
+                time: formatTime(date),
+            };
+        },
+
+        async getAutoPayments() {
+            const params = {
+                cardLastNumber: this.$route.query.cardLastNumber,
+                page: this.$route.query.page,
+            };
+            const { data } = await this.$api.cards.getAutoPayments(params);
+
+            this.autopayments = data.autopayments;
         }
     },
 
     async created() {
         if (this.$route.params.id) {
-            this.getAutoPayments(this.$route.params.id)
+            this.getAutoPayments();
         }
     },
 };
@@ -106,4 +90,7 @@ export default {
             line-height: 3.2rem
         .subtitle
             color: $color-gray-dark
+
+.time
+    color: $color-gray-dark
 </style>

@@ -17,3 +17,19 @@ export const TRANSACTIONS_TABLE_HEADERS = [
     { title: 'Создан', key: 'dateCreate' },
     { title: 'Закрытие', key: 'dateClose' },
 ];
+
+export const AUTOPAYMENTS = [
+    { title: 'ID платежа', key: 'autopaymentId' },
+    { title: 'Платеж', key: 'payment' },
+    { title: 'Карта', key: 'cardLastNumber' },
+    { title: 'Сумма', key: 'amount' },
+    { title: 'Дата и время', key: 'paymentTime' },
+    { title: 'Описание', key: 'message' },
+];
+
+export const CARD_MESSAGES = [
+    { title: 'ID СМС', key: 'messageId' },
+    { title: 'Отправитель', key: 'sender' },
+    { title: 'Описание', key: 'message' },
+    { title: 'Дата и время', key: 'dateCreate' },
+]

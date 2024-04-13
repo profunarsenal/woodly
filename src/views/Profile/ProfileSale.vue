@@ -40,13 +40,13 @@
                     )
                     .status-text {{ setStatus(item.status, 'transactionTitle') }}
             template(#dateCreate="{ item }")
-                .date(v-if="item.dateCreate") {{ formatDate(item.dateCreate).date }} ·
+                .date(v-if="item.dateCreate") {{ formatTableDate(item.dateCreate).date }} ·
                     |
-                    span.time {{ formatDate(item.dateCreate).time }}
+                    span.time {{ formatTableDate(item.dateCreate).time }}
             template(#dateClose="{ item }")
-                .date(v-if="item.dateClose") {{ formatDate(item.dateClose).date }} ·
+                .date(v-if="item.dateClose") {{ formatTableDate(item.dateClose).date }} ·
                     |
-                    span.time {{ formatDate(item.dateClose).time }}
+                    span.time {{ formatTableDate(item.dateClose).time }}
             template(#thead)
                 th.thead-item(colspan="2")
             template(#tbody="{ item }")
@@ -79,7 +79,7 @@ import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
 import { TRANSACTIONS_TABLE_HEADERS } from '@/helpers/table';
 import { formatDate, formatTime } from '@/helpers/string';
-import { downloadFile } from '@/helpers/file';
+import { exportTransactions } from '@/helpers/url';
 
 export default {
     name: 'ProfileSale',
@@ -173,7 +173,7 @@ export default {
             return statusItem[key] || '';
         },
 
-        formatDate(date) {
+        formatTableDate(date) {
             return {
                 date: formatDate(date),
                 time: formatTime(date),
@@ -208,9 +208,7 @@ export default {
             const { dateStart, dateEnd } = date;
 
             try {
-                const { data } = await this.$api.transactions.exportTransactions(dateStart, dateEnd);
-                const filename = `${dateStart}-${dateEnd}`;
-                downloadFile(data, filename);
+                await exportTransactions(dateStart, dateEnd);
             } catch (error) {
                 console.log(error);
             }

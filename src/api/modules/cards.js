@@ -32,8 +32,23 @@ export default class Cards extends AbstractService {
         return response;
     };
 
-    async getAutoPayments(cardId) {
-        const response = await this.axios.get(`/cards/${cardId}/transactions`);
+    async getAutoPayments(options = {}) {
+        const params = {
+            page: options.page,
+            cardLastNumber: options.cardLastNumber,
+        };
+
+        const response = await this.axios.get('/autopayments', { params });
+        return response;
+    }
+
+    async getCardMessages(options = {}) {
+        const params = {
+            page: options.page,
+            cardLastNumber: options.cardLastNumber,
+        };
+
+        const response = await this.axios.get('/messages', { params });
         return response;
     }
 };
