@@ -83,12 +83,12 @@ export default {
         },
 
         isReviewStatus() {
-            return this.item.status === TRANSACTIONS_STATUSES.review.id
+            return this.item.status === TRANSACTIONS_STATUSES.review.id;
         },
 
         controlClasses() {
             return { 'open-window': this.isOpenWindowConfirm };
-        }
+        },
     },
 
     methods: {
@@ -100,14 +100,26 @@ export default {
             this.isOpenWindowConfirm = false;
         },
 
-        confirmTransaction() {
-            console.log('confirmTransaction');
+        async confirmTransaction() {
+            try {
+                const { transactionId, cardId } = this.item;
+                await this.$store.dispatch('transactions/confirmTransaction', {
+                    transactionId,
+                    cardId,
+                    status: TRANSACTIONS_STATUSES.successful.id,
+                })
+
+                this.closeWindowConfirm();
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         openModalCorrection() {
             this.$store.commit('modal/open', {
                 component: 'ModalCorrection',
                 positionCenter: true,
+                componentData: this.item,
             });
         },
     },

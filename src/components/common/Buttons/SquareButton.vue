@@ -1,6 +1,6 @@
 <template lang="pug">
     button.button(@click="$emit('click')")
-        inline-svg.arrow(:src='icon')
+        inline-svg.icon(:src='icon')
 </template>
 
 <script>
@@ -27,7 +27,7 @@ export default {
     border-radius: 1rem
     background-color: $color-white
     transition: all 0.3s ease
-    .arrow
+    .icon
         width: 1.6rem
         height: 1.6rem
     @media(any-hover:hover)

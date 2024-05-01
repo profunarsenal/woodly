@@ -5,11 +5,15 @@
         .title Корректировка заявки
         .form
             v-input(
-                v-model="total"
+                v-model="amount"
+                type="number"
                 label="Сумма"
                 placeholder="Укажите сумму с корректировкой"
             )
-        v-button.button Подтвердить
+        v-button.button(
+            :isDisabled="!amount"
+            @click="confirm"
+        ) Подтвердить
 </template>
 
 <script>
@@ -24,9 +28,16 @@ export default {
         VButton,
     },
 
+    props: {
+        componentData: {
+            type: Object,
+            default: null,
+        },
+    },
+
     data() {
         return {
-            total: '',
+            amount: '',
         };
     },
 
@@ -34,6 +45,31 @@ export default {
         close() {
             this.$store.commit('modal/close');
         },
+
+        async confirm() {
+            if (!this.amount) {
+                return;
+            }
+            
+            try {
+                const { transactionId, cardId } = this.componentData;
+                await this.$store.dispatch('transactions/correctAmount', {
+                    transactionId,
+                    cardId,
+                    amount: +this.amount,
+                })
+
+                this.close();
+            } catch (error) {
+                console.log(error)
+            }
+        },
+    },
+
+    mounted() {
+        if (this.componentData.amount) {
+            this.amount = this.componentData.amount;
+        }
     },
 };
 </script>

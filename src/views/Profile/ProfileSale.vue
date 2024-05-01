@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import debounce from 'lodash/debounce';
 import AppPagination from '@/components/app/AppPagination.vue';
 import VButton from '@/components/common/VButton.vue';
@@ -103,20 +104,19 @@ export default {
                 ...Object.values(TRANSACTIONS_STATUSES),
             ],
             activeTab: 'all',
-            transactions: [],
             urlParams: Object.assign({}, this.$route.query),
             isLoading: false,
             isOpenExport: false,
             search: debounce(this.searchTable, 500),
-            pagination: {
-                limit: 0,
-                pages: 0,
-                total: 0
-            },
         };
     },
 
     computed: {
+        ...mapState({
+            transactions: ({ transactions }) => transactions.transactions,
+            pagination: ({ transactions }) => transactions.pagination,
+        }),
+
         emptyForm() {
             const baseForm = {
                 src: '/images/empty/search.png',
@@ -156,11 +156,7 @@ export default {
             this.isLoading = true;
 
             try {
-                const { data } = await this.$api.transactions.getTransactions(this.urlParams);
-                this.transactions = data.transactions;
-                this.pagination.limit = data.limit;
-                this.pagination.total = data.total;
-                this.pagination.pages = Math.ceil(data.total / data.limit);
+                await this.$store.dispatch('transactions/getTransactions', this.urlParams);
             } catch (error) {
                 console.log(error)
             } finally {

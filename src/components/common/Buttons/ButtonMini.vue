@@ -1,5 +1,5 @@
 <template lang="pug">
-    button.button-mini(@click="$emit('click')")
+    button.button-mini
         inline-svg.icon(
             :src="`/icons/mini-buttons/${type}.svg`"
             :class="type"

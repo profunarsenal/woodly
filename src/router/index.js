@@ -28,6 +28,14 @@ const router = createRouter({
             },
         },
         {
+            path: '/profile/balance',
+            name: 'ProfileBalance',
+            component: () => import('@/views/Profile/ProfileBalance.vue'),
+            meta: {
+                needHideFooter: true,
+            },
+        },
+        {
             path: '/profile/auth',
             name: 'ProfileAuthorization',
             component: () => import('@/views/Profile/ProfileAuthorization.vue'),
