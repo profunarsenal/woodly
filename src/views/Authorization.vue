@@ -11,11 +11,11 @@
                 .title Вход в личный кабинет
                 .controls
                     v-input.control(
-                        v-model="email"
+                        v-model="form.login"
                         placeholder="Email"
                     )
                     v-input.control(
-                        v-model="password"
+                        v-model="form.password"
                         placeholder="Пароль"
                         type="password"
                         isPassword
@@ -24,7 +24,11 @@
                         v-model="code"
                         placeholder="Код"
                     )
-                    v-button.button(isDisabled) Войти
+                    v-button.button(
+                        :isDisabled="!isFormCompleted || isPending"
+                        :isLoading="isPending"
+                        @click="login"
+                    ) Войти
                 a.support(
                     href="#"
                     target="_blank"
@@ -45,10 +49,37 @@ export default {
 
     data() {
         return {
-            email: '',
-            password: '',
+            form: {
+                login: '',
+                password: '',
+            },
+            isPending: false,
             code: '',
         };
+    },
+
+    computed: {
+        isFormCompleted() {
+            return !!(this.form.login && this.form.password);
+        },
+    },
+
+    methods: {
+        async login() {
+            if (this.isPending || !this.isFormCompleted) {
+                return;
+            }
+
+            try {
+                this.isPending = true;
+                await this.$store.dispatch('auth/login', this.form);
+                this.$router.push('/profile/cards');
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isPending = false;
+            }
+        },
     },
 };
 </script>

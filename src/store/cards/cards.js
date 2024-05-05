@@ -1,6 +1,6 @@
 import ApiModule from '@/api/apiModule';
 
-const axios = new ApiModule();
+const api = new ApiModule();
 const CONFIG_ALIAS = 'IS_WORK_TRANSACTIONS';
 
 export default {
@@ -20,9 +20,11 @@ export default {
         setCards(state, cards) {
             state.cards = cards;
         },
+
         setPagination(state, pagination) {
             state.pagination = pagination;
         },
+
         setTransactionsStatus(state, status) {
             state.isWorkTransactions = status;
         },
@@ -30,7 +32,7 @@ export default {
 
     actions: {
         async getCards({ commit }, params) {
-            const { data } = await axios.cards.getCards(params);
+            const { data } = await api.cards.getCards(params);
             commit('setCards', data.cards);
             commit('setPagination', {
                 limit: data.limit,
@@ -41,7 +43,7 @@ export default {
 
         async changeStatus({ state, commit }, params) {
             try {
-                await axios.cards.changeCardStatus(params);
+                await api.cards.changeCardStatus(params);
 
                 const changedCards = state.cards.map((card) => {
                     if (card.cardId === params.cardId) {
@@ -58,13 +60,13 @@ export default {
         },
 
         async getTransactionsStatus({ commit }) {
-            const { data: status } = await axios.config.getConfig(CONFIG_ALIAS);
+            const { data: status } = await api.config.getConfig(CONFIG_ALIAS);
             commit('setTransactionsStatus', status);
         },
 
         async toggleTransactionsStatus({ state, commit }) {
             try {
-                await axios.config.editConfig({
+                await api.config.editConfig({
                     name: CONFIG_ALIAS,
                     value: String(!state.isWorkTransactions),
                 });

@@ -1,3 +1,5 @@
+import { CURRENCIES_SIGNS } from '@/helpers/constants';
+
 export const sliceStringAddDot = (str, maxLength) => {
     if (str?.length > maxLength) {
         return str.slice(0, maxLength) + '…';
@@ -26,5 +28,20 @@ export const formatDate = (date) => {
 
 export const formatTime = (date) => {
     const newDate = new Date(date);
-    return `${newDate.getHours()}:${newDate.getMinutes()}`;
+    let hours = String(newDate.getHours());
+    let minutes = String(newDate.getMinutes());
+
+    if (hours.length < 2) {
+        hours = '0' + hours;
+    }
+
+    if (minutes.length < 2) {
+        minutes = '0' + minutes;
+    }
+
+    return `${hours}:${minutes}`;
+};
+
+export const getCurrencyValue = (value, currency = CURRENCIES_SIGNS.rub) => {
+    return `${value}${currency}`;
 };

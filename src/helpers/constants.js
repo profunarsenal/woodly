@@ -45,3 +45,7 @@ export const PROFILE_SIDEBAR_ITEMS = [
         id: 5,
     },
 ];
+
+export const CURRENCIES_SIGNS = {
+    rub: '₽',
+};

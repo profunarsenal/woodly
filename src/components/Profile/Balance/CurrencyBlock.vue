@@ -1,37 +1,40 @@
 <template lang="pug">
     .currency
-        .image-wrapper ₽
+        .image-wrapper
+            inline-svg(:src="imageSrc")
         .items
             .item
                 .title Баланс в рублях
                 .balance
-                    .value 6 322.16₽
+                    .value {{ getCurrencyValue(balance.balanceRub) }}
                     button-mini(type="payout")
             .item
                 .title Заморожено
-                .value 0.0₽
+                .value {{ getCurrencyValue(balance.balanceRubFreeze) }}
             .item
                 .title USDT / RUB
                 .currencies
-                    .value 81.88
+                    .value {{ balance.rate }}
                     v-badge.percent(
+                        v-if="balance.percent"
                         type="positive"
-                        value="+1,8%"
+                        :value="balance.percent"
                     )
 
                     .value
                         span.slash /
-                        | 83.35
+                        | {{ balance.rateWithPercent }}
             .item
                 .title Ваш кошелек USDT (TRC20) RUB
                 .crypto
-                    .value TAcpdgJPRgbehoUPXE8krztjL45E31Gqg2
+                    .value {{ balance.tokenId }}
                     button-mini(type="qr")
 </template>
 
 <script>
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VBadge from '@/components/common/VBadge.vue';
+import { getCurrencyValue } from '@/helpers/string';
 
 export default {
     name: 'CurrencyBlock',
@@ -39,6 +42,24 @@ export default {
     components: {
         ButtonMini,
         VBadge,
+    },
+
+    props: {
+        imageSrc: {
+            type: String,
+            required: true,
+        },
+
+        balance: {
+            type: Object,
+            required: true,
+        },
+    },
+
+    data() {
+        return {
+            getCurrencyValue: getCurrencyValue,
+        };
     },
 };
 </script>
@@ -118,9 +139,9 @@ export default {
 
 .percent
     display: inline-block
-    margin: 0 0.8rem
+    margin-left: 0.8rem
 
 .slash
-    margin-right: 0.8rem
+    margin: 0 0.8rem
     color: $color-silver-light
 </style>

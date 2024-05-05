@@ -32,4 +32,12 @@ export const CARD_MESSAGES = [
     { title: 'Отправитель', key: 'sender' },
     { title: 'Описание', key: 'message' },
     { title: 'Дата и время', key: 'dateCreate' },
-]
+];
+
+export const BALANCE_TRANSACTIONS = [
+    { title: 'ID операции', key: '' },
+    { title: 'Тип операции', key: 'status' },
+    { title: 'ID платежа', key: 'transactionId' },
+    { title: 'Сумма', key: 'amount' },
+    { title: 'Дата и время', key: 'date' },
+];

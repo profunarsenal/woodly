@@ -7,35 +7,57 @@
                 .table-control(:class="controlClasses")
                     button-mini(
                         type="confirm"
-                        @click="openWindowConfirm"
+                        @click="openPopup('confirm')"
                     )
                     v-tooltip.table-tooltip(
                         position="right"
                         text="Подтвердить сделку"
                     )
-                    window-confirm.confirm-transaction(
-                        v-if="isOpenWindowConfirm"
-                        @cancel="closeWindowConfirm"
-                        @confirm="confirmTransaction"
+                    popup-confirm.confirm-transaction(
+                        v-if="popup.confirm.isOpen"
+                        :componentData="popupConfirmComponentData"
+                        @cancel="closePopup('confirm')"
+                        @confirm="changeTransactionStatus('confirm')"
                     )
-                button-mini(type="decline")
+                .table-control(:class="controlClasses")
+                    button-mini(
+                        type="decline"
+                        @click="openPopup('decline')"
+                    )
+                    v-tooltip.table-tooltip(
+                        position="right"
+                        text="Отклонить проверку"
+                    )
+                    popup-confirm.confirm-transaction(
+                        v-if="popup.decline.isOpen"
+                        :componentData="popupDeclineComponentData"
+                        type="negative"
+                        @cancel="closePopup('decline')"
+                        @confirm="changeTransactionStatus('decline')"
+                    )
         td.tbody-item
-            button-mini(type="option")
+             v-action-menu.action-menu(
+                :controls="menuItems"
+                :item="item"
+            )
+                template(#button)
+                    button-mini(type="option")
     template(v-else)
         td.tbody-item
             .table-control(:class="controlClasses")
                 button-mini(
                     type="confirm"
-                    @click="openWindowConfirm"
+                    @click="openPopup('confirm')"
                 )
                 v-tooltip.table-tooltip(
                     position="right"
                     text="Подтвердить сделку"
                 )
-                window-confirm.confirm-transaction(
-                    v-if="isOpenWindowConfirm"
-                    @cancel="closeWindowConfirm"
-                    @confirm="confirmTransaction"
+                popup-confirm.confirm-transaction(
+                    v-if="popup.confirm.isOpen"
+                    :componentData="popupConfirmComponentData"
+                    @cancel="closePopup('confirm')"
+                    @confirm="declineTransaction"
                 )
         td.tbody-item
             .table-control
@@ -52,7 +74,8 @@
 <script>
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
-import WindowConfirm from '@/components/app/WindowConfirm.vue';
+import PopupConfirm from '@/components/app/PopupConfirm.vue';
+import VActionMenu from '@/components/common/VActionMenu.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
 
 export default {
@@ -61,7 +84,8 @@ export default {
     components: {
         ButtonMini,
         VTooltip,
-        WindowConfirm,
+        PopupConfirm,
+        VActionMenu,
     },
 
     props: {
@@ -73,7 +97,30 @@ export default {
 
     data() {
         return {
-            isOpenWindowConfirm: false,
+            popup: {
+                confirm: {
+                    isOpen: false,
+                },
+                decline: {
+                    isOpen: false,
+                },
+            },
+            popupConfirmComponentData: {
+                title: 'Подтвердить проверку',
+                subtitle: 'Вы уверены, что хотите подтвердить проверку сделки?',
+                buttonCancel: 'Отменить',
+                buttonConfirm: 'Подтвердить',
+                callbackConfirm: () => this.changeTransactionStatus('confirm'),
+                callbackCancel: () => this.closePopup('confirm'),
+            },
+            popupDeclineComponentData: {
+                title: 'Отклонить проверку',
+                subtitle: 'Вы уверены, что хотите отклонить проверку сделки?',
+                buttonCancel: 'Отменить',
+                buttonConfirm: 'Отклонить',
+                callbackConfirm: () => this.changeTransactionStatus('decline'),
+                callbackCancel: () => this.closePopup('decline'),
+            },
         };
     },
 
@@ -87,29 +134,45 @@ export default {
         },
 
         controlClasses() {
-            return { 'open-window': this.isOpenWindowConfirm };
+            return { 'open-window': this.popup.confirm.isOpen };
+        },
+
+        menuItems() {
+            return [
+                {
+                    key: 'correct',
+                    icon: '/icons/edit.svg',
+                    title: 'Корректировать заявку',
+                    callback: () => this.openModalCorrection(),
+                },
+            ];
         },
     },
 
     methods: {
-        openWindowConfirm() {
-            this.isOpenWindowConfirm = true;
+        openPopup(popupName) {
+            this.popup[popupName].isOpen = true;
         },
 
-        closeWindowConfirm() {
-            this.isOpenWindowConfirm = false;
+        closePopup(popupName) {
+            this.popup[popupName].isOpen = false;
         },
 
-        async confirmTransaction() {
+        async changeTransactionStatus(popupName) {
+            const statuses = {
+                confirm: TRANSACTIONS_STATUSES.successful.id,
+                decline: TRANSACTIONS_STATUSES.canceled.id,
+            };
+
             try {
                 const { transactionId, cardId } = this.item;
-                await this.$store.dispatch('transactions/confirmTransaction', {
+                await this.$store.dispatch('transactions/changeTransactionStatus', {
                     transactionId,
                     cardId,
-                    status: TRANSACTIONS_STATUSES.successful.id,
+                    status: statuses[popupName],
                 })
 
-                this.closeWindowConfirm();
+                this.closePopup(popupName);
             } catch (error) {
                 console.log(error);
             }
@@ -157,4 +220,11 @@ export default {
     z-index: 10
     top: calc( 100% + 0.4rem )
     right: 0
+
+.tbody-item
+    position: relative
+
+.action-menu
+    &:deep(.menu)
+        top: 95%
 </style>

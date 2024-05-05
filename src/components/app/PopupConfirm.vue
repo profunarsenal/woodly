@@ -1,38 +1,38 @@
 <template lang="pug">
-    .window(v-click-outside="cancel")
-        .title Подтвердить проверку
-        .subtitle Вы уверены, что хотите подтвердить проверку сделки?
+    .window(v-click-outside="componentData.callbackCancel")
+        .title {{ componentData.title }}
+        .subtitle {{ componentData.subtitle }}
         .buttons
             v-button(
                 type="outline"
-                @click="cancel"
-            ) Отменить
+                @click="componentData.callbackCancel"
+            ) {{ componentData.buttonCancel }}
             v-button(
-                type="positive"
-                @click="confirm"
-            ) Подтвердить
+                :type="type"
+                @click="componentData.callbackConfirm"
+            ) {{ componentData.buttonConfirm }}
 </template>
 
 <script>
 import VButton from '@/components/common/VButton.vue';
 
 export default {
-    name: 'WindowConfirm',
+    name: 'PopupConfirm',
 
-    emits: ['cancel', 'confirm'],
+    props: {
+        componentData: {
+            type: Object,
+            required: true,
+        },
+
+        type: {
+            type: String,
+            default: 'positive',
+        },
+    },
 
     components: {
         VButton,
-    },
-
-    methods: {
-        cancel() {
-            this.$emit('cancel');
-        },
-
-        confirm() {
-            this.$emit('confirm');
-        },
     },
 };
 </script>

@@ -1,6 +1,6 @@
 import ApiModule from '@/api/apiModule';
 
-const axios = new ApiModule();
+const api = new ApiModule();
 
 export default {
     namespaced: true,
@@ -27,7 +27,7 @@ export default {
     actions: {
         async getTransactions({ commit }, params) {
             try {
-                const { data } = await axios.transactions.getTransactions(params);
+                const { data } = await api.transactions.getTransactions(params);
                 commit('setTransactions', data.transactions);
                 commit('setPagination', {
                     limit: data.limit,
@@ -41,7 +41,7 @@ export default {
 
         async correctAmount({ state, commit }, params) {
             try {
-                await axios.transactions.editTransaction(params);
+                await api.transactions.editTransaction(params);
                 
                 const transactions = state.transactions.map((item) => {
                     if (item.transactionId === params.transactionId) {
@@ -56,9 +56,9 @@ export default {
             }
         },
 
-        async confirmTransaction({ state, commit }, params) {
+        async changeTransactionStatus({ state, commit }, params) {
             try {
-                await axios.transactions.editTransaction(params);
+                await api.transactions.editTransaction(params);
 
                 const transactions = state.transactions.map((item) => {
                     if (item.transactionId === params.transactionId) {

@@ -46,3 +46,38 @@ export const TRANSACTIONS_STATUSES = {
         id: 4,
     },
 };
+
+export const BALANCE_STATUSES = {
+    internal: {
+        key: 'internal',
+        id: 1,
+        title: 'Внутренние',
+        icon: '/icons/sort.svg',
+        color: 'blue',
+        transactionTitle: 'Внутренний',
+    },
+    replenishment: {
+        key: 'replenishment',
+        id: 2,
+        title: 'Пополнения',
+        icon: '/icons/arrow.svg',
+        color: 'green',
+        transactionTitle: 'Пополнение',
+    },
+    debit: {
+        key: 'debit',
+        id: 3,
+        title: 'Списания',
+        icon: '/icons/arrow.svg',
+        color: 'red',
+        transactionTitle: 'Списание',
+    },
+    freezing: {
+        key: 'freezing',
+        id: 4,
+        title: 'Заморозка',
+        icon: '/icons/time.svg',
+        color: 'yellow',
+        transactionTitle: 'Заморозка',
+    },
+};

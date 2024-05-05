@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from '@/store';
 import HomeView from '@/views/HomeView.vue';
 
 const router = createRouter({
@@ -13,11 +14,17 @@ const router = createRouter({
             path: '/profile/cards',
             name: 'ProfileCards',
             component: () => import('@/views/Profile/ProfileCards.vue'),
+            meta: {
+                auth: true,
+            },
         },
         {
             path: '/profile/sale',
             name: 'ProfileSale',
             component: () => import('@/views/Profile/ProfileSale.vue'),
+            meta: {
+                auth: true,
+            },
         },
         {
             path: '/profile/settings',
@@ -25,6 +32,7 @@ const router = createRouter({
             component: () => import('@/views/Profile/ProfileSettings.vue'),
             meta: {
                 needHideFooter: true,
+                auth: true,
             },
         },
         {
@@ -33,12 +41,13 @@ const router = createRouter({
             component: () => import('@/views/Profile/ProfileBalance.vue'),
             meta: {
                 needHideFooter: true,
+                auth: true,
             },
         },
         {
-            path: '/profile/auth',
-            name: 'ProfileAuthorization',
-            component: () => import('@/views/Profile/ProfileAuthorization.vue'),
+            path: '/auth',
+            name: 'Authorization',
+            component: () => import('@/views/Authorization.vue'),
             meta: {
                 layout: 'empty',
             },
@@ -94,6 +103,18 @@ const router = createRouter({
             },
         },
     ],
+});
+
+router.beforeEach((to, from, next) => {
+    const requireAuth = to.meta.auth;
+
+    if (requireAuth && store.getters['auth/isAuth']) {
+        next()
+    } else if (requireAuth && !store.getters['auth/isAuth']) {
+        next('/auth')
+    } else {
+        next()
+    };
 });
 
 export default router;

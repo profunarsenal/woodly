@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import AppSidebar from '@/components/Sidebar/AppSidebar.vue';
 import AppFooter from '@/components/Footer/AppFooter.vue';
 import { PROFILE_SIDEBAR_ITEMS } from '@/helpers/constants';
@@ -26,9 +27,20 @@ export default {
     },
 
     computed: {
+        ...mapGetters({
+            isAuth: 'auth/isAuth',
+            hasUser: 'auth/hasUser',
+        }),
+
         needHideFooter() {
             return this.$route.meta.needHideFooter ?? false;
         },
+    },
+
+    async created() {
+        if (!this.hasUser) {
+            await this.$store.dispatch('auth/getUser');
+        }
     },
 };
 </script>

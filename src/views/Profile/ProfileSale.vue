@@ -31,7 +31,7 @@
                 .card-number {{ item.cardNumber }}
                 .card-name {{ item.title }}
             template(#amount="{ item }")
-                .amount {{ `${item.amount}₽` }}
+                .amount {{ getCurrencyValue(item.amount) }}
             template(#status="{ item }")
                 .status
                     inline-svg.status-icon(
@@ -79,7 +79,7 @@ import TableControls from '@/components/Profile/Sale/TableControls.vue';
 import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
 import { TRANSACTIONS_TABLE_HEADERS } from '@/helpers/table';
-import { formatDate, formatTime } from '@/helpers/string';
+import { formatDate, formatTime, getCurrencyValue } from '@/helpers/string';
 import { exportTransactions } from '@/helpers/url';
 
 export default {
@@ -108,6 +108,7 @@ export default {
             isLoading: false,
             isOpenExport: false,
             search: debounce(this.searchTable, 500),
+            getCurrencyValue: getCurrencyValue,
         };
     },
 

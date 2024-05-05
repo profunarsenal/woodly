@@ -13,7 +13,7 @@
             button.button
                 inline-svg.icon(src="/icons/headphone.svg")
                 span.text Поддержка
-            button.button
+            button.button(@click="logout")
                 inline-svg.icon(src="/icons/exit.svg")
                 span.text Выйти
 </template>
@@ -26,6 +26,15 @@ export default {
         items: {
             type: Array,
             required: true,
+        },
+    },
+
+    methods: {
+        logout() {
+            this.$store.commit('modal/open', {
+                component: 'ModalExit',
+                positionCenter: true,
+            });
         },
     },
 };

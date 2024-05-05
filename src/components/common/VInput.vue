@@ -2,11 +2,12 @@
     .input-wrapper
         .label(v-if="label") {{ label }}
         input.input(
+            ref="input"
             :value="modelValue"
             :type="inputType"
             :placeholder="placeholder"
-            @input="input"
             :disabled="isDisabled"
+            @input="input"
         )
         inline-svg.icon-password(
             v-if="isPassword"
