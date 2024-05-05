@@ -37,6 +37,7 @@ export default {
         ModalSettingsQR: defineAsyncComponent(() => import('@/components/Profile/Settings/Modal/ModalQR.vue')),
         ModalCorrection: defineAsyncComponent(() => import('@/components/Profile/Sale/Modal/ModalCorrection.vue')),
         ModalExit: defineAsyncComponent(() => import('@/components/Sidebar/Modal/ModalExit.vue')),
+        ModalTransaction: defineAsyncComponent(() => import('@/components/Profile/Balance/ModalTransaction.vue')),
     },
 
     computed: {

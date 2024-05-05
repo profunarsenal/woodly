@@ -7,7 +7,15 @@
                 .title Баланс в рублях
                 .balance
                     .value {{ getCurrencyValue(balance.balanceRub) }}
-                    button-mini(type="payout")
+                    .button
+                        button-mini(
+                            type="payout"
+                            @click="openModalTransaction"
+                        )
+                        v-tooltip.table-tooltip.left(
+                            position="left"
+                            text="Перевести средства"
+                        )
             .item
                 .title Заморожено
                 .value {{ getCurrencyValue(balance.balanceRubFreeze) }}
@@ -28,12 +36,18 @@
                 .title Ваш кошелек USDT (TRC20) RUB
                 .crypto
                     .value {{ balance.tokenId }}
-                    button-mini(type="qr")
+                    .button
+                        button-mini(type="qr")
+                        v-tooltip.table-tooltip.right(
+                            position="right"
+                            text="Открыть QR-код"
+                        )
 </template>
 
 <script>
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VBadge from '@/components/common/VBadge.vue';
+import VTooltip from '@/components/common/VTooltip.vue';
 import { getCurrencyValue } from '@/helpers/string';
 
 export default {
@@ -42,6 +56,7 @@ export default {
     components: {
         ButtonMini,
         VBadge,
+        VTooltip,
     },
 
     props: {
@@ -60,6 +75,15 @@ export default {
         return {
             getCurrencyValue: getCurrencyValue,
         };
+    },
+
+    methods: {
+        openModalTransaction() {
+            this.$store.commit('modal/open', {
+                component: 'ModalTransaction',
+                positionCenter: true,
+            });
+        },
     },
 };
 </script>
@@ -89,6 +113,27 @@ export default {
     align-items: center
     justify-content: center
     flex: 0 0 5.6rem
+
+.button
+    position: relative
+    &:hover
+        .table-tooltip
+            opacity: 1
+            visibility: visible
+            pointer-events: all
+            transition: 0.4s ease 0.4s
+
+.table-tooltip
+    z-index: 99
+    opacity: 0
+    visibility: hidden
+    pointer-events: none
+    top: -0.3rem
+    transition: 0.2s ease
+    &.left
+        left: calc( 100% + 1.2rem )
+    &.right
+        right: calc( 100% + 1.2rem )
 
 .items
     display: flex

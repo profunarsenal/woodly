@@ -11,11 +11,24 @@
                     imageSrc="/icons/currencies/rouble.svg"
                     :balance="balance"
                 )
-            v-tabs.table-tabs(
-                v-model="activeTab"
-                :tabs="tableTabs"
-                @select="toggleTable"
-            )
+            .table-header
+                v-tabs.table-tabs(
+                    v-model="activeTab"
+                    :tabs="tableTabs"
+                    @select="toggleTable"
+                )
+                .export
+                    v-button(
+                        type="outline"
+                        iconSrc="/icons/download.svg"
+                        size="small"
+                        @click="openExport"
+                    ) Экспорт
+                    export-window(
+                        v-if="isOpenExport"
+                        v-click-outside="closeExport"
+                        @unload="unloadTransactions"
+                    )
             .loader(v-if="isLoadingTransactions")
                 v-loader(size="big")
             v-table.table(
@@ -49,9 +62,12 @@ import VTable from '@/components/common/VTable.vue';
 import VLoader from '@/components/common/VLoader.vue';
 import AppPagination from '@/components/app/AppPagination.vue';
 import VTabs from '@/components/common/VTabs.vue';
+import VButton from '@/components/common/VButton.vue';
+import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import { BALANCE_TRANSACTIONS } from '@/helpers/table';
 import { BALANCE_STATUSES } from '@/helpers/catalogs';
 import { getCurrencyValue, formatDate, formatTime } from '@/helpers/string';
+import { exportTransactions } from '@/helpers/url';
 
 export default {
     name: 'ProfileBalance',
@@ -62,12 +78,15 @@ export default {
         VLoader,
         AppPagination,
         VTabs,
+        VButton,
+        ExportWindow,
     },
 
     data() {
         return {
             isLoading: false,
             isLoadingTransactions: false,
+            isOpenExport: false,
             urlParams: Object.assign({}, this.$route.query),
             tableHeaders: BALANCE_TRANSACTIONS,
             getCurrencyValue: getCurrencyValue,
@@ -122,6 +141,24 @@ export default {
                 this.isLoadingTransactions = false;
             }
         },
+
+        openExport() {
+            this.isOpenExport = true;
+        },
+
+        closeExport() {
+            this.isOpenExport = false;
+        },
+
+        async unloadTransactions(date) {
+            const { dateStart, dateEnd } = date;
+
+            try {
+                await exportTransactions(dateStart, dateEnd);
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
 
     watch: {
@@ -169,9 +206,6 @@ export default {
 .currencies
     margin-bottom: 4rem
 
-.table-tabs
-    margin-bottom: 0.8rem
-
 .header
     display: flex
     align-items: center
@@ -185,6 +219,14 @@ export default {
         line-height: 3.2rem
     .id
         color: $color-silver-light
+
+.table-header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 0.8rem
+    .export
+        position: relative
 
 .time
     color: $color-gray-dark
