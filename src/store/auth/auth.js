@@ -43,8 +43,8 @@ export default {
     actions: {
         async login({ commit, dispatch }, form) {
             try {
-                const { data } = await api.auth.login(form);
-                commit('setToken', data.accessToken);
+                const { accessToken } = await api.auth.login(form);
+                commit('setToken', accessToken);
 
                 await dispatch('getUser');
             } catch (error) {
@@ -54,8 +54,8 @@ export default {
 
         async getUser({ commit }) {
             try {
-                const { data } = await api.auth.getUser();
-                commit('setUser', data);
+                const user = await api.auth.getUser();
+                commit('setUser', user);
             } catch (error) {
                 console.log(error);
             }

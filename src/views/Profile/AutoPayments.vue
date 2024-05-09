@@ -56,9 +56,9 @@ export default {
                 cardLastNumber: this.$route.query.cardLastNumber,
                 page: this.$route.query.page,
             };
-            const { data } = await this.$api.cards.getAutoPayments(params);
+            const { autopayments } = await this.$api.cards.getAutoPayments(params);
 
-            this.autopayments = data.autopayments;
+            this.autopayments = autopayments;
         }
     },
 

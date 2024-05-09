@@ -24,6 +24,7 @@
                     label="Пароль"
                     placeholder="Введите пароль"
                     type="password"
+                    autocomplete="new-password"
                     isPassword
                 )
                 v-input.control(

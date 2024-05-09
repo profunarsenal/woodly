@@ -7,6 +7,7 @@
             :type="inputType"
             :placeholder="placeholder"
             :disabled="isDisabled"
+            :autocomplete="autocomplete"
             @input="input"
         )
         inline-svg.icon-password(
@@ -54,6 +55,11 @@ export default {
         isPassword: {
             type: Boolean,
             default: false,
+        },
+
+        autocomplete: {
+            type: String,
+            default: '',
         },
     },
 

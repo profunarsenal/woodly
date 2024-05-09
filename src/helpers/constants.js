@@ -22,7 +22,7 @@ export const PROFILE_SIDEBAR_ITEMS = [
     },
     {
         icon: '/icons/credit-card-payment.svg',
-        path: '/profile/purchase',
+        path: '/profile/purchases',
         title: 'Покупка',
         id: 2,
     },

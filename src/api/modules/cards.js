@@ -1,54 +1,37 @@
 import AbstractService from "@/api/abstractService";
+import CardsModel from "@/models/Cards/Cards";
+import AutoPaymentsModel from "@/models/Cards/AutoPayments";
+import MessagesModel from "@/models/Cards/Messages";
 
 export default class Cards extends AbstractService {
-    async getCards(options = {}) {
-        const params = {
-            page: options.page,
-            limit: options.limit,
-            status: options.status,
-            cardNumber: options.cardNumber,
-        };
-        const response = await this.axios.get('/cards', { params });
-        return response;
+    async getCards(params = {}) {
+        const { data } = await this.axios.get('/cards', { params });
+        return new CardsModel(data);
     };
 
     async createCard(form) {
-        const response = await this.axios.post('/cards/create', form);
-        return response;
+        return await this.axios.post('/cards/create', form);
     };
 
     async editCard(form) {
-        const response = await this.axios.patch('/cards/edit', form);
-        return response;
+        return await this.axios.patch('/cards/edit', form);
     };
 
     async changeCardStatus(payload) {
-        const response = await this.axios.patch('/cards/change-status', payload);
-        return response;
+        return await this.axios.patch('/cards/change-status', payload);
     };
 
     async setLimit(payload) {
-        const response = await this.axios.patch('/cards/set-limit', payload);
-        return response;
+        return await this.axios.patch('/cards/set-limit', payload);
     };
 
-    async getAutoPayments(options = {}) {
-        const params = {
-            page: options.page,
-            cardLastNumber: options.cardLastNumber,
-        };
+    async getAutoPayments(params = {}) {
+        const { data } = await this.axios.get('/autopayments', { params });
+        return new AutoPaymentsModel(data);
+    };
 
-        const response = await this.axios.get('/autopayments', { params });
-        return response;
-    }
-
-    async getCardMessages(options = {}) {
-        const params = {
-            page: options.page,
-            cardLastNumber: options.cardLastNumber,
-        };
-
-        const response = await this.axios.get('/messages', { params });
-        return response;
-    }
+    async getCardMessages(params = {}) {
+        const { data } = await this.axios.get('/messages', { params });
+        return new MessagesModel(data);
+    };
 };

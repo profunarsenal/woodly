@@ -9,11 +9,7 @@ export default {
     state: {
         cards: [],
         isWorkTransactions: false,
-        pagination: {
-            limit: 1,
-            total: 1,
-            pages: 1,
-        },
+        pagination: {},
     },
 
     mutations: {
@@ -32,13 +28,9 @@ export default {
 
     actions: {
         async getCards({ commit }, params) {
-            const { data } = await api.cards.getCards(params);
-            commit('setCards', data.cards);
-            commit('setPagination', {
-                limit: data.limit,
-                total: data.total,
-                pages: Math.ceil(data.total / data.limit),
-            });
+            const { cards, pagination } = await api.cards.getCards(params);
+            commit('setCards', cards);
+            commit('setPagination', pagination);
         },
 
         async changeStatus({ state, commit }, params) {
@@ -60,7 +52,7 @@ export default {
         },
 
         async getTransactionsStatus({ commit }) {
-            const { data: status } = await api.config.getConfig(CONFIG_ALIAS);
+            const status = await api.config.getConfig(CONFIG_ALIAS);
             commit('setTransactionsStatus', status);
         },
 

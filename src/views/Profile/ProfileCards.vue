@@ -10,6 +10,8 @@
             ) Добавить
             v-button.button-transactions(
                 :type="buttonTransactions.type"
+                :isDisabled="isSwitching"
+                :isLoading="isSwitching"
                 size="small"
                 @click="toggleTransactions"
             ) {{ buttonTransactions.value }}
@@ -105,6 +107,7 @@ export default {
             urlParams: Object.assign({}, this.$route.query),
             activeTab: CARD_STATUSES.active,
             isLoadingCards: false,
+            isSwitching: false,
             search: debounce(this.searchTable, 500),
         };
     },
@@ -291,8 +294,26 @@ export default {
             return bank?.title || '';
         },
 
-        toggleTransactions() {
-            this.$store.dispatch('cards/toggleTransactionsStatus');
+        async toggleTransactions() {
+            try {
+                this.isSwitching = true;
+                await this.$store.dispatch('cards/toggleTransactionsStatus');
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isSwitching = false;
+            }
+        },
+
+        async getTransactionsStatus() {
+            try {
+                this.isSwitching = true;
+                await this.$store.dispatch('cards/getTransactionsStatus');
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isSwitching = false;
+            }
         },
 
         openModal(modal) {
@@ -347,15 +368,15 @@ export default {
         },
     },
 
-    created() {
+    async created() {
         this.cardStatuses = CARD_STATUSES;
 
         if (this.urlParams.hasOwnProperty('status')) {
             this.activeTab = this.cardStatuses.deleted;
         }
 
-        this.getCards();
-        this.$store.dispatch('cards/getTransactionsStatus');
+        await this.getCards();
+        await this.getTransactionsStatus();
     },
 };
 </script>
@@ -383,6 +404,8 @@ export default {
         line-height: 3.2rem
     .button-transactions
         margin-left: auto
+        width: 16.1rem
+        white-space: nowrap
 
 .table-tabs
     margin-bottom: 0.8rem

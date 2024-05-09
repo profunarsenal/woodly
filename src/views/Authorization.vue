@@ -18,6 +18,7 @@
                         v-model="form.password"
                         placeholder="Пароль"
                         type="password"
+                        autocomplete="new-password"
                         isPassword
                     )
                     v-input.control(

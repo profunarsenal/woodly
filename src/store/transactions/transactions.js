@@ -7,11 +7,7 @@ export default {
 
     state: {
         transactions: [],
-        pagination: {
-            limit: 1,
-            total: 1,
-            pages: 1,
-        },
+        pagination: {},
     },
 
     mutations: {
@@ -27,13 +23,9 @@ export default {
     actions: {
         async getTransactions({ commit }, params) {
             try {
-                const { data } = await api.transactions.getTransactions(params);
-                commit('setTransactions', data.transactions);
-                commit('setPagination', {
-                    limit: data.limit,
-                    total: data.total,
-                    pages: Math.ceil(data.total / data.limit),
-                });
+                const { transactions, pagination } = await api.transactions.getTransactions(params);
+                commit('setTransactions', transactions);
+                commit('setPagination', pagination);
             } catch (error) {
                 console.log(error)
             }

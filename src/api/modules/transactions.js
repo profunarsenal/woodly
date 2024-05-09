@@ -1,13 +1,13 @@
 import AbstractService from "@/api/abstractService";
+import TransactionsModel from "@/models/Transactions/Transactions";
 
 export default class Transactions extends AbstractService {
     async getTransactions(params = {}) {
-        const response = await this.axios.get('/transactions', { params });
-        return response;
+        const { data } = await this.axios.get('/transactions', { params });
+        return new TransactionsModel(data);
     };
 
     async editTransaction(params = {}) {
-        const response = await this.axios.patch('/transactions/edit', params);
-        return response;
+        return await this.axios.patch('/transactions/edit', params);
     };
 };

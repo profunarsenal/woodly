@@ -8,11 +8,7 @@ export default {
     state: {
         balance: {},
         balanceTransactions: [],
-        pagination: {
-            limit: 1,
-            total: 1,
-            pages: 1,
-        },
+        pagination: {},
     },
 
     mutations: {
@@ -32,8 +28,8 @@ export default {
     actions: {
         async getBalance({ commit }) {
             try {
-                const { data } = await api.balance.getBalance();
-                commit('setBalance', data);
+                const balance = await api.balance.getBalance();
+                commit('setBalance', balance);
             } catch (error) {
                 console.log(error);
             }
@@ -41,13 +37,9 @@ export default {
 
         async getBalanceTransactions({ commit }, params) {
             try {
-                const { data } = await api.balance.getBalanceTransactions(params);
-                commit('setBalanceTransactions', data.transactions);
-                commit('setPagination', {
-                    limit: data.limit,
-                    total: data.total,
-                    pages: Math.ceil(data.total / data.limit),
-                });
+                const { balanceTransactions, pagination } = await api.balance.getBalanceTransactions(params);
+                commit('setBalanceTransactions', balanceTransactions);
+                commit('setPagination', pagination);
             } catch (error) {
                 console.log(error);
             }

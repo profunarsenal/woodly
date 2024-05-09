@@ -56,9 +56,9 @@ export default {
                 cardLastNumber: this.$route.query.cardLastNumber,
                 page: this.$route.query.page,
             };
-            const { data } = await this.$api.cards.getCardMessages(params);
+            const { messages } = await this.$api.cards.getCardMessages(params);
 
-            this.messages = data.messages;
+            this.messages = messages;
         }
     },
 

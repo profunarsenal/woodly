@@ -45,6 +45,15 @@ const router = createRouter({
             },
         },
         {
+            path: '/profile/purchases',
+            name: 'ProfilePurchases',
+            component: () => import('@/views/Profile/ProfilePurchases.vue'),
+            meta: {
+                needHideFooter: true,
+                auth: true,
+            },
+        },
+        {
             path: '/auth',
             name: 'Authorization',
             component: () => import('@/views/Authorization.vue'),
