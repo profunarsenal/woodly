@@ -18,6 +18,18 @@ export default {
         setPagination(state, pagination) {
             state.pagination = pagination;
         },
+
+        changeStatus(state, params) {
+            const { transactionId, status} = params;
+
+            state.transactions = state.transactions.map((item) => {
+                if (item.transactionId === transactionId) {
+                    item.status = status;
+                }
+
+                return item;
+            });
+        },
     },
 
     actions: {
@@ -48,20 +60,21 @@ export default {
             }
         },
 
-        async changeTransactionStatus({ state, commit }, params) {
+        async confirmTransaction({ commit }, params) {
             try {
-                await api.transactions.editTransaction(params);
-
-                const transactions = state.transactions.map((item) => {
-                    if (item.transactionId === params.transactionId) {
-                        item.status = params.status;
-                    }
-
-                    return item;
-                });
-                commit('setTransactions', transactions);
+                await api.transactions.confirmTransaction(params.transactionId);
+                commit('changeStatus', params);
             } catch (error) {
-                console.log(error)
+                console.log(error);
+            }
+        },
+
+        async cancelTransaction({ commit }, params) {
+            try {
+                await api.transactions.cancelTransaction(params.transactionId);
+                commit('changeStatus', params);
+            } catch (error) {
+                console.log(error);
             }
         },
     },

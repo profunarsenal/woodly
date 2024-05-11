@@ -1,35 +1,39 @@
 <template lang="pug">
-    .auto-payments
-        .header
+    profile-wrapper(title="Автоплатежи по карте")
+        template(#header)
             square-button.back(
                 icon="/icons/arrow.svg"
                 @click="back"
             )
-            .title Автоплатежи по карте
             .subtitle {{ $route.query.cardLastNumber }}
-        .table-wrapper
-            v-table(
-                :headers="headers"
-                :items="autopayments"
-            )
-                template(#paymentTime="{ item }")
-                    .date {{ formatTableDate(item.paymentTime).date }} · 
-                        |
-                        span.time {{ formatTableDate(item.paymentTime).time }}
+        template(#content)
+            .table-wrapper
+                v-table(
+                    :headers="headers"
+                    :items="autopayments"
+                )
+                    template(#paymentTime="{ item }")
+                        table-date(
+                            v-if="item.paymentTime"
+                            :date="item.paymentTime"
+                        )
 </template>
 
 <script>
+import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import SquareButton from '@/components/common/Buttons/SquareButton.vue';
 import VTable from '@/components/common/VTable.vue';
+import TableDate from '@/components/common/Table/TableDate.vue';
 import { AUTOPAYMENTS } from '@/helpers/table';
-import { formatDate, formatTime } from '@/helpers/string';
 
 export default {
     name: 'AutoPayments',
 
     components: {
+        ProfileWrapper,
         SquareButton,
         VTable,
+        TableDate,
     },
 
     data() {
@@ -42,13 +46,6 @@ export default {
     methods: {
         back() {
             this.$router.push('/profile/cards');
-        },
-
-        formatTableDate(date) {
-            return {
-                date: formatDate(date),
-                time: formatTime(date),
-            };
         },
 
         async getAutoPayments() {
@@ -71,26 +68,12 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.auto-payments
-    margin-top: 0.8rem
-    padding: 2.4rem 3.2rem
-    background-color: $color-white
-    border-radius: 2rem 0 0 0
-    width: 100%
-    flex: 1 1 auto
-    .header
-        display: flex
-        align-items: center
-        gap: 1.6rem
-        margin-bottom: 3.2rem
-        .title,
-        .subtitle
-            font-weight: 600
-            font-size: 3.2rem
-            line-height: 3.2rem
-        .subtitle
-            color: $color-gray-dark
-
-.time
+.subtitle
+    font-weight: 600
+    font-size: 3.2rem
+    line-height: 3.2rem
     color: $color-gray-dark
+
+.back
+    order: -1
 </style>

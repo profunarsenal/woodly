@@ -56,6 +56,7 @@ export const BALANCE_STATUSES = {
         color: 'blue',
         transactionTitle: 'Внутренний',
     },
+
     replenishment: {
         key: 'replenishment',
         id: 2,
@@ -64,6 +65,7 @@ export const BALANCE_STATUSES = {
         color: 'green',
         transactionTitle: 'Пополнение',
     },
+
     debit: {
         key: 'debit',
         id: 3,
@@ -72,6 +74,7 @@ export const BALANCE_STATUSES = {
         color: 'red',
         transactionTitle: 'Списание',
     },
+
     freezing: {
         key: 'freezing',
         id: 4,
@@ -79,5 +82,43 @@ export const BALANCE_STATUSES = {
         icon: '/icons/time.svg',
         color: 'yellow',
         transactionTitle: 'Заморозка',
+    },
+};
+
+export const PURCHASES_STATUSES = {
+    available: {
+        key: 'available',
+        icon: '/icons/zipper.svg',
+        title: 'Доступные',
+        transactionTitle: 'Доступная ',
+        color: 'yellow',
+        id: 1,
+    },
+ 
+    active: {
+        key: 'active',
+        icon: '/icons/activity.svg',
+        title: 'Активные',
+        transactionTitle: 'Активная',
+        color: 'blue',
+        id: 2,
+    },
+
+    canceled: {
+        key: 'canceled',
+        icon: '/icons/close.svg',
+        title: 'Отмененные',
+        transactionTitle: 'Отмененная',
+        color: 'red',
+        id: 3,
+    },
+
+    successful: {
+        key: 'successful',
+        icon: '/icons/checkbox-mark.svg',
+        title: 'Успешные',
+        transactionTitle: 'Успешная',
+        color: 'green',
+        id: 4,
     },
 };

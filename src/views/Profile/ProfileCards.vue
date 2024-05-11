@@ -1,7 +1,10 @@
 <template lang="pug">
-    .profile-cards
-        .header
-            .title Мои карты
+    profile-wrapper(
+        title="Мои карты"
+        :pagination="pagination"
+        :items="cards"
+    )
+        template(#header)
             v-button(
                 iconSrc="/icons/plus.svg"
                 type="outline"
@@ -15,17 +18,17 @@
                 size="small"
                 @click="toggleTransactions"
             ) {{ buttonTransactions.value }}
-        v-tabs.table-tabs(
-            v-model="activeTab"
-            :tabs="tableTabs"
-            @select="toggleTable"
-        )
-        .loader(v-if="isLoadingCards")
-            v-loader(size="big")
-        template(v-else)
+
+        template(#content)
+            v-tabs.table-tabs(
+                v-model="activeTab"
+                :tabs="tableTabs"
+                @select="toggleTable"
+            )
             v-table.cards-table(
                 :headers="tableHeaders"
                 :items="cards"
+                :isLoading="isLoadingCards"
                 @search="search"
             )
                 template(#bankType="{ item }")
@@ -60,24 +63,16 @@
                         :title="emptyForm.title"
                         :subtitle="emptyForm.subtitle"
                     )
-    app-pagination.pagination(
-        v-if="pagination.pages > 1"
-        :pages="pagination.pages"
-        :limit="pagination.limit"
-        :total="pagination.total"
-        :count="cards.length"
-    )
 </template>
 
 <script>
-import debounce from 'lodash/debounce';
 import { mapState } from 'vuex';
-import AppPagination from '@/components/app/AppPagination.vue';
+import debounce from 'lodash/debounce';
+import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VTable from '@/components/common/VTable.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VActionMenu from '@/components/common/VActionMenu.vue';
-import VLoader from '@/components/common/VLoader.vue';
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
@@ -87,12 +82,11 @@ export default {
     name: 'ProfileCards',
 
     components: {
-        AppPagination,
+        ProfileWrapper,
         VTable,
         VButton,
         VTabs,
         VActionMenu,
-        VLoader,
         ButtonMini,
         EmptyForm,
     },
@@ -375,47 +369,22 @@ export default {
             this.activeTab = this.cardStatuses.deleted;
         }
 
-        await this.getCards();
-        await this.getTransactionsStatus();
+        await Promise.allSettled([
+            this.getCards(),
+            this.getTransactionsStatus(),
+        ]);
     },
 };
 </script>
 
 <style lang="sass" scoped>
-.profile-cards
-    display: flex
-    flex-direction: column
-    margin-top: 0.8rem
-    padding: 2.4rem 3.2rem 9.8rem 3.2rem
-    background-color: $color-white
-    border-radius: 2rem 0 0 0
-    width: 100%
-    flex: 1 1 auto
-
-.header
-    display: flex
-    align-items: center
-    justify-content: flex-start
-    gap: 1.6rem
-    margin-bottom: 3.2rem
-    .title
-        font-weight: 600
-        font-size: 3.2rem
-        line-height: 3.2rem
-    .button-transactions
-        margin-left: auto
-        width: 16.1rem
-        white-space: nowrap
+.button-transactions
+    margin-left: auto
+    width: 16.1rem
+    white-space: nowrap
 
 .table-tabs
     margin-bottom: 0.8rem
-
-.loader
-    display: flex
-    align-items: center
-    justify-content: center
-    height: 100%
-    fill: $color-violet-100
 
 .status
     width: 2rem
@@ -436,11 +405,4 @@ export default {
 .cards-table
     .tbody-item
         position: relative
-
-.pagination
-    position: fixed
-    bottom: 3.8rem
-    right: 0
-    width: calc( 100% - 22rem )
-    z-index: 50
 </style>

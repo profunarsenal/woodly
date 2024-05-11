@@ -1,65 +1,65 @@
 <template lang="pug">
-    .profile-settings
-        .header
-            .title Настройки
-        .form
-            .controls
-                v-input.control(
-                    v-model="form.email"
-                    label="Email"
-                    placeholder="Введите email"
+    profile-wrapper(title="Настройки")
+        template(#content)
+            .form
+                .controls
+                    v-input.control(
+                        v-model="form.email"
+                        label="Email"
+                        placeholder="Введите email"
+                    )
+                    v-input.control(
+                        v-model="form.traderId"
+                        label="Trader ID"
+                        placeholder="Введите ID"
+                    )
+                    v-input.control(
+                        v-model="form.telegram"
+                        label="Контакт Telegram"
+                        placeholder="Контакт Telegram"
+                    )
+                    v-input.control(
+                        v-model="form.password"
+                        label="Пароль"
+                        placeholder="Введите пароль"
+                        type="password"
+                        autocomplete="new-password"
+                        isPassword
+                    )
+                    v-input.control(
+                        v-model="form.apiKey"
+                        label="API KEY"
+                        placeholder="API KEY"
+                    )
+                    v-input.control(
+                        v-model="form.telegramId"
+                        label="Telegram ID"
+                        placeholder="Telegram ID"
+                    )
+                v-button.button(isDisabled) Сохранить
+            .header
+                .title Активные сессии
+                .subtitle 6
+                v-button.close-session(
+                    type="outline"
+                    size="small"
+                    @click="openModalSessions"
+                ) Закрыть все сессии кроме текущей
+        .footer
+            telegram-button
+            .buttons
+                square-button(
+                    icon="/icons/qr-code.svg"
+                    @click="openQR"
                 )
-                v-input.control(
-                    v-model="form.traderId"
-                    label="Trader ID"
-                    placeholder="Введите ID"
-                )
-                v-input.control(
-                    v-model="form.telegram"
-                    label="Контакт Telegram"
-                    placeholder="Контакт Telegram"
-                )
-                v-input.control(
-                    v-model="form.password"
-                    label="Пароль"
-                    placeholder="Введите пароль"
-                    type="password"
-                    autocomplete="new-password"
-                    isPassword
-                )
-                v-input.control(
-                    v-model="form.apiKey"
-                    label="API KEY"
-                    placeholder="API KEY"
-                )
-                v-input.control(
-                    v-model="form.telegramId"
-                    label="Telegram ID"
-                    placeholder="Telegram ID"
-                )
-            v-button.button(isDisabled) Сохранить
-        .header
-            .title Активные сессии
-            .subtitle 6
-            v-button.close-session(
-                type="outline"
-                size="small"
-                @click="openModalSessions"
-            ) Закрыть все сессии кроме текущей
-    .footer
-        telegram-button
-        .buttons
-            square-button(
-                icon="/icons/qr-code.svg"
-                @click="openQR"
-            )
-            v-button.button-go(
-                size="small"
-                iconSrc="/icons/arrow.svg"
-            ) Перейти
+                v-button.button-go(
+                    size="small"
+                    iconSrc="/icons/arrow.svg"
+                ) Перейти
 </template>
 
 <script>
+import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import TelegramButton from '@/components/common/Buttons/TelegramButton.vue';
@@ -69,6 +69,7 @@ export default {
     name: 'ProfileSettings',
 
     components: {
+        ProfileWrapper,
         VInput,
         VButton,
         TelegramButton,
@@ -107,43 +108,37 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.profile-settings
+.header
     display: flex
-    flex-direction: column
-    margin-top: 0.8rem
-    padding: 2.4rem 3.2rem 9.8rem 3.2rem
-    background-color: $color-white
-    border-radius: 2rem 0 0 0
-    width: 100%
-    flex: 1 1 auto
-    .header
+    align-items: center
+    justify-content: flex-start
+    gap: 1.6rem
+    margin-bottom: 3.2rem
+    .title,
+    .subtitle
+        font-weight: 600
+        font-size: 3.2rem
+        line-height: 3.2rem
+    .subtitle
+        color: $color-silver-light
+
+.close-session
+    margin-left: auto
+
+.form
+    margin-bottom: 7.2rem
+    .controls
         display: flex
+        flex-wrap: wrap
         align-items: center
-        justify-content: flex-start
-        gap: 1.6rem
+        column-gap: 2.4rem
+        row-gap: 2rem
         margin-bottom: 3.2rem
-        .title,
-        .subtitle
-            font-weight: 600
-            font-size: 3.2rem
-            line-height: 3.2rem
-        .subtitle
-            color: $color-silver-light
-        .close-session
-            margin-left: auto
-    .form
-        margin-bottom: 7.2rem
-        .controls
-            display: flex
-            flex-wrap: wrap
-            align-items: center
-            column-gap: 2.4rem
-            row-gap: 2rem
-            margin-bottom: 3.2rem
-            .control
-                flex: 1 1 30%
-        .button
-            min-width: 16.4rem
+        .control
+            flex: 1 1 30%
+    .button
+        min-width: 16.4rem
+
 .footer
     position: relative
     display: flex

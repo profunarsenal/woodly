@@ -12,4 +12,11 @@ export default class Balance extends AbstractService {
         const { data } = await this.axios.get('/balance/transactions', { params });
         return new BalanceTransactionsModel(data);
     };
+
+    async exportBalance(params) {
+        return await this.axios.get('/balance/export', {
+            params,
+            responseType: 'blob',
+        });
+    };
 };

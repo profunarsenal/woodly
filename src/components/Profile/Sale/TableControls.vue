@@ -16,24 +16,20 @@
                     popup-confirm.confirm-transaction(
                         v-if="popup.confirm.isOpen"
                         :componentData="popupConfirmComponentData"
-                        @cancel="closePopup('confirm')"
-                        @confirm="changeTransactionStatus('confirm')"
                     )
                 .table-control(:class="controlClasses")
                     button-mini(
                         type="decline"
-                        @click="openPopup('decline')"
+                        @click="openPopup('cancel')"
                     )
                     v-tooltip.table-tooltip(
                         position="right"
                         text="Отклонить проверку"
                     )
                     popup-confirm.confirm-transaction(
-                        v-if="popup.decline.isOpen"
+                        v-if="popup.cancel.isOpen"
                         :componentData="popupDeclineComponentData"
                         type="negative"
-                        @cancel="closePopup('decline')"
-                        @confirm="changeTransactionStatus('decline')"
                     )
         td.tbody-item
              v-action-menu.action-menu(
@@ -56,8 +52,6 @@
                 popup-confirm.confirm-transaction(
                     v-if="popup.confirm.isOpen"
                     :componentData="popupConfirmComponentData"
-                    @cancel="closePopup('confirm')"
-                    @confirm="declineTransaction"
                 )
         td.tbody-item
             .table-control
@@ -101,7 +95,7 @@ export default {
                 confirm: {
                     isOpen: false,
                 },
-                decline: {
+                cancel: {
                     isOpen: false,
                 },
             },
@@ -110,7 +104,7 @@ export default {
                 subtitle: 'Вы уверены, что хотите подтвердить проверку сделки?',
                 buttonCancel: 'Отменить',
                 buttonConfirm: 'Подтвердить',
-                callbackConfirm: () => this.changeTransactionStatus('confirm'),
+                callbackConfirm: () => this.confirm(),
                 callbackCancel: () => this.closePopup('confirm'),
             },
             popupDeclineComponentData: {
@@ -118,8 +112,8 @@ export default {
                 subtitle: 'Вы уверены, что хотите отклонить проверку сделки?',
                 buttonCancel: 'Отменить',
                 buttonConfirm: 'Отклонить',
-                callbackConfirm: () => this.changeTransactionStatus('decline'),
-                callbackCancel: () => this.closePopup('decline'),
+                callbackConfirm: () => this.cancel(),
+                callbackCancel: () => this.closePopup('cancel'),
             },
         };
     },
@@ -158,21 +152,27 @@ export default {
             this.popup[popupName].isOpen = false;
         },
 
-        async changeTransactionStatus(popupName) {
-            const statuses = {
-                confirm: TRANSACTIONS_STATUSES.successful.id,
-                decline: TRANSACTIONS_STATUSES.canceled.id,
-            };
-
+        async confirm() {
             try {
-                const { transactionId, cardId } = this.item;
-                await this.$store.dispatch('transactions/changeTransactionStatus', {
-                    transactionId,
-                    cardId,
-                    status: statuses[popupName],
-                })
+                await this.$store.dispatch('transactions/confirmTransaction', {
+                    transactionId: this.item.transactionId,
+                    status: TRANSACTIONS_STATUSES.successful.id,
+                });
 
-                this.closePopup(popupName);
+                this.closePopup('confirm');
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async cancel() {
+            try {
+                await this.$store.dispatch('transactions/cancelTransaction', {
+                    transactionId: this.item.transactionId,
+                    status: TRANSACTIONS_STATUSES.canceled.id,
+                });
+
+                this.closePopup('cancel');
             } catch (error) {
                 console.log(error);
             }

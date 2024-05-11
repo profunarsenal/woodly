@@ -41,3 +41,12 @@ export const BALANCE_TRANSACTIONS = [
     { title: 'Сумма', key: 'amount' },
     { title: 'Дата и время', key: 'date' },
 ];
+
+export const PURCHASES = [
+    { title: 'ID платежа', key: 'purchaseId', searchable: true },
+    { title: 'Способ оплаты', key: 'paymentSystem' },
+    { title: 'Карта', key: 'requisites', searchable: true },
+    { title: 'Сумма', key: 'amount', searchable: true },
+    { title: 'Статус', key: 'status' },
+    { title: 'Создан', key: 'dateCreate' },
+];

@@ -5,6 +5,7 @@ import payment from '@/store/payment/payment';
 import cards from '@/store/cards/cards';
 import transactions from '@/store/transactions/transactions';
 import balance from '@/store/balance/balance';
+import purchases from '@/store/purchases/purchases';
 
 export default createStore({
     state: {
@@ -22,5 +23,6 @@ export default createStore({
         cards,
         transactions,
         balance,
+        purchases,
     },
 });

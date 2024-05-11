@@ -1,7 +1,10 @@
 <template lang="pug">
-    .profile-purchases
-        .header
-            .title Покупка
+    profile-wrapper.purchases(
+        title="Покупка"
+        :pagination="pagination"
+        :items="purchases"
+    )
+        template(#header)
             .export
                 v-button(
                     type="outline"
@@ -12,30 +15,96 @@
                 export-window(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
-                    @unload="unloadTransactions"
+                    @unload="exportPurchases"
                 )
+
+        template(#content)
+            v-tabs.table-tabs(
+                v-model="activeTab"
+                :tabs="tableTabs"
+                @select="toggleTable"
+            )
+            v-table.table(
+                :headers="tableHeaders"
+                :items="purchases"
+                :isLoading="isLoading"
+                @search="search"
+            )
+                template(#amount="{ item }")
+                    .amount {{ getCurrencyValue(item.amount) }}
+                template(#status="{ item }")
+                    .status(:class="setStatus(item.status, 'color')")
+                        inline-svg.status-icon(:src="setStatus(item.status, 'icon')")
+                        .status-text {{ setStatus(item.status, 'transactionTitle') }}
+                template(#dateCreate="{ item }")
+                    table-date(
+                        v-if="item.dateCreate"
+                        :date="item.dateCreate"
+                    )
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import debounce from 'lodash/debounce';
+import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
 import ExportWindow from '@/components/Profile/ExportWindow.vue';
-import { exportTransactions } from '@/helpers/url';
+import VTable from '@/components/common/VTable.vue';
+import VTabs from '@/components/common/VTabs.vue';
+import TableDate from '@/components/common/Table/TableDate.vue';
+import { PURCHASES } from '@/helpers/table';
+import { downloadFile } from '@/helpers/url';
+import { getCurrencyValue } from '@/helpers/string';
+import { PURCHASES_STATUSES } from '@/helpers/catalogs';
 
 export default {
     name: 'ProfilePurchases',
 
     components: {
+        ProfileWrapper,
         VButton,
         ExportWindow,
+        VTable,
+        TableDate,
+        VTabs,
     },
 
     data() {
         return {
+            tableHeaders: PURCHASES,
             isOpenExport: false,
+            isLoading: false,
+            urlParams: Object.assign({}, this.$route.query),
+            tableTabs: [
+                { key: 'all', title: 'Все платежи' },
+                ...Object.values(PURCHASES_STATUSES),
+            ],
+            activeTab: 'all',
+            search: debounce(this.searchTable, 500),
+            getCurrencyValue: getCurrencyValue,
         };
     },
 
+    computed: {
+        ...mapState({
+            purchases: ({ purchases }) => purchases.purchases,
+            pagination: ({ purchases }) => purchases.pagination,
+        }),
+    },
+
     methods: {
+        async getPurchases() {
+            this.isLoading = true;
+
+            try {
+                await this.$store.dispatch('purchases/getPurchases', this.urlParams);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
         openExport() {
             this.isOpenExport = true;
         },
@@ -44,40 +113,100 @@ export default {
             this.isOpenExport = false;
         },
 
-        async unloadTransactions(date) {
-            const { dateStart, dateEnd } = date;
-
+        async exportPurchases(date) {
             try {
-                await exportTransactions(dateStart, dateEnd);
+                const { data: blob } = await this.$api.purchases.exportPurchases(date);
+                downloadFile(blob, 'purchases.xlsx');
             } catch (error) {
                 console.log(error);
             }
         },
+
+        searchTable(value, key) {
+            this.urlParams[key] = value;
+            this.$router.push({ query: this.urlParams });
+        },
+
+        toggleTable() {
+            if (this.activeTab === 'all') {
+                delete this.urlParams.status;
+            } else {
+                const status = PURCHASES_STATUSES[this.activeTab];
+                this.urlParams.status = status.id;
+            }
+
+            this.$router.push({ query: this.urlParams });
+        },
+
+        setStatus(status, key) {
+            const statusItem = Object.values(PURCHASES_STATUSES).find(item => item.id === status);
+            return statusItem[key] || '';
+        },
+    },
+
+    watch: {
+        '$route.query': {
+            handler(query) {
+                this.urlParams = Object.assign({}, query);
+                this.getPurchases();
+            },
+            deep: true,
+        },
+    },
+
+    async created() {
+        await this.getPurchases();
     },
 };
 </script>
 
 <style lang="sass" scoped>
-.profile-purchases
-    display: flex
-    flex-direction: column
-    margin-top: 0.8rem
-    padding: 2.4rem 3.2rem 9.8rem 3.2rem
-    background-color: $color-white
-    border-radius: 2rem 0 0 0
-    width: 100%
-    flex: 1 1 auto
+.purchases
+    &:deep(.header)
+        justify-content: space-between
 
-.header
+.export
+    position: relative
+
+.table-tabs
+    margin-bottom: 0.8rem
+
+.status
     display: flex
     align-items: center
-    justify-content: space-between
-    gap: 1.6rem
-    margin-bottom: 3.2rem
-    .title
-        font-weight: 600
-        font-size: 3.2rem
-        line-height: 3.2rem
-    .export
-        position: relative
+    gap: 0.6rem
+    border-radius: 0.6rem
+    padding: 0.6rem 0.9rem
+    &-icon
+        width: 1.6rem
+        height: 1.6rem
+    &.blue
+        background-color: rgba($color-violet-100, 0.1)
+        .status-icon
+            fill: $color-violet-100
+    &.yellow
+        background-color: rgba($color-yellow-dark, 0.1)
+        .status-icon
+            fill: $color-yellow-dark
+    &.red
+        background-color: rgba($color-red-dark, 0.08)
+        .status-icon
+            fill: $color-red-dark
+            transform: rotate(-90deg)
+    &.green
+        background-color: rgba($color-green, 0.08)
+        .status-icon
+            fill: $color-green
+            transform: rotate(90deg)
+
+.table-tabs
+    &:deep(.tab)
+        &.green .icon
+            transform: rotate(90deg)
+        &.red .icon
+            transform: rotate(-90deg)
+
+.table
+    &:deep(.table-item-status)
+        padding: 0.3rem
 </style>

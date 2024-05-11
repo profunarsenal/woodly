@@ -1,11 +1,13 @@
 <template lang="pug">
-    .profile-balance
-        .header
-            .title Баланс
+    profile-wrapper.balance(
+        title="Баланс"
+        :pagination="pagination"
+        :items="balanceTransactions"
+        :isLoading="isLoading"
+    )
+        template(#header)
             .id Мой ID: {{ user.userId }}
-        .loader(v-if="isLoading")
-            v-loader(size="big")
-        template(v-else)
+        template(#content)
             .currencies
                 currency-block(
                     imageSrc="/icons/currencies/rouble.svg"
@@ -27,14 +29,12 @@
                     export-window(
                         v-if="isOpenExport"
                         v-click-outside="closeExport"
-                        @unload="unloadTransactions"
+                        @unload="exportBalance"
                     )
-            .loader(v-if="isLoadingTransactions")
-                v-loader(size="big")
             v-table.table(
-                v-else
                 :headers="tableHeaders"
                 :items="balanceTransactions"
+                :isLoading="isLoadingTransactions"
             )
                 template(#status="{ item }")
                     .status(:class="setStatus(item.status, 'color')")
@@ -43,43 +43,39 @@
                 template(#amount="{ item }")
                     .bank {{ getCurrencyValue(item.amount) }}
                 template(#date="{ item }")
-                    .date(v-if="item.date") {{ formatTableDate(item.date).date }} · 
-                        |
-                        span.time {{ formatTableDate(item.date).time }}
-    app-pagination.pagination(
-        v-if="pagination.pages > 1"
-        :pages="pagination.pages"
-        :limit="pagination.limit"
-        :total="pagination.total"
-        :count="balanceTransactions.length"
-    )
+                    table-date(
+                        v-if="item.date"
+                        :date="item.date"
+                    )
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import CurrencyBlock from '@/components/Profile/Balance/CurrencyBlock.vue';
 import VTable from '@/components/common/VTable.vue';
-import VLoader from '@/components/common/VLoader.vue';
 import AppPagination from '@/components/app/AppPagination.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VButton from '@/components/common/VButton.vue';
 import ExportWindow from '@/components/Profile/ExportWindow.vue';
+import TableDate from '@/components/common/Table/TableDate.vue';
 import { BALANCE_TRANSACTIONS } from '@/helpers/table';
 import { BALANCE_STATUSES } from '@/helpers/catalogs';
-import { getCurrencyValue, formatDate, formatTime } from '@/helpers/string';
-import { exportTransactions } from '@/helpers/url';
+import { getCurrencyValue } from '@/helpers/string';
+import { downloadFile } from '@/helpers/url';
 
 export default {
     name: 'ProfileBalance',
 
     components: {
+        ProfileWrapper,
         CurrencyBlock,
         VTable,
-        VLoader,
         AppPagination,
         VTabs,
         VButton,
         ExportWindow,
+        TableDate,
     },
 
     data() {
@@ -108,13 +104,6 @@ export default {
     },
 
     methods: {
-        formatTableDate(date) {
-            return {
-                date: formatDate(date),
-                time: formatTime(date),
-            };
-        },
-
         toggleTable() {
             if (this.activeTab === 'all') {
                 delete this.urlParams.status;
@@ -142,6 +131,17 @@ export default {
             }
         },
 
+        async getBalance() {
+            try {
+                this.isLoading = true;
+                await this.$store.dispatch('balance/getBalance');
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
         openExport() {
             this.isOpenExport = true;
         },
@@ -150,11 +150,10 @@ export default {
             this.isOpenExport = false;
         },
 
-        async unloadTransactions(date) {
-            const { dateStart, dateEnd } = date;
-
+        async exportBalance(date) {
             try {
-                await exportTransactions(dateStart, dateEnd);
+                const { data: blob } = await this.$api.balance.exportBalance(date);
+                downloadFile(blob, 'balance.xlsx');
             } catch (error) {
                 console.log(error);
             }
@@ -172,29 +171,18 @@ export default {
     },
 
     async created() {
-        try {
-            this.isLoading = true;
-            await this.$store.dispatch('balance/getBalance');
-            await this.getBalanceTransactions();
-        } catch (error) {
-            console.log(error);
-        } finally {
-            this.isLoading = false;
-        }
+        await Promise.allSettled([
+            this.getBalance(),
+            this.getBalanceTransactions(),
+        ]);
     },
 };
 </script>
 
 <style lang="sass" scoped>
-.profile-balance
-    display: flex
-    flex-direction: column
-    margin-top: 0.8rem
-    padding: 2.4rem 3.2rem 9.8rem 3.2rem
-    background-color: $color-white
-    border-radius: 2rem 0 0 0
-    width: 100%
-    flex: 1 1 auto
+.balance
+    &:deep(.header)
+        justify-content: space-between
 
 .loader
     display: flex
@@ -206,19 +194,11 @@ export default {
 .currencies
     margin-bottom: 4rem
 
-.header
-    display: flex
-    align-items: center
-    justify-content: space-between
-    gap: 1.6rem
-    margin-bottom: 3.2rem
-    .title,
-    .id
-        font-weight: 600
-        font-size: 3.2rem
-        line-height: 3.2rem
-    .id
-        color: $color-silver-light
+.id
+    font-weight: 600
+    font-size: 3.2rem
+    line-height: 3.2rem
+    color: $color-silver-light
 
 .table-header
     display: flex
@@ -227,9 +207,6 @@ export default {
     margin-bottom: 0.8rem
     .export
         position: relative
-
-.time
-    color: $color-gray-dark
 
 .status
     display: flex

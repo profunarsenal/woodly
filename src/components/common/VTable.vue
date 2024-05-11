@@ -1,5 +1,7 @@
 <template lang="pug">
-    .wrapper
+    .loader(v-if="isLoading")
+        v-loader(size="big")
+    .wrapper(v-else)
         table.table(
             v-if="items.length || isSearch"
             cellspacing="0"
@@ -57,6 +59,7 @@
 </template>
 
 <script>
+import VLoader from '@//components/common/VLoader.vue';
 import TableHeader from '@/components/common/Table/TableHeader.vue';
 import TableItem from '@/components/common/Table/TableItem.vue';
 import TableSearch from '@/components/common/Table/TableSearch.vue';
@@ -70,6 +73,7 @@ export default {
         TableItem,
         TableSearch,
         EmptyForm,
+        VLoader,
     },
 
     props: {
@@ -77,9 +81,15 @@ export default {
             type: Array,
             defaul: () => [],
         },
+
         items: {
             type: Array,
             defaul: () => [],
+        },
+
+        isLoading: {
+            type: Boolean,
+            default: false,
         },
     },
 
@@ -131,8 +141,16 @@ export default {
 <style lang="sass" scoped>
 .wrapper
     height: 100%
+
 .table
     width: 100%
     border: none
     border-collapse: separate
+
+.loader
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 100%
+    fill: $color-violet-100
 </style>
