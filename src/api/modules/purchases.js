@@ -20,4 +20,19 @@ export default class Purchases extends AbstractService {
             status,
         });
     };
+
+    async uploadCheck(purchaseId, file) {
+        return await this.axios.post('/purchases/upload',
+            {
+                purchaseId,
+                file,
+                comment: '',
+            },
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        );
+    };
 };

@@ -10,6 +10,7 @@
         )
         v-button.button(
             :isDisabled="!files.length"
+            :isLoading="isUploading"
             @click="sendCheck"
         ) Отправить
 </template>
@@ -37,6 +38,7 @@ export default {
         return {
             files: [],
             imageExtensions: '.jpg, .gif, .jpeg, .png, .webp',
+            isUploading: false,
         };
     },
 
@@ -51,8 +53,18 @@ export default {
             this.$store.commit('modal/close');
         },
 
-        sendCheck() {
-            console.log(this.componentData)
+        async sendCheck() {
+            const file = new Blob([this.files[0]], { type: 'image/png' });
+
+            try {
+                this.isUploading = true;
+                await this.$api.purchases.uploadCheck(this.purchaseId, file);
+                this.close();
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isUploading = false;
+            }
         },
     },
 };

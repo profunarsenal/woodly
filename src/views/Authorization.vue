@@ -1,10 +1,10 @@
 <template lang="pug">
     .profile-auth
         .cover
-            img.image.image-dollar(src="/images/big-icon/dollar.png")
-            img.image.image-bitcoin(src="/images/big-icon/bitcoin.png")
-            img.image.image-rouble(src="/images/big-icon/rouble.png")
-            img.image.image-wallet(src="/images/big-icon/wallet.png")
+            //- img.image.image-dollar(src="/images/big-icon/dollar.png")
+            //- img.image.image-bitcoin(src="/images/big-icon/bitcoin.png")
+            //- img.image.image-rouble(src="/images/big-icon/rouble.png")
+            //- img.image.image-wallet(src="/images/big-icon/wallet.png")
             inline-svg.logo(src="/images/logo.svg")
         .content
             .form

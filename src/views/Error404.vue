@@ -1,5 +1,7 @@
 <template lang="pug">
     .error-404
+        //- .angle
+        //-     img.ufo.center(src="/images/404/ufo.png")
         .content
             .title Мы не смогли найти эту страницу
             .subtitle Страницы не существует или она была удалена. Нажмите кнопку ниже, чтобы вернуться назад
@@ -22,11 +24,37 @@ export default {
 
 <style lang="sass" scoped>
 .error-404
+    position: relative
     height: 100%
     background-color: $color-violet-100
     display: flex
     align-items: center
     justify-content: center
+    overflow: hidden
+    // .angle
+    //     position: absolute
+    //     bottom: 0
+    //     left: 50%
+    //     width: 80%
+    //     height: calc( 70% + 14rem )
+    //     transform: translateX(-50%)
+    //     &::after
+    //         content: ''
+    //         position: absolute
+    //         bottom: -14rem
+    //         width: 100%
+    //         height: 100%
+    //         background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) -1.17%, rgba(255, 255, 255, 0) 90.26%)
+    //         clip-path: polygon(50% 0%, 0% 100%, 100% 100%)
+    // .ufo
+    //     position: absolute
+    //     z-index: 99
+    //     &.center
+    //         top: 0
+    //         left: 50%
+    //         width: 38rem
+    //         height: 38rem
+    //         transform: translateX(-50%)
     .content
         max-width: 42rem
         text-align: center

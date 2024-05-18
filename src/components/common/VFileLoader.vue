@@ -5,7 +5,7 @@
             type="file"
             ref="files"
             :accept="extensions"
-            multiple
+            :multiple="isMultiple"
             @change="upload"
         )
         template(v-if="files.length")
@@ -20,6 +20,7 @@
                 button.remove(@click.stop="remove(file.name)")
                     inline-svg.icon-close(src="/icons/close.svg")
         label.loader(
+            v-if="isMultiple || !files.length"
             for="file-input"
             @dragover.prevent="dragover"
             @drop.prevent="drop"
@@ -47,6 +48,11 @@ export default {
         modelValue: {
             type: [FileList, Array],
             required: true,
+        },
+
+        isMultiple: {
+            type: Boolean,
+            default: false,
         },
     },
 

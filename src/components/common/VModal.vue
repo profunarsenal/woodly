@@ -7,7 +7,6 @@
             component(
                 :is="component"
                 :componentData="componentData"
-                class="test"
                 v-click-outside="close"
             )
 </template>
@@ -20,6 +19,7 @@ export default {
     name: 'VModal',
 
     components: {
+        ModalImage: defineAsyncComponent(() => import('@/components/app/ModalImage.vue')),
         ModalCancelPayment: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalCancel.vue')),
         ModalInsurance: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalInsurance.vue')),
         ModalQR: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalQR.vue')),

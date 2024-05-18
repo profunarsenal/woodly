@@ -25,7 +25,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Отменить сделку"
+                        text="Подтвердить сделку"
                     )
                     popup-confirm.popup(
                         v-if="popup.confirm.isOpen"
@@ -39,7 +39,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Подтвердить сделку"
+                        text="Отменить сделку"
                     )
                     popup-confirm.popup(
                         v-if="popup.cancel.isOpen"
@@ -55,8 +55,20 @@
                         position="right"
                         text="Прикрепить чек"
                     )
+    template(v-else-if="isSuccessfulStatus")
+        td.tbody-item
+            .controls
+                .control
+                    button-mini(
+                        type="add"
+                        @click="showCheck"
+                    )
+                    v-tooltip.tooltip(
+                        position="right"
+                        text="Посмотреть чек"
+                    )
     template(v-else)
-        td.tbody-item(colspan="2")
+        td.tbody-item
 </template>
 
 <script>
@@ -129,6 +141,10 @@ export default {
         isActiveStatus() {
             return this.item.status === PURCHASES_STATUSES.active.id;
         },
+
+        isSuccessfulStatus() {
+            return this.item.status === PURCHASES_STATUSES.successful.id;
+        },
     },
 
     methods: {
@@ -165,6 +181,13 @@ export default {
             this.$store.commit('modal/open', {
                 component: 'ModalAttachingCheck',
                 positionCenter: true,
+                componentData: this.item,
+            });
+        },
+
+        showCheck() {
+            this.$store.commit('modal/open', {
+                component: 'ModalImage',
                 componentData: this.item,
             });
         },
