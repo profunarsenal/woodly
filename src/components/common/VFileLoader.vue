@@ -17,7 +17,7 @@
                 .info
                     .name {{ setFileName(file) }}
                     .weight {{ setFileSize(file) }}
-                button.remove(@click="remove(file.name)")
+                button.remove(@click.stop="remove(file.name)")
                     inline-svg.icon-close(src="/icons/close.svg")
         label.loader(
             for="file-input"
@@ -36,18 +36,23 @@ import { sliceStringAddDot } from '@/helpers/string.js';
 export default {
     name: 'VFileLoader',
 
-    emits: ['change'],
+    emits: ['update:modelValue'],
 
     props: {
         extensions: {
             type: String,
             default: '',
         },
+
+        modelValue: {
+            type: [FileList, Array],
+            required: true,
+        },
     },
 
     data() {
         return {
-            files: [],
+            files: this.modelValue,
         };
     },
 
@@ -55,7 +60,7 @@ export default {
         upload(event) {
             const { files } = event.target;
             this.files = files;
-            this.$emit('change', this.files);
+            this.$emit('update:modelValue', this.files);
         },
 
         remove(name) {
@@ -72,14 +77,14 @@ export default {
 
                 this.$refs.files.files = dt.files;
                 this.files = dt.files;
-                this.$emit('change', this.files);
+                this.$emit('update:modelValue', this.files);
 
                 return;
             }
 
             this.$refs.files.value = null;
             this.files = [];
-            this.$emit('change', this.files);
+            this.$emit('update:modelValue', this.files);
         },
 
         setFileName(file) {
@@ -98,7 +103,7 @@ export default {
         drop(event) {
             const files = event.dataTransfer.files;
             this.files = files;
-            this.$emit('change', this.files);
+            this.$emit('update:modelValue', this.files);
         },
     },
 };

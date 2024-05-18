@@ -38,6 +38,7 @@ export default {
         ModalCorrection: defineAsyncComponent(() => import('@/components/Profile/Sale/Modal/ModalCorrection.vue')),
         ModalExit: defineAsyncComponent(() => import('@/components/Sidebar/Modal/ModalExit.vue')),
         ModalTransaction: defineAsyncComponent(() => import('@/components/Profile/Balance/ModalTransaction.vue')),
+        ModalAttachingCheck: defineAsyncComponent(() => import('@/components/Profile/Purchases/ModalAttachingCheck.vue')),
     },
 
     computed: {
