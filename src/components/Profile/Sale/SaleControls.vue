@@ -3,30 +3,31 @@
         td.tbody-item(colspan="2")
     template(v-else-if="isReviewStatus")
         td.tbody-item
-            .table-controls
-                .table-control(:class="controlClasses")
+            .controls
+                .control(:class="setClass('confirm')")
                     button-mini(
                         type="confirm"
                         @click="openPopup('confirm')"
                     )
-                    v-tooltip.table-tooltip(
+                    v-tooltip.tooltip(
                         position="right"
                         text="Подтвердить сделку"
                     )
-                    popup-confirm.confirm-transaction(
+                    popup-confirm.popup(
                         v-if="popup.confirm.isOpen"
                         :componentData="popupConfirmComponentData"
+                        type="positive"
                     )
-                .table-control(:class="controlClasses")
+                .control(:class="setClass('cancel')")
                     button-mini(
                         type="decline"
                         @click="openPopup('cancel')"
                     )
-                    v-tooltip.table-tooltip(
+                    v-tooltip.tooltip(
                         position="right"
                         text="Отклонить проверку"
                     )
-                    popup-confirm.confirm-transaction(
+                    popup-confirm.popup(
                         v-if="popup.cancel.isOpen"
                         :componentData="popupDeclineComponentData"
                         type="negative"
@@ -40,26 +41,27 @@
                     button-mini(type="option")
     template(v-else)
         td.tbody-item
-            .table-control(:class="controlClasses")
+            .control(:class="setClass('confirm')")
                 button-mini(
                     type="confirm"
                     @click="openPopup('confirm')"
                 )
-                v-tooltip.table-tooltip(
+                v-tooltip.tooltip(
                     position="right"
                     text="Подтвердить сделку"
                 )
-                popup-confirm.confirm-transaction(
+                popup-confirm.popup(
                     v-if="popup.confirm.isOpen"
                     :componentData="popupConfirmComponentData"
+                    type="positive"
                 )
         td.tbody-item
-            .table-control
+            .control
                 button-mini(
                     type="edit"
                     @click="openModalCorrection"
                 )
-                v-tooltip.table-tooltip(
+                v-tooltip.tooltip(
                     position="right"
                     text="Корректировать заявку"
                 )
@@ -127,10 +129,6 @@ export default {
             return this.item.status === TRANSACTIONS_STATUSES.review.id;
         },
 
-        controlClasses() {
-            return { 'open-window': this.popup.confirm.isOpen };
-        },
-
         menuItems() {
             return [
                 {
@@ -185,29 +183,35 @@ export default {
                 componentData: this.item,
             });
         },
+
+        setClass(popupName) {
+            return {
+                open: this.popup[popupName].isOpen,
+            };
+        },
     },
 };
 </script>
 
 <style lang="sass" scoped>
-.table-controls
+.controls
     display: flex
     gap: 0.8rem
 
-.table-control
+.control
     width: 2rem
     height: 2rem
     position: relative
-    &:not(.open-window)
+    &:not(.open)
         @media(any-hover:hover)
             &:hover
-                .table-tooltip
+                .tooltip
                     opacity: 1
                     visibility: visible
                     pointer-events: all
                     transition: 0.4s ease 0.4s
 
-.table-tooltip
+.tooltip
     opacity: 0
     visibility: hidden
     pointer-events: none
@@ -215,7 +219,7 @@ export default {
     top: -0.3rem
     transition: 0.2s ease
 
-.confirm-transaction
+.popup
     position: absolute
     z-index: 10
     top: calc( 100% + 0.4rem )
@@ -226,5 +230,5 @@ export default {
 
 .action-menu
     &:deep(.menu)
-        top: 95%
+        top: 60%
 </style>

@@ -4,7 +4,7 @@
         .subtitle {{ componentData.subtitle }}
         .buttons
             v-button(
-                type="outline"
+                type="secondary"
                 @click="componentData.callbackCancel"
             ) {{ componentData.buttonCancel }}
             v-button(
@@ -27,7 +27,7 @@ export default {
 
         type: {
             type: String,
-            default: 'positive',
+            default: 'primary',
         },
     },
 

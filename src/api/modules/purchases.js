@@ -13,4 +13,11 @@ export default class Purchases extends AbstractService {
             responseType: 'blob',
         });
     };
+
+    async changeStatus(purchaseId, status) {
+        return await this.axios.patch('/purchases/change-status', {
+            purchaseId,
+            status,
+        });
+    };
 };

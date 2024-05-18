@@ -65,6 +65,7 @@ export default {
     font-weight: 500
     line-height: 2rem
     border-radius: 1.2rem
+    white-space: nowrap
     transition: background-color 0.3s ease
     .icon
         width: 2rem

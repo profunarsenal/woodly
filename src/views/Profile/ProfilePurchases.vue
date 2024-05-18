@@ -41,6 +41,16 @@
                         v-if="item.dateCreate"
                         :date="item.dateCreate"
                     )
+                template(#thead)
+                    th.thead-item(colspan="2")
+                template(#tbody="{ item }")
+                    purchases-controls(:item="item")
+                template(#empty)
+                    empty-form(
+                        :imageSrc="emptyForm.src"
+                        :title="emptyForm.title"
+                        :subtitle="emptyForm.subtitle"
+                    )
 </template>
 
 <script>
@@ -52,6 +62,8 @@ import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import VTable from '@/components/common/VTable.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
+import EmptyForm from '@/components/app/EmptyForm.vue';
+import PurchasesControls from '@/components/Profile/Purchases/PurchasesControls.vue';
 import { PURCHASES } from '@/helpers/table';
 import { downloadFile } from '@/helpers/url';
 import { getCurrencyValue } from '@/helpers/string';
@@ -67,6 +79,8 @@ export default {
         VTable,
         TableDate,
         VTabs,
+        EmptyForm,
+        PurchasesControls,
     },
 
     data() {
@@ -90,6 +104,34 @@ export default {
             purchases: ({ purchases }) => purchases.purchases,
             pagination: ({ purchases }) => purchases.pagination,
         }),
+
+        emptyForm() {
+            const baseForm = {
+                src: '/images/empty/search.png',
+                title: 'Ничего не нашлось',
+            };
+
+            switch (this.activeTab) {
+                case 'all':
+                    return {
+                        src: '/images/empty/wallet.png',
+                        title: 'У вас еще нет сделок',
+                        subtitle: 'Здесь будут храниться все сделки по покупке',
+                    };
+                case PURCHASES_STATUSES.available.key:
+                    baseForm.subtitle = 'Здесь будут храниться все доступные сделки';
+                    return baseForm;
+                case PURCHASES_STATUSES.active.key:
+                    baseForm.subtitle = 'Здесь будут храниться все активные сделки';
+                    return baseForm;
+                case PURCHASES_STATUSES.canceled.key:
+                    baseForm.subtitle = 'Здесь будут храниться все отмененные сделки ';
+                    return baseForm;
+                case PURCHASES_STATUSES.successful.key:
+                    baseForm.subtitle = 'Здесь будут храниться все успешные сделки';
+                    return baseForm;
+            }
+        },
     },
 
     methods: {
@@ -197,12 +239,9 @@ export default {
         background-color: rgba($color-green, 0.08)
         .status-icon
             fill: $color-green
-            transform: rotate(90deg)
 
 .table-tabs
     &:deep(.tab)
-        &.green .icon
-            transform: rotate(90deg)
         &.red .icon
             transform: rotate(-90deg)
 

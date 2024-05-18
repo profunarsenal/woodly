@@ -55,7 +55,7 @@
                 template(#thead)
                     th.thead-item(colspan="2")
                 template(#tbody="{ item }")
-                    table-controls(:item="item")
+                    sale-controls(:item="item")
                 template(#empty)
                     empty-form(
                         :imageSrc="emptyForm.src"
@@ -72,7 +72,7 @@ import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
-import TableControls from '@/components/Profile/Sale/TableControls.vue';
+import SaleControls from '@/components/Profile/Sale/SaleControls.vue';
 import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
@@ -89,7 +89,7 @@ export default {
         VTabs,
         VTable,
         EmptyForm,
-        TableControls,
+        SaleControls,
         ExportWindow,
         TableDate,
     },
@@ -122,31 +122,26 @@ export default {
                 title: 'Ничего не нашлось',
             };
 
-            if (this.activeTab === 'all') {
-                return {
-                    src: '/images/empty/wallet.png',
-                    title: 'У вас еще нет сделок',
-                    subtitle: 'Здесь будут храниться все сделки по продаже',
-                };
+            switch (this.activeTab) {
+                case 'all':
+                    return {
+                        src: '/images/empty/wallet.png',
+                        title: 'У вас еще нет сделок',
+                        subtitle: 'Здесь будут храниться все сделки по продаже',
+                    };
+                case TRANSACTIONS_STATUSES.active.key:
+                    baseForm.subtitle = 'Здесь будут храниться все активные сделки';
+                    return baseForm;
+                case TRANSACTIONS_STATUSES.review.key:
+                    baseForm.subtitle = 'Здесь будут храниться все сделки на проверке';
+                    return baseForm;
+                case TRANSACTIONS_STATUSES.canceled.key:
+                    baseForm.subtitle = 'Здесь будут храниться все отмененные сделки ';
+                    return baseForm;
+                case TRANSACTIONS_STATUSES.successful.key:
+                    baseForm.subtitle = 'Здесь будут храниться все успешные сделки';
+                    return baseForm;
             }
-
-            if (this.activeTab === TRANSACTIONS_STATUSES.active.key) {
-                baseForm.subtitle = 'Здесь будут храниться все активные сделки';
-            }
-
-            if (this.activeTab === TRANSACTIONS_STATUSES.review.key) {
-                baseForm.subtitle = 'Здесь будут храниться все сделки на проверке';
-            }
-
-            if (this.activeTab === TRANSACTIONS_STATUSES.canceled.key) {
-                baseForm.subtitle = 'Здесь будут храниться все отмененные сделки';
-            }
-
-            if (this.activeTab === TRANSACTIONS_STATUSES.successful.key) {
-                baseForm.subtitle = 'Здесь будут храниться все успешные сделки';
-            }
-
-            return baseForm;
         },
     },
 
