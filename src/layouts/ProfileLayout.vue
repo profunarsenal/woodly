@@ -3,37 +3,41 @@
         app-sidebar.sidebar(:items="sidebarItems")
         .content
             router-view
-            app-footer.footer(v-if="!needHideFooter")
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import AppSidebar from '@/components/Sidebar/AppSidebar.vue';
-import AppFooter from '@/components/Footer/AppFooter.vue';
-import { PROFILE_SIDEBAR_ITEMS } from '@/helpers/constants';
+import {
+    ROLES,
+    TRADER_SIDEBAR_ITEMS,
+    ADMIN_SIDEBAR_ITEMS,
+    MERCHANT_SIDEBAR_ITEMS,
+} from '@/helpers/constants';
 
 export default {
     name: 'ProfileLayout',
 
     components: {
         AppSidebar,
-        AppFooter,
-    },
-
-    data() {
-        return {
-            sidebarItems: PROFILE_SIDEBAR_ITEMS,
-        };
     },
 
     computed: {
         ...mapGetters({
             isAuth: 'auth/isAuth',
             hasUser: 'auth/hasUser',
+            role: 'auth/role',
         }),
 
-        needHideFooter() {
-            return this.$route.meta.needHideFooter ?? false;
+        sidebarItems() {
+            const SIDEBAR_ITEMS = {
+                [ROLES.admin]: ADMIN_SIDEBAR_ITEMS,
+                [ROLES.trader]: TRADER_SIDEBAR_ITEMS,
+                [ROLES.merchant]: MERCHANT_SIDEBAR_ITEMS,
+                [ROLES.operator]: ADMIN_SIDEBAR_ITEMS,
+            };
+
+            return SIDEBAR_ITEMS[this.role] || [];
         },
     },
 
@@ -63,10 +67,4 @@ export default {
         left: 0
         z-index: 50
         height: 100%
-    .footer
-        position: fixed
-        bottom: 0
-        right: 0
-        width: calc( 100% - 22rem )
-        z-index: 50
 </style>

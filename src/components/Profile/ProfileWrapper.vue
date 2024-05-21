@@ -17,10 +17,13 @@
                 :total="pagination.total"
                 :count="items.length"
             )
+        slot(name="footer")
+            app-footer.footer
 </template>
 
 <script>
 import AppPagination from '@/components/app/AppPagination.vue';
+import AppFooter from '@/components/Footer/AppFooter.vue';
 import VLoader from '@//components/common/VLoader.vue';
 
 export default {
@@ -28,6 +31,7 @@ export default {
 
     components: {
         AppPagination,
+        AppFooter,
         VLoader,
     },
 
@@ -90,4 +94,11 @@ export default {
     justify-content: center
     height: 100%
     fill: $color-violet-100
+
+.footer
+    position: fixed
+    bottom: 0
+    right: 0
+    width: calc( 100% - 22rem )
+    z-index: 50
 </style>

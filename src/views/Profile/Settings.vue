@@ -45,17 +45,18 @@
                     size="small"
                     @click="openModalSessions"
                 ) Закрыть все сессии кроме текущей
-        .footer
-            telegram-button
-            .buttons
-                square-button(
-                    icon="/icons/qr-code.svg"
-                    @click="openQR"
-                )
-                v-button.button-go(
-                    size="small"
-                    iconSrc="/icons/arrow.svg"
-                ) Перейти
+        template(#footer)
+            .footer
+                telegram-button
+                .buttons
+                    square-button(
+                        icon="/icons/qr-code.svg"
+                        @click="openQR"
+                    )
+                    v-button.button-go(
+                        size="small"
+                        iconSrc="/icons/arrow.svg"
+                    ) Перейти
 </template>
 
 <script>
@@ -140,7 +141,11 @@ export default {
         min-width: 16.4rem
 
 .footer
-    position: relative
+    position: fixed
+    bottom: 0
+    right: 0
+    width: calc( 100% - 22rem )
+    z-index: 50
     display: flex
     justify-content: space-between
     padding: 2rem 3.2rem

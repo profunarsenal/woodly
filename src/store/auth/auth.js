@@ -1,6 +1,6 @@
+import { isEmpty } from 'lodash';
 import ApiModule from '@/api/apiModule';
 import request from '@/helpers/http';
-import { isEmpty } from 'lodash';
 
 const api = new ApiModule();
 
@@ -19,6 +19,10 @@ export default {
 
         hasUser(state) {
             return !isEmpty(state.user);
+        },
+
+        role(state) {
+            return state.user?.role || '';
         },
     },
 
