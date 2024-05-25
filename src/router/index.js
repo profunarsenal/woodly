@@ -1,18 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import store from '@/store';
+import store from '@/store/index';
 import HomeView from '@/views/HomeView.vue';
-import { ROLES } from '@/helpers/constants';
+import { ROLES, API } from '@/helpers/constants';
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory(),
     routes: [
         {
-            path: '/',
+            path: API.main,
             name: 'HomeView',
             component: HomeView,
         },
         {
-            path: '/profile/cards',
+            path: API.auth,
+            name: 'Authorization',
+            component: () => import('@/views/Authorization.vue'),
+            meta: {
+                layout: 'empty',
+            },
+        },
+        {
+            path: API.profile.cards,
             name: 'ProfileCards',
             component: () => import('@/views/Profile/Cards.vue'),
             meta: {
@@ -21,7 +29,7 @@ const router = createRouter({
             },
         },
         {
-            path: '/profile/sale',
+            path: API.profile.sale,
             name: 'ProfileSale',
             component: () => import('@/views/Profile/Sale.vue'),
             meta: {
@@ -30,25 +38,25 @@ const router = createRouter({
             },
         },
         {
-            path: '/profile/settings',
+            path: API.profile.settings,
             name: 'ProfileSettings',
             component: () => import('@/views/Profile/Settings.vue'),
             meta: {
                 auth: true,
-                roles: [ROLES.trader],
+                roles: [ROLES.trader, ROLES.admin, ROLES.merchant, ROLES.operator],
             },
         },
         {
-            path: '/profile/balance',
+            path: API.profile.balance,
             name: 'ProfileBalance',
             component: () => import('@/views/Profile/Balance.vue'),
             meta: {
                 auth: true,
-                roles: [ROLES.trader],
+                roles: [ROLES.trader, ROLES.admin, ROLES.merchant, ROLES.operator],
             },
         },
         {
-            path: '/profile/purchases',
+            path: API.profile.purchases,
             name: 'ProfilePurchases',
             component: () => import('@/views/Profile/Purchases.vue'),
             meta: {
@@ -57,43 +65,53 @@ const router = createRouter({
             },
         },
         {
-            path: '/profile/cash-register',
+            path: API.profile.cashRegister,
             name: 'ProfileCashRegister',
             component: () => import('@/views/Profile/CashRegister.vue'),
             meta: {
                 auth: true,
-                roles: [ROLES.merchant],
+                roles: [ROLES.merchant, ROLES.admin, ROLES.operator],
             },
         },
         {
-            path: '/profile/payments',
+            path: API.profile.payments,
             name: 'ProfilePayments',
             component: () => import('@/views/Profile/Payments.vue'),
             meta: {
                 auth: true,
-                roles: [ROLES.merchant],
+                roles: [ROLES.merchant, ROLES.admin, ROLES.operator],
             },
         },
         {
-            path: '/profile/payouts',
+            path: API.profile.payouts,
             name: 'ProfilePayouts',
             component: () => import('@/views/Profile/Payouts.vue'),
             meta: {
                 auth: true,
-                roles: [ROLES.merchant],
+                roles: [ROLES.merchant, ROLES.admin, ROLES.operator],
             },
         },
         {
-            path: '/auth',
-            name: 'Authorization',
-            component: () => import('@/views/Authorization.vue'),
+            path: API.profile.statistics,
+            name: 'ProfileStatistics',
+            component: () => import('@/views/Profile/Statistics.vue'),
             meta: {
-                layout: 'empty',
+                auth: true,
+                roles: [ROLES.trader, ROLES.admin, ROLES.operator],
             },
         },
         {
-            path: '/cards/auto-payments/:id',
-            name: 'AutoPayments',
+            path: API.profile.users,
+            name: 'ProfileUsers',
+            component: () => import('@/views/Profile/Users.vue'),
+            meta: {
+                auth: true,
+                roles: [ROLES.admin, ROLES.operator],
+            },
+        },
+        {
+            path: `${API.profile.autoPayments}/:id`,
+            name: 'ProfileAutoPayments',
             component: () => import('@/views/Profile/AutoPayments.vue'),
             meta: {
                 auth: true,
@@ -101,8 +119,8 @@ const router = createRouter({
             },
         },
         {
-            path: '/card-messages/:id',
-            name: 'CardMessages',
+            path: `${API.profile.cardMessages}/:id`,
+            name: 'ProfileCardMessages',
             component: () => import('@/views/Profile/CardMessages.vue'),
             meta: {
                 auth: true,
@@ -110,7 +128,7 @@ const router = createRouter({
             },
         },
         {
-            path: '/payment',
+            path: API.payment.base,
             name: 'PaymentView',
             component: () => import('@/views/PaymentViews/PaymentView.vue'),
             meta: {
@@ -118,7 +136,7 @@ const router = createRouter({
             },
         },
         {
-            path: '/payment-qr-code',
+            path: API.payment.qrCode,
             name: 'PaymentQrCode',
             component: () => import('@/views/PaymentViews/PaymentQrCode.vue'),
             meta: {
@@ -126,7 +144,7 @@ const router = createRouter({
             },
         },
         {
-            path: '/payment-crypto',
+            path: API.payment.crypto,
             name: 'PaymentCrypto',
             component: () => import('@/views/PaymentViews/PaymentCrypto.vue'),
             meta: {
@@ -134,7 +152,7 @@ const router = createRouter({
             },
         },
         {
-            path: '/payment-acquiring',
+            path: API.payment.acquiring,
             name: 'PaymentAcquiring',
             component: () => import('@/views/PaymentViews/PaymentAcquiring.vue'),
             meta: {
@@ -142,24 +160,30 @@ const router = createRouter({
             },
         },
         {
-            path: '/:pathMatch(.*)*',
+            path: API.error404,
             name: 'Error',
             component: () => import('@/views/Error404.vue'),
             meta: {
                 layout: 'empty',
             },
         },
+        {
+            path: '/:pathMatch(.*)*',
+            redirect: API.error404,
+        },
     ],
 });
 
 router.beforeEach((to, from, next) => {
-    const isAuth = store.getters['auth/isAuth'];
-    const requireAuth = to.meta.auth;
+    const isAuthorizationRequired = to.meta.auth;
+    const rolesWithAccess = to.meta.roles;
+    const isUserAuthorized = store.getters['auth/isAuth'];
+    const userRole = store.getters['auth/role'];
 
-    if (requireAuth && isAuth) {
-        next()
-    } else if (requireAuth && !isAuth) {
-        next('/auth')
+    if (isAuthorizationRequired && isUserAuthorized) {
+        rolesWithAccess.includes(userRole) ? next() : next(API.error404);
+    } else if (isAuthorizationRequired && !isUserAuthorized) {
+        next(API.auth)
     } else {
         next()
     };

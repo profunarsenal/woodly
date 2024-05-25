@@ -22,7 +22,7 @@ export default {
         },
 
         role(state) {
-            return state.user?.role || '';
+            return localStorage.getItem('role') || state.user?.role || '';
         },
     },
 
@@ -35,10 +35,12 @@ export default {
 
         setUser(state, user) {
             state.user = user;
+            localStorage.setItem('role', user.role);
         },
 
         logout(state) {
             localStorage.removeItem('token');
+            localStorage.removeItem('role');
             state.token = '';
             state.user = {};
         },

@@ -17,6 +17,7 @@
 
 <script>
 import VButton from '@/components/common/VButton.vue';
+import { API } from '@/helpers/constants';
 
 export default {
     name: 'ModalCardDelete',
@@ -39,7 +40,7 @@ export default {
 
         logout() {
             this.$store.commit('auth/logout');
-            this.$router.push('/auth');
+            this.$router.push(API.auth);
             this.close();
         },
     },

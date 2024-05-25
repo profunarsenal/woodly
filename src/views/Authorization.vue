@@ -37,8 +37,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
+import { SIDEBAR_ITEMS } from '@/helpers/constants';
 
 export default {
     name: 'ProfileAuthorization',
@@ -60,6 +62,10 @@ export default {
     },
 
     computed: {
+        ...mapGetters({
+            role: 'auth/role',
+        }),
+
         isFormCompleted() {
             return !!(this.form.login && this.form.password);
         },
@@ -74,7 +80,11 @@ export default {
             try {
                 this.isPending = true;
                 await this.$store.dispatch('auth/login', this.form);
-                this.$router.push('/profile/cards');
+
+                const sidebarItems = SIDEBAR_ITEMS[this.role] || [];
+                const redirectPath = sidebarItems[0]?.path;
+
+                this.$router.push(redirectPath);
             } catch (error) {
                 console.log(error);
             } finally {

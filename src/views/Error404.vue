@@ -7,17 +7,40 @@
             .subtitle Страницы не существует или она была удалена. Нажмите кнопку ниже, чтобы вернуться назад
             v-button.button(
                 type="secondary"
+                @click="back"
             ) Вернуться назад
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VButton from '@/components/common/VButton.vue';
+import { API, SIDEBAR_ITEMS } from '@/helpers/constants';
 
 export default {
     name: 'Error404',
 
     components: {
         VButton,
+    },
+
+    computed: {
+        ...mapGetters({
+            isAuth: 'auth/isAuth',
+            role: 'auth/role',
+        }),
+    },
+
+    methods: {
+        back() {
+            if (this.isAuth && this.role) {
+                const sidebarItems = SIDEBAR_ITEMS[this.role] || [];
+                const redirectPath = sidebarItems[0]?.path;
+
+                this.$router.push(redirectPath);
+            } else {
+                this.$router.push(API.main)
+            }
+        },
     },
 };
 </script>

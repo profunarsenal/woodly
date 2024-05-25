@@ -77,6 +77,7 @@ import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
 import { BANK_TYPES, CARD_STATUSES } from '@/helpers/catalogs';
+import { API } from '@/helpers/constants';
 
 export default {
     name: 'ProfileCards',
@@ -144,10 +145,7 @@ export default {
                     title: 'Автоплатежи',
                     callback: (item) => {
                         this.$router.push({
-                            name: 'AutoPayments',
-                            params: {
-                                id: item.cardId,
-                            },
+                            path: `${API.profile.autoPayments}/${item.cardId}`,
                             query: {
                                 cardLastNumber: item.cardLastNumber,
                             },
@@ -160,10 +158,7 @@ export default {
                     title: 'Общие СМС',
                     callback: (item) => {
                         this.$router.push({
-                            name: 'CardMessages',
-                            params: {
-                                id: item.cardId,
-                            },
+                            path: `${API.profile.cardMessages}/${item.cardId}`,
                             query: {
                                 cardLastNumber: item.cardLastNumber,
                             },
@@ -193,7 +188,7 @@ export default {
                     icon: '/icons/cards.svg',
                     title: 'Автоплатежи',
                     callback: (item) => {
-                        this.$router.push('/auto-payments/123');
+                        this.$router.push(`${API.profile.autoPayments}/${item.cardId}`);
                     },
                 },
                 {

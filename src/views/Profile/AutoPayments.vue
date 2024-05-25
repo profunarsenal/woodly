@@ -25,9 +25,10 @@ import SquareButton from '@/components/common/Buttons/SquareButton.vue';
 import VTable from '@/components/common/VTable.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 import { AUTOPAYMENTS } from '@/helpers/table';
+import { API } from '@/helpers/constants';
 
 export default {
-    name: 'AutoPayments',
+    name: 'ProfileAutoPayments',
 
     components: {
         ProfileWrapper,
@@ -45,7 +46,7 @@ export default {
 
     methods: {
         back() {
-            this.$router.push('/profile/cards');
+            this.$router.push(API.profile.cards);
         },
 
         async getAutoPayments() {

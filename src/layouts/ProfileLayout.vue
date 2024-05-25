@@ -8,12 +8,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import AppSidebar from '@/components/Sidebar/AppSidebar.vue';
-import {
-    ROLES,
-    TRADER_SIDEBAR_ITEMS,
-    ADMIN_SIDEBAR_ITEMS,
-    MERCHANT_SIDEBAR_ITEMS,
-} from '@/helpers/constants';
+import { SIDEBAR_ITEMS } from '@/helpers/constants';
 
 export default {
     name: 'ProfileLayout',
@@ -24,19 +19,11 @@ export default {
 
     computed: {
         ...mapGetters({
-            isAuth: 'auth/isAuth',
             hasUser: 'auth/hasUser',
             role: 'auth/role',
         }),
 
         sidebarItems() {
-            const SIDEBAR_ITEMS = {
-                [ROLES.admin]: ADMIN_SIDEBAR_ITEMS,
-                [ROLES.trader]: TRADER_SIDEBAR_ITEMS,
-                [ROLES.merchant]: MERCHANT_SIDEBAR_ITEMS,
-                [ROLES.operator]: ADMIN_SIDEBAR_ITEMS,
-            };
-
             return SIDEBAR_ITEMS[this.role] || [];
         },
     },
@@ -45,6 +32,7 @@ export default {
         if (!this.hasUser) {
             await this.$store.dispatch('auth/getUser');
         }
+
     },
 };
 </script>
