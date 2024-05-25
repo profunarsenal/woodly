@@ -76,7 +76,10 @@
                 label="СБП имя получателя"
                 placeholder="Введите имя получателя"
             )
-        v-button.button(@click="saveCard") Сохранить
+        v-button.button(
+            :isLoading="isPending"
+            @click="save"
+        ) Сохранить
 </template>
 
 <script>
@@ -117,7 +120,7 @@ export default {
         },
 
         cardId() {
-            return this.componentData?.cardId || 0;
+            return this.componentData?.cardId;
         },
     },
 
@@ -145,6 +148,7 @@ export default {
                 phone: '',
                 recipient: ''
             },
+            isPending: false,
         };
     },
 
@@ -153,22 +157,34 @@ export default {
             this.$store.commit('modal/close');
         },
 
-        async saveCard() {
-            if (this.isEdit) {
-                await this.$api.cards.editCard({
-                    ...this.form,
-                    cardId: this.cardId,
-                });
-                this.close();
-                return;
-            }
+        async save() {
+            try {
+                this.isPending = true;
 
-            await this.$api.cards.createCard(this.form);
-            this.close();
-            this.$store.dispatch('cards/getCards', this.$route.query);
+                const form = {
+                    ...this.form,
+                    cardNumber: this.form.cardNumber.split(' ').join(''),
+                };
+
+                if (this.isEdit) {
+                    await this.$api.cards.editCard({
+                        ...form,
+                        cardId: this.cardId,
+                    });
+                } else {
+                    await this.$api.cards.createCard(form);
+                }
+
+                this.$store.dispatch('cards/getCards', this.$route.query);
+                this.close();
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isPending = false;
+            }
         },
 
-        setCard() {
+        setCardFields() {
             const formKeys = Object.keys(this.form);
 
             formKeys.forEach((key) => {
@@ -181,7 +197,7 @@ export default {
 
     mounted() {
         if (this.isEdit) {
-            this.setCard();
+            this.setCardFields();
         }
     },
 };
