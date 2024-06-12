@@ -16,7 +16,8 @@ export const TRANSACTIONS_STATUSES = {
         icon: '/icons/activity.svg',
         title: 'Активные',
         transactionTitle: 'Активная',
-        id: 1,
+        color: 'blue',
+        id: 2,
     },
 
     review: {
@@ -25,7 +26,7 @@ export const TRANSACTIONS_STATUSES = {
         title: 'На проверке',
         transactionTitle: 'На проверке',
         color: 'yellow',
-        id: 2,
+        id: 3,
     },
 
     canceled: {
@@ -34,7 +35,7 @@ export const TRANSACTIONS_STATUSES = {
         title: 'Отмененные',
         transactionTitle: 'Отмененная',
         color: 'red',
-        id: 3,
+        id: 4,
     },
 
     successful: {
@@ -43,7 +44,7 @@ export const TRANSACTIONS_STATUSES = {
         title: 'Успешные',
         transactionTitle: 'Успешная',
         color: 'green',
-        id: 4,
+        id: 5,
     },
 };
 

@@ -19,7 +19,7 @@ export default {
             state.pagination = pagination;
         },
 
-        changeStatus(state, params) {
+        setChangedTransactions(state, params) {
             const { transactionId, status} = params;
 
             state.transactions = state.transactions.map((item) => {
@@ -63,7 +63,7 @@ export default {
         async confirmTransaction({ commit }, params) {
             try {
                 await api.transactions.confirmTransaction(params.transactionId);
-                commit('changeStatus', params);
+                commit('setChangedTransactions', params);
             } catch (error) {
                 console.log(error);
             }
@@ -72,7 +72,7 @@ export default {
         async cancelTransaction({ commit }, params) {
             try {
                 await api.transactions.cancelTransaction(params.transactionId);
-                commit('changeStatus', params);
+                commit('setChangedTransactions', params);
             } catch (error) {
                 console.log(error);
             }

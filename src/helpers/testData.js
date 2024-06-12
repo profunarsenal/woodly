@@ -88,16 +88,12 @@ export const PROCESS_METHODS = [
 
 export const CURRENСIES = [
     {
-        id: 1,
+        id: 'rub',
         title: 'RUB',
     },
     {
-        id: 2,
+        id: 'kzt',
         title: 'KZT',
-    },
-    {
-        id: 3,
-        title: 'UZS',
     },
 ];
 

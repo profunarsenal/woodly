@@ -21,6 +21,18 @@ export default class Purchases extends AbstractService {
         });
     };
 
+    async acceptPurchase(id) {
+        return await this.axios.patch(`/purchases/activate/${id}`);
+    };
+
+    async confirmPurchase(id) {
+        return await this.axios.patch(`/purchases/confirm/${id}`);
+    };
+
+    async cancelPurchase(id) {
+        return await this.axios.patch(`/purchases/cancel/${id}`);
+    };
+
     async uploadCheck(purchaseId, file) {
         return await this.axios.post('/purchases/upload',
             {

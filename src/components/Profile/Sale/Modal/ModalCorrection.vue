@@ -52,7 +52,8 @@ export default {
             }
             
             try {
-                const { transactionId, cardId } = this.componentData;
+                const { transactionId, card } = this.componentData;
+                const { cardId } = card;
                 await this.$store.dispatch('transactions/correctAmount', {
                     transactionId,
                     cardId,

@@ -1,7 +1,6 @@
 import ApiModule from '@/api/apiModule';
 
 const api = new ApiModule();
-const CONFIG_ALIAS = 'IS_WORK_TRANSACTIONS';
 
 export default {
     namespaced: true,
@@ -52,16 +51,13 @@ export default {
         },
 
         async getTransactionsStatus({ commit }) {
-            const status = await api.config.getConfig(CONFIG_ALIAS);
+            const status = await api.auth.getTransactionsFlag();
             commit('setTransactionsStatus', status);
         },
 
         async toggleTransactionsStatus({ state, commit }) {
             try {
-                await api.config.editConfig({
-                    name: CONFIG_ALIAS,
-                    value: String(!state.isWorkTransactions),
-                });
+                await api.auth.switchTransactionsFlag();
                 commit('setTransactionsStatus', !state.isWorkTransactions);
             } catch (error) {
                 console.log(error)

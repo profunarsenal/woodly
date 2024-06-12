@@ -31,8 +31,8 @@
                 @search="search"
             )
                 template(#cardNumberAndTitle="{ item }")
-                    .card-number {{ item.cardNumber }}
-                    .card-name {{ item.title }}
+                    .card-number {{ item.card.cardNumber }}
+                    .card-name {{ item.card.title }}
                 template(#amount="{ item }")
                     .amount {{ getCurrencyValue(item.amount) }}
                 template(#status="{ item }")
@@ -175,6 +175,24 @@ export default {
         },
 
         searchTable(value, key) {
+            const KEYS_FOR_SEARCH = {
+                cardNumberAndTitle: 'cardNumberAndTitle',
+                cardNumber: 'cardNumber',
+                title: 'title',
+            };
+
+            if (key === KEYS_FOR_SEARCH.cardNumberAndTitle) {
+                if (Number.isFinite(+value)) {
+                    this.urlParams[KEYS_FOR_SEARCH.cardNumber] = value;
+                    this.urlParams[KEYS_FOR_SEARCH.title] = '';
+                } else {
+                    this.urlParams[KEYS_FOR_SEARCH.title] = value;
+                    this.urlParams[KEYS_FOR_SEARCH.cardNumber] = '';
+                }
+                this.$router.push({ query: this.urlParams });
+                return;
+            }
+
             this.urlParams[key] = value;
             this.$router.push({ query: this.urlParams });
         },

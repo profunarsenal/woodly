@@ -41,10 +41,27 @@ export default {
             }
         },
 
-        async changeStatus({ commit }, params) {
+        async confirmPurchase({ commit }, params) {
             try {
-                const { purchaseId, status } = params;
-                await api.purchases.changeStatus(purchaseId, status);
+                await api.purchases.confirmPurchase(params.purchaseId);
+                commit('setChangedPurchases', params);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async acceptPurchase({ commit }, params) {
+            try {
+                await api.purchases.acceptPurchase(params.purchaseId);
+                commit('setChangedPurchases', params);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async cancelPurchase({ commit }, params) {
+            try {
+                await api.purchases.cancelPurchase(params.purchaseId);
                 commit('setChangedPurchases', params);
             } catch (error) {
                 console.log(error);

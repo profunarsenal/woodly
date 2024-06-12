@@ -111,7 +111,7 @@ export default {
                 subtitle: 'Вы уверены, что хотите принять сделку?',
                 buttonCancel: 'Отменить',
                 buttonConfirm: 'Принять',
-                callbackConfirm: () => this.changeStatus('accept'),
+                callbackConfirm: () => this.accept(),
                 callbackCancel: () => this.closePopup('accept'),
             },
             popupConfirmComponentData: {
@@ -119,7 +119,7 @@ export default {
                 subtitle: 'Вы уверены, что хотите подтвердить сделку?',
                 buttonCancel: 'Отменить',
                 buttonConfirm: 'Подтвердить',
-                callbackConfirm: () => this.changeStatus('confirm'),
+                callbackConfirm: () => this.confirm(),
                 callbackCancel: () => this.closePopup('confirm'),
             },
             popupCancelComponentData: {
@@ -127,7 +127,7 @@ export default {
                 subtitle: 'Вы уверены, что хотите отменить сделку?',
                 buttonCancel: 'Закрыть',
                 buttonConfirm: 'Отменить сделку',
-                callbackConfirm: () => this.changeStatus('cancel'),
+                callbackConfirm: () => this.cancel(),
                 callbackCancel: () => this.closePopup('cancel'),
             },
         };
@@ -162,19 +162,56 @@ export default {
             };
         },
 
-        async changeStatus(popupName) {
-            const statuses = {
-                accept: PURCHASES_STATUSES.active.id,
-                confirm: PURCHASES_STATUSES.successful.id,
-                cancel: PURCHASES_STATUSES.canceled.id,
-            };
+        async cancel() {
+            try {
+                await this.$store.dispatch('purchases/cancelPurchase', {
+                    purchaseId: this.item.purchaseId,
+                    status: PURCHASES_STATUSES.canceled.id,
+                });
 
-            await this.$store.dispatch('purchases/changeStatus', {
-                purchaseId: this.item.purchaseId,
-                status: statuses[popupName],
-            });
+                this.closePopup('cancel');
+            } catch (error) {
+                console.log(error);
+            }
+        },
 
-            this.closePopup(popupName);
+        async confirm() {
+            try {
+                await this.$store.dispatch('purchases/confirmPurchase', {
+                    purchaseId: this.item.purchaseId,
+                    status: PURCHASES_STATUSES.successful.id,
+                });
+
+                this.closePopup('confirm');
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async accept() {
+            try {
+                await this.$store.dispatch('purchases/acceptPurchase', {
+                    purchaseId: this.item.purchaseId,
+                    status: PURCHASES_STATUSES.active.id,
+                });
+
+                this.closePopup('accept');
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async cancel() {
+            try {
+                await this.$store.dispatch('purchases/cancelPurchase', {
+                    purchaseId: this.item.purchaseId,
+                    status: PURCHASES_STATUSES.canceled.id,
+                });
+
+                this.closePopup('cancel');
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         openModalAttachingCheck() {
