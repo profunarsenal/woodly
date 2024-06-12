@@ -14,7 +14,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import VButton from '@/components/common/VButton.vue';
-import { API, SIDEBAR_ITEMS } from '@/helpers/constants';
+import { API, USER_PAGES } from '@/helpers/constants';
 
 export default {
     name: 'Error404',
@@ -33,7 +33,7 @@ export default {
     methods: {
         back() {
             if (this.isAuth && this.role) {
-                const sidebarItems = SIDEBAR_ITEMS[this.role] || [];
+                const sidebarItems = USER_PAGES[this.role] || [];
                 const redirectPath = sidebarItems[0]?.path;
 
                 this.$router.push(redirectPath);

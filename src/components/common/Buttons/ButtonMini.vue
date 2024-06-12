@@ -40,6 +40,7 @@ export default {
                 &.attach,
                 &.payout,
                 &.qr,
+                &.info
                     &:deep(rect)
                         fill: $color-gray-dark
 </style>

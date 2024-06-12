@@ -6,6 +6,7 @@ import cards from '@/store/cards/cards';
 import transactions from '@/store/transactions/transactions';
 import balance from '@/store/balance/balance';
 import purchases from '@/store/purchases/purchases';
+import users from '@/store/users/users';
 
 export default createStore({
     state: {
@@ -24,5 +25,6 @@ export default createStore({
         transactions,
         balance,
         purchases,
+        users,
     },
 });

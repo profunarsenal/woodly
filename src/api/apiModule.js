@@ -4,6 +4,7 @@ import Cards from "@/api/modules/cards";
 import Transactions from '@/api/modules/transactions';
 import Balance from "@/api/modules/balance";
 import Purchases from "@/api/modules/purchases";
+import Users from "@/api/modules/users";
 
 export default class ApiModule {
     constructor() {
@@ -13,5 +14,6 @@ export default class ApiModule {
         this.transactions = new Transactions();
         this.balance = new Balance();
         this.purchases = new Purchases();
+        this.users = new Users();
     }
 };

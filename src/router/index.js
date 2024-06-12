@@ -65,9 +65,9 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.cashRegister,
-            name: 'ProfileCashRegister',
-            component: () => import('@/views/Profile/CashRegister.vue'),
+            path: API.profile.сashboxes,
+            name: 'ProfileСashboxes',
+            component: () => import('@/views/Profile/Cashboxes.vue'),
             meta: {
                 auth: true,
                 roles: [ROLES.merchant, ROLES.admin, ROLES.operator],

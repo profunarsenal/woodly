@@ -12,7 +12,7 @@ import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
 
 export default {
-    name: 'ProfileCashRegister',
+    name: 'ProfileCashboxes',
 
     components: {
         ProfileWrapper,

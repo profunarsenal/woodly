@@ -13,7 +13,7 @@
         inline-svg.icon-password(
             v-if="isPassword"
             :src="iconPassword"
-            @click="togglePasswordVisible"
+            @click.stop="togglePasswordVisible"
         )
 </template>
 

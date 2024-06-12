@@ -7,6 +7,13 @@ export const ROLES = {
     operator: 'operator',
 };
 
+export const ROLES_RUSSIAN = {
+    merchant: 'Мерчант',
+    trader: 'Трейдер',
+    operator: 'Оператор',
+    admin: 'Администратор',
+};
+
 export const API = {
     main: '/',
     auth: '/auth',
@@ -16,7 +23,7 @@ export const API = {
         settings: '/profile/settings',
         balance: '/profile/balance',
         purchases: '/profile/purchases',
-        cashRegister: '/profile/cash-register',
+        сashboxes: '/profile/сashboxes',
         payments: '/profile/payments',
         payouts: '/profile/payouts',
         autoPayments: '/profile/auto-payments',
@@ -40,128 +47,146 @@ export const PAYMENT_STATUSES = {
     loading: 'loading',
 };
 
-export const MERCHANT_SIDEBAR_ITEMS = [
+export const MERCHANT_PAGES = [
     {
         icon: '/icons/basket.svg',
-        path: API.profile.cashRegister,
+        path: API.profile.сashboxes,
         title: 'Кассы',
+        permission: 'cashboxes',
         id: 0,
     },
     {
         icon: '/icons/credit-card-payout.svg',
         path: API.profile.payments,
         title: 'Платежи',
+        permission: 'transactions',
         id: 1,
     },
     {
         icon: '/icons/credit-card-payment.svg',
         path: API.profile.payouts,
         title: 'Выплаты',
+        permission: 'purchases',
         id: 2,
     },
     {
         icon: '/icons/wallet.svg',
         path: API.profile.balance,
         title: 'Баланс',
+        permission: 'balance',
         id: 3,
     },
     {
         icon: '/icons/settings.svg',
         path: API.profile.settings,
         title: 'Настройки',
+        permission: 'settings',
         id: 4,
     },
 ];
 
-export const TRADER_SIDEBAR_ITEMS = [
+export const TRADER_PAGES = [
     {
         icon: '/icons/credit-card.svg',
         path: API.profile.cards,
         title: 'Мои карты',
+        permission: 'cards',
         id: 0,
     },
     {
         icon: '/icons/credit-card-payout.svg',
         path: API.profile.sale,
         title: 'Продажа',
+        permission: 'transactions',
         id: 1,
     },
     {
         icon: '/icons/credit-card-payment.svg',
         path: API.profile.purchases,
         title: 'Покупка',
+        permission: 'purchases',
         id: 2,
     },
     {
         icon: '/icons/chart.svg',
         path: API.profile.statistics,
         title: 'Статистика',
+        permission: 'statistics',
         id: 3,
     },
     {
         icon: '/icons/wallet.svg',
         path: API.profile.balance,
         title: 'Баланс',
+        permission: 'balance',
         id: 4,
     },
     {
         icon: '/icons/settings.svg',
         path: API.profile.settings,
         title: 'Настройки',
+        permission: 'settings',
         id: 5,
     },
 ];
 
-export const ADMIN_SIDEBAR_ITEMS = [
+export const ADMIN_PAGES = [
     {
         icon: '/icons/basket.svg',
-        path: API.profile.cashRegister,
+        path: API.profile.сashboxes,
         title: 'Кассы',
+        permission: 'cashboxes',
         id: 0,
     },
     {
         icon: '/icons/credit-card-payout.svg',
         path: API.profile.payments,
         title: 'Платежи',
+        permission: 'transactions',
         id: 1,
     },
     {
         icon: '/icons/credit-card-payment.svg',
         path: API.profile.payouts,
         title: 'Выплаты',
+        permission: 'purchases',
         id: 2,
     },
     {
         icon: '/icons/user.svg',
         path: API.profile.users,
         title: 'Пользователи',
+        permission: 'users',
         id: 3,
     },
     {
         icon: '/icons/wallet.svg',
         path: API.profile.balance,
         title: 'Баланс',
+        permission: 'balance',
         id: 4,
     },
     {
         icon: '/icons/chart.svg',
         path: API.profile.statistics,
         title: 'Статистика',
+        permission: 'statistics',
         id: 5,
     },
     {
         icon: '/icons/settings.svg',
         path: API.profile.settings,
         title: 'Настройки',
+        permission: 'settings',
         id: 6,
     },
 ];
 
-export const SIDEBAR_ITEMS = {
-    [ROLES.admin]: ADMIN_SIDEBAR_ITEMS,
-    [ROLES.trader]: TRADER_SIDEBAR_ITEMS,
-    [ROLES.merchant]: MERCHANT_SIDEBAR_ITEMS,
-    [ROLES.operator]: ADMIN_SIDEBAR_ITEMS,
+export const USER_PAGES = {
+    [ROLES.admin]: ADMIN_PAGES,
+    [ROLES.trader]: TRADER_PAGES,
+    [ROLES.merchant]: MERCHANT_PAGES,
+    [ROLES.operator]: ADMIN_PAGES,
 };
 
 export const CURRENCIES_SIGNS = {

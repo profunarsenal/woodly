@@ -11,18 +11,18 @@
                 .title Вход в личный кабинет
                 .controls
                     v-input.control(
-                        v-model="form.login"
+                        v-model.trim="form.login"
                         placeholder="Email"
                     )
                     v-input.control(
-                        v-model="form.password"
+                        v-model.trim="form.password"
                         placeholder="Пароль"
                         type="password"
                         autocomplete="new-password"
                         isPassword
                     )
                     v-input.control(
-                        v-model="code"
+                        v-model.trim="code"
                         placeholder="Код"
                     )
                     v-button.button(
@@ -40,7 +40,7 @@
 import { mapGetters } from 'vuex';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import { SIDEBAR_ITEMS } from '@/helpers/constants';
+import { USER_PAGES } from '@/helpers/constants';
 
 export default {
     name: 'ProfileAuthorization',
@@ -81,7 +81,7 @@ export default {
                 this.isPending = true;
                 await this.$store.dispatch('auth/login', this.form);
 
-                const sidebarItems = SIDEBAR_ITEMS[this.role] || [];
+                const sidebarItems = USER_PAGES[this.role] || [];
                 const redirectPath = sidebarItems[0]?.path;
 
                 this.$router.push(redirectPath);

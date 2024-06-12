@@ -8,7 +8,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import AppSidebar from '@/components/Sidebar/AppSidebar.vue';
-import { SIDEBAR_ITEMS } from '@/helpers/constants';
+import { USER_PAGES } from '@/helpers/constants';
 
 export default {
     name: 'ProfileLayout',
@@ -24,7 +24,7 @@ export default {
         }),
 
         sidebarItems() {
-            return SIDEBAR_ITEMS[this.role] || [];
+            return USER_PAGES[this.role] || [];
         },
     },
 

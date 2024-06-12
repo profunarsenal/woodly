@@ -50,3 +50,11 @@ export const PURCHASES = [
     { title: 'Статус', key: 'status' },
     { title: 'Создан', key: 'dateCreate' },
 ];
+
+export const USERS = [
+    { title: 'ID пользователя', key: 'userId' },
+    { title: 'Название', key: 'name' },
+    { title: 'Логин', key: 'login' },
+    { title: 'Пароль', key: 'password' },
+    { title: 'Уровень', key: 'role' },
+];
