@@ -17,7 +17,7 @@
 export default {
     name: 'VCheckbox',
 
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'onChange'],
 
     props: {
         modelValue: {
@@ -53,6 +53,7 @@ export default {
     methods: {
         change() {
             this.$emit('update:modelValue', !this.modelValue);
+            this.$emit('onChange', !this.modelValue);
         },
     },
 };

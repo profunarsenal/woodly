@@ -38,14 +38,16 @@
                     v-model="isFullAccess"
                     id="full-access"
                     label="Полный доступ"
+                    @onChange="setFullAccess"
                 )
                 .permissions
                     v-checkbox(
-                        v-for="checkbox in checkboxes"
-                        :key="checkbox.id"
-                        v-model="checkboxes[checkbox.permission]"
-                        :label="checkbox.title"
-                        :id="checkbox.permission"
+                        v-for="page in pages"
+                        :key="page.id"
+                        v-model="checkboxes[page.permission]"
+                        :label="page.title"
+                        :id="page.permission"
+                        @onChange="setCheckboxValue"
                     )
         .buttons
             v-button.button(
@@ -59,6 +61,11 @@ import VButton from '@/components/common/VButton.vue';
 import VDropdown from '@/components/common/VDropdown.vue';
 import VCheckbox from '@/components/common/VCheckbox.vue';
 import { ROLES_RUSSIAN, USER_PAGES } from '@/helpers/constants';
+
+const SWITCHES_CHECKBOXES = {
+    on: true,
+    off: false,
+};
 
 export default {
     name: 'ModalCorrection',
@@ -87,6 +94,7 @@ export default {
                 role: '',
                 permissions: [],
             },
+            checkboxes: {},
             isFullAccess: false,
         };
     },
@@ -114,7 +122,7 @@ export default {
             });
         },
 
-        checkboxes() {
+        pages() {
             if (!this.form.role) {
                 return [];
             }
@@ -130,6 +138,35 @@ export default {
 
         save() {
 
+        },
+
+        switchAllCheckboxes(value) {
+            this.pages.forEach((item) => {
+                this.checkboxes[item.permission] = value;
+            });
+        },
+
+        setCheckboxValue() {
+            const checkboxesValue = Object.values(this.checkboxes);
+            const isAllCheckboxesOn = checkboxesValue.every(item => item === SWITCHES_CHECKBOXES.on);
+
+            if (!this.isFullAccess && isAllCheckboxesOn) {
+                this.isFullAccess = SWITCHES_CHECKBOXES.on;
+            }
+
+            if (this.isFullAccess && !isAllCheckboxesOn) {
+                this.isFullAccess = SWITCHES_CHECKBOXES.off;
+            }
+        },
+
+        setFullAccess(value) {
+            this.switchAllCheckboxes(value);
+        },
+    },
+
+    watch: {
+        'form.role'() {
+            this.switchAllCheckboxes(SWITCHES_CHECKBOXES.off);
         },
     },
 };
@@ -169,9 +206,11 @@ export default {
         width: 100%
     .permissions
         display: flex
+        justify-content: center
         flex-wrap: wrap
-        // gap: 1.6rem
+        row-gap: 1.6rem
         margin-top: 1.6rem
+        padding-left: 2.8rem
         &:deep(.checkbox)
             flex: 1 0 50%
 </style>
