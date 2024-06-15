@@ -33,5 +33,32 @@ export default {
                 console.log(error);
             }
         },
+
+        async createUser({ dispatch }, user) {
+            try {
+                await api.users.createUser(user);
+                await dispatch('getUsers');
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async editUser({ dispatch }, user) {
+            try {
+                await api.users.editUser(user);
+                await dispatch('getUsers');
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async deleteUser({ dispatch }, userId) {
+            try {
+                await api.users.deleteUser(userId);
+                await dispatch('getUsers');
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
 }

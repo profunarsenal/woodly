@@ -123,3 +123,16 @@ export const PURCHASES_STATUSES = {
         id: 4,
     },
 };
+
+export const CASHBOXES_STATUSES = {
+    active: {
+        id: 1,
+        class: 'active',
+        icon: '/icons/checkmark-circle.svg',
+    },
+    disabled: {
+        id: 2,
+        class: 'disabled',
+        icon: '/icons/close-circle.svg',
+    },
+};

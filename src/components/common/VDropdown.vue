@@ -25,7 +25,7 @@
 export default {
     name: 'VDropdown',
 
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'onChange'],
 
     props: {
         modelValue: {
@@ -85,6 +85,7 @@ export default {
 
         select(item) {
             this.$emit('update:modelValue', item.id);
+            this.$emit('onChange', item.id);
             this.isOpenList = false;
         },
 

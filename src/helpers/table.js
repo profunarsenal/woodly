@@ -58,3 +58,12 @@ export const USERS = [
     { title: 'Пароль', key: 'password' },
     { title: 'Уровень', key: 'role' },
 ];
+
+export const CASHBOXES = [
+    { title: 'ID кассы', key: 'cashboxId', style: 'width: 7.61%' },
+    { title: 'Название', key: 'title', style: 'width: 19.81%' },
+    { title: 'URL', key: 'url', style: 'width: 19.81%' },
+    { title: 'Активен', key: 'status', style: 'width: 7.01%' },
+    { title: 'Баланс', key: 'balance', style: 'width: 19.81%' },
+    { title: 'API', key: 'apiKey', style: 'width: 19.81%' },
+];

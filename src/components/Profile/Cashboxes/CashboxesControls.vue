@@ -13,11 +13,11 @@
             .control
                 button-mini(
                     type="edit"
-                    @click="openModalUser"
+                    @click="openModalCashbox"
                 )
                 v-tooltip.tooltip(
                     position="right"
-                    text="Редактировать пользователя"
+                    text="Редактировать кассу"
                 )
 </template>
 
@@ -26,7 +26,7 @@ import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
 
 export default {
-    name: 'UsersControls',
+    name: 'CashboxesControls',
 
     components: {
         ButtonMini,
@@ -42,9 +42,9 @@ export default {
 
     methods: {
         openModalInfo() {},
-        openModalUser() {
+        openModalCashbox() {
             this.$store.commit('modal/open', {
-                component: 'ModalUser',
+                component: 'ModalCashbox',
                 componentData: this.item,
             });
         },
@@ -58,8 +58,10 @@ export default {
 
 .controls
     display: flex
-    justify-content: flex-end
+    align-items: center
+    justify-content: center
     gap: 0.8rem
+    height: 100%
 
 .control
     width: 2rem

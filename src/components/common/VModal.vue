@@ -19,6 +19,7 @@ export default {
     name: 'VModal',
 
     components: {
+        ModalConfirm: defineAsyncComponent(() => import('@/components/app/ModalConfirm.vue')),
         ModalImage: defineAsyncComponent(() => import('@/components/app/ModalImage.vue')),
         ModalCancelPayment: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalCancel.vue')),
         ModalInsurance: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalInsurance.vue')),
@@ -40,6 +41,7 @@ export default {
         ModalTransaction: defineAsyncComponent(() => import('@/components/Profile/Balance/ModalTransaction.vue')),
         ModalAttachingCheck: defineAsyncComponent(() => import('@/components/Profile/Purchases/ModalAttachingCheck.vue')),
         ModalUser: defineAsyncComponent(() => import('@/components/Profile/Users/ModalUser.vue')),
+        ModalCashbox: defineAsyncComponent(() => import('@/components/Profile/Cashboxes/ModalCashbox.vue')),
     },
 
     computed: {

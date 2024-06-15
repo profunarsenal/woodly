@@ -78,6 +78,7 @@ export default {
         .text
             font-size: 1.4rem
             line-height: 2rem
+            color: $color-black
         .box
             display: flex
             align-items: center

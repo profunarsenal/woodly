@@ -15,6 +15,7 @@
                 placeholder="Введите email"
             )
             v-input(
+                v-if="!isEdit"
                 v-model="form.login"
                 label="Логин"
                 placeholder="Введите логин"
@@ -32,6 +33,7 @@
                 :list="typesAccount"
                 label="Тип аккаунта"
                 placeholder="Выберите тип аккаунта"
+                @onChange="switchAllCheckboxes(switchesCheckboxes.off)"
             )
             .checkboxes(v-if="form.role")
                 v-checkbox(
@@ -51,6 +53,12 @@
                     )
         .buttons
             v-button.button(
+                v-if="isEdit"
+                type="negative"
+                @click="openModalDeleteUser"
+            ) Деактивировать пользователя
+            v-button.button(
+                :isLoading="isPending"
                 @click="save"
             ) {{ buttonTitle }}
 </template>
@@ -68,7 +76,7 @@ const SWITCHES_CHECKBOXES = {
 };
 
 export default {
-    name: 'ModalCorrection',
+    name: 'ModalUser',
 
     components: {
         VInput,
@@ -96,6 +104,7 @@ export default {
             },
             checkboxes: {},
             isFullAccess: false,
+            isPending: false,
         };
     },
 
@@ -136,8 +145,64 @@ export default {
             this.$store.commit('modal/close');
         },
 
-        save() {
+        async save() {
+            this.addPermissions();
+            const request = this.isEdit ? this.editUser : this.createUser;
 
+            try {
+                this.isPending = true;
+                await request();
+                this.close();
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isPending = false;
+            }
+        },
+
+        editUser() {
+            const user = {
+                userId: this.componentData?.userId,
+                name: this.form.name,
+                email: this.form.email,
+                password: this.form.password,
+                role: this.form.role,
+                permissions: this.form.permissions,
+            };
+
+            return this.$store.dispatch('users/editUser', user);
+        },
+
+        createUser() {
+            return this.$store.dispatch('users/createUser', this.form);
+        },
+
+        async deleteUser() {
+            await this.$store.dispatch('users/deleteUser', this.componentData?.userId);
+        },
+
+        addPermissions() {
+            for (const permission in this.checkboxes) {
+                if (this.checkboxes[permission]) {
+                    this.form.permissions.push(permission);
+                }
+            }
+        },
+
+        setUser() {
+            for (const key in this.form) {
+                if (this.componentData[key]) {
+                    this.form[key] = this.componentData[key];
+                }
+            }
+
+            this.pages.forEach((item) => {
+                const hasPermission = this.form.permissions?.includes(item.permission);
+                const checkboxValue = hasPermission ? SWITCHES_CHECKBOXES.on : SWITCHES_CHECKBOXES.off;
+                this.checkboxes[item.permission] = checkboxValue;
+            });
+
+            this.setCheckboxValue();
         },
 
         switchAllCheckboxes(value) {
@@ -162,12 +227,29 @@ export default {
         setFullAccess(value) {
             this.switchAllCheckboxes(value);
         },
+
+        openModalDeleteUser() {
+            this.$store.commit('modal/open', {
+                component: 'ModalConfirm',
+                positionCenter: true,
+                componentData: {
+                    item: this.item,
+                    type: 'negative',
+                    title: 'Деактивация пользователя',
+                    subtitle: 'Вы уверены, что хотите деактивировать пользователя Admin?',
+                    buttonConfirm: 'Удалить',
+                    callbackConfirm: () => this.deleteUser(),
+                },
+            });
+        },
     },
 
-    watch: {
-        'form.role'() {
-            this.switchAllCheckboxes(SWITCHES_CHECKBOXES.off);
-        },
+    created() {
+        this.switchesCheckboxes = SWITCHES_CHECKBOXES;
+
+        if (this.isEdit) {
+            this.setUser();
+        }
     },
 };
 </script>
@@ -202,8 +284,12 @@ export default {
         flex-direction: column
         gap: 2rem
         margin-bottom: 4rem
-    .button
-        width: 100%
+    .buttons
+        display: flex
+        flex-direction: column
+        gap: 0.8rem
+        .button
+            width: 100%
     .permissions
         display: flex
         justify-content: center

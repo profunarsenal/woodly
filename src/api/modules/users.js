@@ -6,4 +6,16 @@ export default class Users extends AbstractService {
         const { data } = await this.axios.get('/users');
         return new UsersModel(data);
     };
+
+    async createUser(user) {
+        return await this.axios.post('/users/create', user);
+    };
+
+    async editUser(user) {
+        return await this.axios.patch('/users/edit', user);
+    };
+
+    async deleteUser(userId) {
+        return await this.axios.delete(`/users/delete/${userId}`);
+    };
 };

@@ -23,7 +23,7 @@ export const API = {
         settings: '/profile/settings',
         balance: '/profile/balance',
         purchases: '/profile/purchases',
-        сashboxes: '/profile/сashboxes',
+        cashboxes: '/profile/cashboxes',
         payments: '/profile/payments',
         payouts: '/profile/payouts',
         autoPayments: '/profile/auto-payments',
@@ -50,7 +50,7 @@ export const PAYMENT_STATUSES = {
 export const MERCHANT_PAGES = [
     {
         icon: '/icons/basket.svg',
-        path: API.profile.сashboxes,
+        path: API.profile.cashboxes,
         title: 'Кассы',
         permission: 'cashboxes',
         id: 0,
@@ -133,7 +133,7 @@ export const TRADER_PAGES = [
 export const ADMIN_PAGES = [
     {
         icon: '/icons/basket.svg',
-        path: API.profile.сashboxes,
+        path: API.profile.cashboxes,
         title: 'Кассы',
         permission: 'cashboxes',
         id: 0,

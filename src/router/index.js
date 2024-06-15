@@ -65,8 +65,8 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.сashboxes,
-            name: 'ProfileСashboxes',
+            path: API.profile.cashboxes,
+            name: 'ProfileCashboxes',
             component: () => import('@/views/Profile/Cashboxes.vue'),
             meta: {
                 auth: true,

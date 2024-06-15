@@ -4,6 +4,7 @@
             th.thead-item(
                 v-for="header in headers"
                 :key="header.key"
+                :style="header.style"
             )
                 slot(
                     :name="`thead-${header.key}`"

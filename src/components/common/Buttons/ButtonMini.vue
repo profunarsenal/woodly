@@ -40,7 +40,9 @@ export default {
                 &.attach,
                 &.payout,
                 &.qr,
-                &.info
+                &.info,
+                &.eye,
+                &.eye-hide
                     &:deep(rect)
                         fill: $color-gray-dark
 </style>
