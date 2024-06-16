@@ -39,6 +39,7 @@
                 placeholder="Выберите валюту карты"
             )
             v-input(
+                v-if="isEdit"
                 v-model="form.deviceId"
                 label="ID устройства"
                 placeholder="ID устройства"

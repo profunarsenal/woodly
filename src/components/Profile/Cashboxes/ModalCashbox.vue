@@ -95,7 +95,7 @@ export default {
                 errorUrl: '',
                 notificationUrlPayments: '',
                 notificationUrlPayOff: '',
-                commissionPayer: null,
+                commissionPayer: '',
                 apiKey: '',
             },
             comissionPayers: Object.values(COMISSION_PAYERS),

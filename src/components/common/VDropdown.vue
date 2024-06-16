@@ -17,8 +17,14 @@
                     li.item(
                         v-for="item in list"
                         :key="item.id"
+                        :class="{ selected: modelValue === item.id }"
                         @click.stop="select(item)"
-                    ) {{ item.title }}
+                    )
+                        span {{ item.title }}
+                        inline-svg.icon(
+                            v-if="modelValue === item.id"
+                            src="/icons/check.svg"
+                        )
 </template>
 
 <script>
@@ -154,6 +160,9 @@ export default {
             flex-direction: column
             gap: 0.2rem
             .item
+                display: flex
+                justify-content: space-between
+                gap: 1.2rem
                 padding: 1rem
                 font-weight: 500
                 font-size: 1.2rem
@@ -165,6 +174,13 @@ export default {
                 @media(any-hover:hover)
                     &:hover
                         background-color: $color-gray-light
+                &.selected
+                    background-color: rgba($color-violet-100, 0.1)
+                .icon
+                    width: 1.6rem
+                    height: 1.6rem
+                    &:deep(path:first-child)
+                        fill: $color-violet-100
     &.opened
         .chevron
             transform: rotate(-180deg)
