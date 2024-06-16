@@ -33,12 +33,16 @@
                         type="negative"
                     )
         td.tbody-item
-             v-action-menu.action-menu(
-                :controls="menuItems"
+            button-mini(
+                type="option"
+                @click="openMenuControls"
+            )
+            v-action-menu(
+                v-if="isOpenMenuControls"
+                v-click-outside="closeMenuControls"
+                :controls="menuControls"
                 :item="item"
             )
-                template(#button)
-                    button-mini(type="option")
     template(v-else)
         td.tbody-item
             .control(:class="setClass('confirm')")
@@ -93,6 +97,7 @@ export default {
 
     data() {
         return {
+            isOpenMenuControls: false,
             popup: {
                 confirm: {
                     isOpen: false,
@@ -129,7 +134,7 @@ export default {
             return this.item.status === TRANSACTIONS_STATUSES.review.id;
         },
 
-        menuItems() {
+        menuControls() {
             return [
                 {
                     key: 'correct',
@@ -137,11 +142,25 @@ export default {
                     title: 'Корректировать заявку',
                     callback: () => this.openModalCorrection(),
                 },
+                {
+                    key: 'correct',
+                    icon: '/icons/bill.svg',
+                    title: 'Посмотреть чек',
+                    callback: () => () => ({}),
+                },
             ];
         },
     },
 
     methods: {
+        openMenuControls() {
+            this.isOpenMenuControls = true;
+        },
+
+        closeMenuControls() {
+            this.isOpenMenuControls = false;
+        },
+
         openPopup(popupName) {
             this.popup[popupName].isOpen = true;
         },

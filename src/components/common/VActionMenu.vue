@@ -1,19 +1,13 @@
 <template lang="pug">
-    .action-menu
-        .button-slot(@click="openMenu")
-            slot(name="button")
-        .menu(
-            v-if="isOpen"
-            v-click-outside="closeMenu"
+    .menu
+        button.menu-item(
+            v-for="control in controls"
+            :key="controls.key"
+            :class="control.type"
+            @click="control.callback(item)"
         )
-            button.menu-item(
-                v-for="control in controls"
-                :key="controls.key"
-                :class="control.type"
-                @click="control.callback(item)"
-            )
-                inline-svg.menu-icon(:src="control.icon")
-                .menu-text {{ control.title }}
+            inline-svg.menu-icon(:src="control.icon")
+            .menu-text {{ control.title }}
 </template>
 
 <script>
@@ -31,35 +25,10 @@ export default {
             default: () => ({}),
         },
     },
-
-    data() {
-        return {
-            isOpen: false,
-        };
-    },
-
-    methods: {
-        closeMenu() {
-            this.isOpen = false;
-        },
-
-        openMenu() {
-            this.isOpen = true;
-        },
-    },
 }
 </script>
 
 <style lang="sass" scoped>
-.button-slot
-    display: flex
-    align-items: center
-    justify-content: center
-    margin: 0 auto
-    cursor: pointer
-    width: 2rem
-    height: 2rem
-
 .menu
     position: absolute
     z-index: 3

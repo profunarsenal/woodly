@@ -7,8 +7,8 @@ export default {
 
     state: {
         cards: [],
-        isWorkTransactions: false,
         pagination: {},
+        isWorkTransactions: false,
     },
 
     mutations: {
@@ -32,19 +32,9 @@ export default {
             commit('setPagination', pagination);
         },
 
-        async changeStatus({ state, commit }, params) {
+        async changeStatus(_, params) {
             try {
                 await api.cards.changeCardStatus(params);
-
-                const changedCards = state.cards.map((card) => {
-                    if (card.cardId === params.cardId) {
-                        card.status = params.status
-                    }
-
-                    return card;
-                });
-
-                commit('setCards', changedCards);
             } catch (error) {
                 console.log(error)
             }

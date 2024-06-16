@@ -13,12 +13,14 @@
             button.button
                 inline-svg.icon(src="/icons/headphone.svg")
                 span.text Поддержка
-            button.button(@click="logout")
+            button.button(@click="openModalExit")
                 inline-svg.icon(src="/icons/exit.svg")
                 span.text Выйти
 </template>
 
 <script>
+import { API } from '@/helpers/constants';
+
 export default {
     name: 'AppSidebar',
 
@@ -30,11 +32,23 @@ export default {
     },
 
     methods: {
-        logout() {
+        openModalExit() {
             this.$store.commit('modal/open', {
-                component: 'ModalExit',
+                component: 'ModalConfirm',
                 positionCenter: true,
+                componentData: {
+                    type: 'negative',
+                    title: 'Выход из аккаунта',
+                    subtitle: 'Вы действительно хотите выйти из аккаунта?',
+                    buttonConfirm: 'Выйти',
+                    callbackConfirm: () => this.logout(),
+                },
             });
+        },
+
+        logout() {
+            this.$store.commit('auth/logout');
+            this.$router.push(API.auth);
         },
     },
 };

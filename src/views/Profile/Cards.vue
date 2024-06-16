@@ -51,12 +51,11 @@
                     th.thead-item
                 template(#tbody="{ item }")
                     td.tbody-item
-                        v-action-menu(
-                            :controls="tableControls"
+                        cards-controls(
                             :item="item"
+                            :isEnabledTabActive="isEnabledTabActive"
+                            :isEnabledTabDeleted="isEnabledTabDeleted"
                         )
-                            template(#button)
-                                button-mini(type="option")
                 template(#empty)
                     empty-form(
                         :imageSrc="emptyForm.src"
@@ -72,12 +71,10 @@ import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VTable from '@/components/common/VTable.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
-import VActionMenu from '@/components/common/VActionMenu.vue';
-import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
+import CardsControls from '@/components/Profile/Cards/CardsControls.vue';
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
 import { BANK_TYPES, CARD_STATUSES } from '@/helpers/catalogs';
-import { API } from '@/helpers/constants';
 
 export default {
     name: 'ProfileCards',
@@ -87,8 +84,7 @@ export default {
         VTable,
         VButton,
         VTabs,
-        VActionMenu,
-        ButtonMini,
+        CardsControls,
         EmptyForm,
     },
 
@@ -114,109 +110,12 @@ export default {
             isWorkTransactions: ({ cards }) => cards.isWorkTransactions,
         }),
 
-        tableControlsTabActive() {
-            return [
-                {
-                    key: 'limit',
-                    icon: '/icons/settings.svg',
-                    title: 'Установить лимит',
-                    callback: (item) => {
-                        this.openModal({
-                            component: 'ModalSetLimit',
-                            positionCenter: true,
-                            item,
-                        });
-                    },
-                },
-                {
-                    key: 'edit',
-                    icon: '/icons/edit.svg',
-                    title: 'Редактировать карту',
-                    callback: (item) => {
-                        this.openModal({
-                            component: 'ModalCard',
-                            item,
-                        });
-                    },
-                },
-                {
-                    key: 'auto',
-                    icon: '/icons/cards.svg',
-                    title: 'Автоплатежи',
-                    callback: (item) => {
-                        this.$router.push({
-                            path: `${API.profile.autoPayments}/${item.cardId}`,
-                            query: {
-                                cardLastNumber: item.cardLastNumber,
-                            },
-                        });
-                    },
-                },
-                {
-                    key: 'message',
-                    icon: '/icons/message.svg',
-                    title: 'Общие СМС',
-                    callback: (item) => {
-                        this.$router.push({
-                            path: `${API.profile.cardMessages}/${item.cardId}`,
-                            query: {
-                                cardLastNumber: item.cardLastNumber,
-                            },
-                        });
-                    },
-                },
-                {
-                    key: 'delete',
-                    icon: '/icons/delete.svg',
-                    title: 'Удалить карту',
-                    type: 'negative',
-                    callback: (item) => {
-                        this.openModal({
-                            component: 'ModalCardDelete',
-                            positionCenter: true,
-                            item,
-                        });
-                    },
-                },
-            ];
-        },
-
-        tableControlsTabDeleted() {
-            return [
-                {
-                    key: 'auto',
-                    icon: '/icons/cards.svg',
-                    title: 'Автоплатежи',
-                    callback: (item) => {
-                        this.$router.push(`${API.profile.autoPayments}/${item.cardId}`);
-                    },
-                },
-                {
-                    key: 'recovery',
-                    icon: '/icons/rotate.svg',
-                    title: 'Восстановить карту',
-                    type: 'positive',
-                    callback: (item) => {
-                        this.openModal({
-                            component: 'ModalCardRecovery',
-                            positionCenter: true,
-                            item,
-                        });
-                    },
-                },
-            ];
-        },
-
-        tableControls() {
-            return this.isEnabledTabActive ? this.tableControlsTabActive : this.tableControlsTabDeleted;
-        },
-
         isEnabledTabActive() {
-            return this.activeTab === this.cardStatuses.active;
+            return this.activeTab === CARD_STATUSES.active;
         },
 
         isEnabledTabDeleted() {
-            return this.activeTab === this.cardStatuses.deleted;
+            return this.activeTab === CARD_STATUSES.deleted;
         },
 
         emptyForm() {
@@ -271,9 +170,9 @@ export default {
             };
 
             switch(status) {
-                case this.cardStatuses.active:
+                case CARD_STATUSES.active:
                     return STATUSES.active;
-                case this.cardStatuses.notActive:
+                case CARD_STATUSES.notActive:
                     return STATUSES.notActive;
             }
         },
@@ -305,23 +204,15 @@ export default {
             }
         },
 
-        openModal(modal) {
-            this.$store.commit('modal/open', {
-                component: modal.component,
-                positionCenter: modal.positionCenter ?? false,
-                componentData: modal.item,
-            });
-        },
-
         openModalCard() {
-            this.openModal({
+            this.$store.commit('modal/open', {
                 component: 'ModalCard',
             });
         },
 
         toggleTable() {
-            if (this.activeTab === this.cardStatuses.deleted) {
-                this.urlParams.status = this.cardStatuses.deleted;
+            if (this.activeTab === CARD_STATUSES.deleted) {
+                this.urlParams.status = CARD_STATUSES.deleted;
             } else {
                 delete this.urlParams.status;
             }
@@ -335,9 +226,9 @@ export default {
         },
 
         changeStatus(card) {
-            const newStatus = card.status === this.cardStatuses.active ?
-                this.cardStatuses.notActive :
-                this.cardStatuses.active;
+            const newStatus = card.status === CARD_STATUSES.active ?
+                CARD_STATUSES.notActive :
+                CARD_STATUSES.active;
 
             this.$store.dispatch('cards/changeStatus', {
                 cardId: card.cardId,
@@ -361,7 +252,7 @@ export default {
         this.cardStatuses = CARD_STATUSES;
 
         if (this.urlParams.hasOwnProperty('status')) {
-            this.activeTab = this.cardStatuses.deleted;
+            this.activeTab = CARD_STATUSES.deleted;
         }
 
         await Promise.allSettled([
