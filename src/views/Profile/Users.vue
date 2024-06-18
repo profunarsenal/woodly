@@ -1,6 +1,6 @@
 <template lang="pug">
     profile-wrapper(
-        title="Пользователи"
+        :title="$lang.users"
         :pagination="pagination"
         :items="users"
     )
@@ -9,7 +9,7 @@
                 type="outline"
                 iconSrc="/icons/plus.svg"
                 @click="openModalUser"
-            ) Добавить
+            ) {{ $lang.add }}
 
         template(#content)
             v-table.table(
@@ -21,7 +21,7 @@
                     div {{ rolesRussian[item.role] }}
                 template(#thead)
                     th.thead-item
-                        .title Инфо
+                        .title {{ $lang.info }}
                 template(#tbody="{ item }")
                     users-controls(:item="item")
 
@@ -29,10 +29,12 @@
 
 <script>
 import { mapState } from 'vuex';
+
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTable from '@/components/common/VTable.vue';
 import UsersControls from '@/components/Profile/Users/UsersControls.vue';
+
 import { USERS } from '@/helpers/table';
 import { ROLES_RUSSIAN } from '@/helpers/constants';
 

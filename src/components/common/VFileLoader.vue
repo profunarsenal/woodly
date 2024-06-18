@@ -25,14 +25,14 @@
             @dragover.prevent="dragover"
             @drop.prevent="drop"
         )
-            span.text Выберите файл
-            span.text.sub или перетащите сюда
+            span.text {{ $lang.chooseFile }}
+            span.text.sub {{ $lang.orDragAndDropHere }}
             inline-svg.icon(src="/icons/upload.svg")
 </template>
 
 <script>
-import { converBytesToSize } from '@/helpers/file.js';
-import { sliceStringAddDot } from '@/helpers/string.js';
+import { converBytesToSize } from '@/helpers/file';
+import { sliceStringAddDot } from '@/helpers/string';
 
 export default {
     name: 'VFileLoader',

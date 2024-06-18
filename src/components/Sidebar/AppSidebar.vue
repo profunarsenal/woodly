@@ -12,10 +12,10 @@
         .buttons
             button.button
                 inline-svg.icon(src="/icons/headphone.svg")
-                span.text Поддержка
+                span.text {{ $lang.support }}
             button.button(@click="openModalExit")
                 inline-svg.icon(src="/icons/exit.svg")
-                span.text Выйти
+                span.text {{ $lang.goOut }}
 </template>
 
 <script>
@@ -38,9 +38,9 @@ export default {
                 positionCenter: true,
                 componentData: {
                     type: 'negative',
-                    title: 'Выход из аккаунта',
-                    subtitle: 'Вы действительно хотите выйти из аккаунта?',
-                    buttonConfirm: 'Выйти',
+                    title: this.$lang.logoutFromAccount,
+                    subtitle: this.$lang.areYouReallyLogoutFromAccount,
+                    buttonConfirm: this.$lang.goOut,
                     callbackConfirm: () => this.logout(),
                 },
             });

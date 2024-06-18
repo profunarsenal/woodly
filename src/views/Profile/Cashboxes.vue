@@ -1,6 +1,6 @@
 <template lang="pug">
     profile-wrapper(
-        title="Кассы"
+        :title="$lang.cashboxes"
         :pagination="pagination"
         :items="cashboxes"
     )
@@ -9,7 +9,7 @@
                 type="outline"
                 iconSrc="/icons/plus.svg"
                 @click="openModalCashbox"
-            ) Добавить
+            ) {{ $lang.add }}
 
         template(#content)
             v-table.table(
@@ -24,13 +24,14 @@
                     api-control(:apiKey="item.apiKey")
                 template(#thead)
                     th.thead-item
-                        .title Инфо
+                        .title {{ $lang.info }}
                 template(#tbody="{ item }")
                     cashboxes-controls(:item="item")
 </template>
 
 <script>
 import { mapState } from 'vuex';
+
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTable from '@/components/common/VTable.vue';
@@ -38,6 +39,7 @@ import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
 import CashboxesControls from '@/components/Profile/Cashboxes/CashboxesControls.vue';
 import ApiControl from '@/components/Profile/Cashboxes/ApiControl.vue';
+
 import { CASHBOXES } from '@/helpers/table';
 import { CASHBOXES_STATUSES } from '@/helpers/catalogs';
 

@@ -1,5 +1,5 @@
 <template lang="pug">
-    profile-wrapper(title="Автоплатежи по карте")
+    profile-wrapper(:title="$lang.automaticPaymentsByCard")
         template(#header)
             square-button.back(
                 icon="/icons/arrow.svg"
@@ -24,6 +24,7 @@ import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import SquareButton from '@/components/common/Buttons/SquareButton.vue';
 import VTable from '@/components/common/VTable.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
+
 import { AUTOPAYMENTS } from '@/helpers/table';
 import { API } from '@/helpers/constants';
 
@@ -39,7 +40,6 @@ export default {
 
     data() {
         return {
-            headers: AUTOPAYMENTS,
             autopayments: [],
         };
     },
@@ -61,6 +61,8 @@ export default {
     },
 
     async created() {
+        this.headers = AUTOPAYMENTS;
+
         if (this.$route.params.id) {
             this.getAutoPayments();
         }

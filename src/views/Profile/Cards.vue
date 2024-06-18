@@ -1,6 +1,6 @@
 <template lang="pug">
     profile-wrapper(
-        title="Мои карты"
+        :title="$lang.myCards"
         :pagination="pagination"
         :items="cards"
     )
@@ -10,7 +10,7 @@
                 type="outline"
                 size="small"
                 @click="openModalCard"
-            ) Добавить
+            ) {{ $lang.add }}
             v-button.button-transactions(
                 :type="buttonTransactions.type"
                 :isDisabled="isSwitching"
@@ -67,12 +67,14 @@
 <script>
 import { mapState } from 'vuex';
 import debounce from 'lodash/debounce';
+
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VTable from '@/components/common/VTable.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import CardsControls from '@/components/Profile/Cards/CardsControls.vue';
+
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
 import { BANK_TYPES, CARD_STATUSES } from '@/helpers/catalogs';
 
@@ -92,8 +94,8 @@ export default {
         return {
             tableHeaders: CARDS_TABLE_HEADERS,
             tableTabs: [
-                { key: CARD_STATUSES.active, title: 'Активные' },
-                { key: CARD_STATUSES.deleted, title: 'Удаленные' },
+                { key: CARD_STATUSES.active, title: this.$lang.active },
+                { key: CARD_STATUSES.deleted, title: this.$lang.deleted },
             ],
             urlParams: Object.assign({}, this.$route.query),
             activeTab: CARD_STATUSES.active,
@@ -122,16 +124,16 @@ export default {
             if (this.isEnabledTabActive) {
                 return {
                     src: '/images/empty/card-positive.png',
-                    title: 'У вас нет активных карт',
-                    subtitle: 'Здесь будут храниться карты, которые можно добавить нажав кнопку «Добавить» в верхней части страницы',
+                    title: this.$lang.emptyActiveCardsTitle,
+                    subtitle: this.$lang.emptyActiveCardsSubtitle,
                 }
             }
 
             if (this.isEnabledTabDeleted) {
                 return {
                     src: '/images/empty/card-negative.png',
-                    title: 'У вас нет удаленных карт',
-                    subtitle: 'Здесь будут храниться карты, которые вы удалили',
+                    title: this.$lang.emptyDeletedCardsTitle,
+                    subtitle: this.$lang.emptyDeletedCardsSubtitle,
                 }
             }
         },
@@ -139,7 +141,7 @@ export default {
         buttonTransactions() {
             return {
                 type: this.isWorkTransactions ? 'negative' : 'positive',
-                value: this.isWorkTransactions ? 'Выключить сделки' : 'Включить сделки',
+                value: this.isWorkTransactions ? this.$lang.offTransactions : this.$lang.onTransactions,
             };
         },
     },

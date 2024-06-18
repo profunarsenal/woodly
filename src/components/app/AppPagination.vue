@@ -1,9 +1,9 @@
 <template lang="pug">
     .pagination
         .info
-            .title Общее количество: 
+            .title {{ $lang.pagination.total }}
                 span.count {{ total }}
-            .title Показано на странице: 
+            .title {{ $lang.pagination.shownOnPage }}
                 span.count {{ count }}
         .navigation
             ul.items
@@ -17,7 +17,7 @@
                 @click="nextPage"
                 :disabled="isLastPage"
             )
-                span Дальше
+                span {{ $lang.pagination.further }}
                 inline-svg.icon(src="/icons/chevron.svg")
 </template>
 

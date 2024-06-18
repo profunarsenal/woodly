@@ -1,5 +1,5 @@
 <template lang="pug">
-    profile-wrapper(title="Общие СМС по карте")
+    profile-wrapper(:title="$lang.generalSmsBycard")
         template(#header)
             square-button.back(
                 icon="/icons/arrow.svg"
@@ -24,6 +24,7 @@ import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import SquareButton from '@/components/common/Buttons/SquareButton.vue';
 import VTable from '@/components/common/VTable.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
+
 import { CARD_MESSAGES } from '@/helpers/table';
 import { API } from '@/helpers/constants';
 

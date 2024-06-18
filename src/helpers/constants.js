@@ -1,5 +1,11 @@
 export const BASE_URL = 'https://woodly-azure.vercel.app';
 
+export const SUPPORT_EMAIL = 'support@woodly.ru';
+
+export const TELEGRAM_BOT = 'WoodlyNotifyBot';
+
+export const WOODLY_COPY = '© 2024 Woodly, Inc';
+
 export const ROLES = {
     admin: 'admin',
     trader: 'trader',

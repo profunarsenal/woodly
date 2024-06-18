@@ -3,13 +3,19 @@
         a.docs(
             href="#"
             target="_blank"
-        ) Документация API
-        .copy © 2024 Woodly, Inc
+        ) {{ $lang.documentationApi }}
+        .copy {{ copy }}
 </template>
 
 <script>
+import { WOODLY_COPY } from '@/helpers/constants';
+
 export default {
     name: 'AppFooter',
+
+    created() {
+        this.copy = WOODLY_COPY;
+    },
 };
 </script>
 

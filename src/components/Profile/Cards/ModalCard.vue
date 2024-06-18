@@ -57,11 +57,6 @@
             )
             .checkboxes
                 v-checkbox(
-                    v-model="form.isQiwi"
-                    id="qiwi"
-                    label="Разрешить перевод с QIWI"
-                )
-                v-checkbox(
                     v-model="form.isSbp"
                     id="sbp"
                     label="Разрешить перевод по СБП"
@@ -144,7 +139,6 @@ export default {
                 deviceId: '',
                 apiKey: '',
                 slotSim: null,
-                isQiwi: false,
                 isSbp: false,
                 phone: '',
                 recipient: ''

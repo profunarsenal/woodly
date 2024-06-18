@@ -1,5 +1,5 @@
 <template lang="pug">
-    profile-wrapper(title="Выплаты")
+    profile-wrapper(:title="$lang.payouts")
 </template>
 
 <script>

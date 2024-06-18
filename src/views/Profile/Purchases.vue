@@ -1,6 +1,6 @@
 <template lang="pug">
     profile-wrapper.purchases(
-        title="Покупка"
+        :title="$lang.purchase"
         :pagination="pagination"
         :items="purchases"
     )
@@ -11,7 +11,7 @@
                     iconSrc="/icons/download.svg"
                     size="small"
                     @click="openExport"
-                ) Экспорт
+                ) {{ $lang.export }}
                 export-window(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
@@ -56,6 +56,7 @@
 <script>
 import { mapState } from 'vuex';
 import debounce from 'lodash/debounce';
+
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
 import ExportWindow from '@/components/Profile/ExportWindow.vue';
@@ -64,6 +65,7 @@ import VTabs from '@/components/common/VTabs.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import PurchasesControls from '@/components/Profile/Purchases/PurchasesControls.vue';
+
 import { PURCHASES } from '@/helpers/table';
 import { downloadFile } from '@/helpers/url';
 import { getCurrencyValue } from '@/helpers/string';
@@ -90,7 +92,7 @@ export default {
             isLoading: false,
             urlParams: Object.assign({}, this.$route.query),
             tableTabs: [
-                { key: 'all', title: 'Все платежи' },
+                { key: 'all', title: this.$lang.allPayments },
                 ...Object.values(PURCHASES_STATUSES),
             ],
             activeTab: 'all',
@@ -108,27 +110,27 @@ export default {
         emptyForm() {
             const baseForm = {
                 src: '/images/empty/search.png',
-                title: 'Ничего не нашлось',
+                title: this.$lang.nothingFound,
             };
 
             switch (this.activeTab) {
                 case 'all':
                     return {
                         src: '/images/empty/wallet.png',
-                        title: 'У вас еще нет сделок',
-                        subtitle: 'Здесь будут храниться все сделки по покупке',
+                        title: this.$lang.youHaveNoDeals,
+                        subtitle: this.$lang.emptyPurchasesSubtitle.all,
                     };
                 case PURCHASES_STATUSES.available.key:
-                    baseForm.subtitle = 'Здесь будут храниться все доступные сделки';
+                    baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.available;
                     return baseForm;
                 case PURCHASES_STATUSES.active.key:
-                    baseForm.subtitle = 'Здесь будут храниться все активные сделки';
+                    baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.active;
                     return baseForm;
                 case PURCHASES_STATUSES.canceled.key:
-                    baseForm.subtitle = 'Здесь будут храниться все отмененные сделки ';
+                    baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.canceled;
                     return baseForm;
                 case PURCHASES_STATUSES.successful.key:
-                    baseForm.subtitle = 'Здесь будут храниться все успешные сделки';
+                    baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.successful;
                     return baseForm;
             }
         },

@@ -1,12 +1,12 @@
 <template lang="pug">
     profile-wrapper.balance(
-        title="Баланс"
+        :title="$lang.balance"
         :pagination="pagination"
         :items="balanceTransactions"
         :isLoading="isLoading"
     )
         template(#header)
-            .id Мой ID: {{ user.userId }}
+            .id {{ $lang.myId }} {{ user.userId }}
         template(#content)
             .currencies
                 currency-block(
@@ -25,7 +25,7 @@
                         iconSrc="/icons/download.svg"
                         size="small"
                         @click="openExport"
-                    ) Экспорт
+                    ) {{ $lang.export }}
                     export-window(
                         v-if="isOpenExport"
                         v-click-outside="closeExport"
@@ -51,6 +51,7 @@
 
 <script>
 import { mapState } from 'vuex';
+
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import CurrencyBlock from '@/components/Profile/Balance/CurrencyBlock.vue';
 import VTable from '@/components/common/VTable.vue';
@@ -59,6 +60,7 @@ import VTabs from '@/components/common/VTabs.vue';
 import VButton from '@/components/common/VButton.vue';
 import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
+
 import { BALANCE_TRANSACTIONS } from '@/helpers/table';
 import { BALANCE_STATUSES } from '@/helpers/catalogs';
 import { getCurrencyValue } from '@/helpers/string';
@@ -88,7 +90,7 @@ export default {
             getCurrencyValue: getCurrencyValue,
             activeTab: 'all',
             tableTabs: [
-                { key: 'all', title: 'Все переводы' },
+                { key: 'all', title: this.$lang.allTransactions },
                 ...Object.values(BALANCE_STATUSES),
             ],
         };

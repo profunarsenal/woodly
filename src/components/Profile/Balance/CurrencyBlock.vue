@@ -4,7 +4,7 @@
             inline-svg(:src="imageSrc")
         .items
             .item
-                .title Баланс в рублях
+                .title {{ $lang.balanceInRubles }}
                 .balance
                     .value {{ getCurrencyValue(balance.balanceRub) }}
                     .button
@@ -14,13 +14,13 @@
                         )
                         v-tooltip.table-tooltip.left(
                             position="left"
-                            text="Перевести средства"
+                            :text="$lang.transferFunds"
                         )
             .item
-                .title Заморожено
+                .title {{ $lang.frozen }}
                 .value {{ getCurrencyValue(balance.balanceRubFreeze) }}
             .item
-                .title USDT / RUB
+                .title {{ currencies.usdt }} / {{ currencies.rub }}
                 .currencies
                     .value {{ balance.rate }}
                     v-badge.percent(
@@ -33,14 +33,14 @@
                         span.slash /
                         | {{ balance.rateWithPercent }}
             .item
-                .title Ваш кошелек USDT (TRC20) RUB
+                .title {{ titleCrypto }}
                 .crypto
                     .value {{ balance.tokenId }}
                     .button
                         button-mini(type="qr")
                         v-tooltip.table-tooltip.right(
                             position="right"
-                            text="Открыть QR-код"
+                            :text="$lang.openQrCode"
                         )
 </template>
 
@@ -77,6 +77,12 @@ export default {
         };
     },
 
+    computed: {
+        titleCrypto() {
+            return `${this.$lang.yourWallet} ${this.currencies.usdt} (${this.crypto.trc}) ${this.currencies.rub}`;
+        },
+    },
+
     methods: {
         openModalTransaction() {
             this.$store.commit('modal/open', {
@@ -84,6 +90,16 @@ export default {
                 positionCenter: true,
             });
         },
+    },
+
+    created() {
+        this.currencies = {
+            usdt: 'USDT',
+            rub: 'RUB',
+        };
+        this.crypto = {
+            trc: 'TRC20',
+        };
     },
 };
 </script>

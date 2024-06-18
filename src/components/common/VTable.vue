@@ -53,8 +53,8 @@
         empty-form(
             v-if="!items.length && isSearch"
             imageSrc="/images/empty/search.png"
-            title="Ничего не нашлось"
-            subtitle="Попробуйте изменить свой запрос"
+            :title="$lang.nothingFound"
+            :subtitle="$lang.tryChangingYourQuery"
         )
 </template>
 

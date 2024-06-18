@@ -1,6 +1,6 @@
 <template lang="pug">
     profile-wrapper.sale(
-        title="Продажа"
+        :title="$lang.sale"
         :pagination="pagination"
         :items="transactions"
     )
@@ -11,7 +11,7 @@
                     iconSrc="/icons/download.svg"
                     size="small"
                     @click="openExport"
-                ) Экспорт
+                ) {{ $lang.export }}
                 export-window(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
@@ -67,6 +67,7 @@
 <script>
 import { mapState } from 'vuex';
 import debounce from 'lodash/debounce';
+
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
@@ -75,6 +76,7 @@ import EmptyForm from '@/components/app/EmptyForm.vue';
 import SaleControls from '@/components/Profile/Sale/SaleControls.vue';
 import ExportWindow from '@/components/Profile/ExportWindow.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
+
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
 import { TRANSACTIONS_TABLE_HEADERS } from '@/helpers/table';
 import { getCurrencyValue } from '@/helpers/string';
@@ -98,7 +100,7 @@ export default {
         return {
             tableHeaders: TRANSACTIONS_TABLE_HEADERS,
             tableTabs: [
-                { key: 'all', title: 'Все сделки' },
+                { key: 'all', title: this.$lang.allDeals },
                 ...Object.values(TRANSACTIONS_STATUSES),
             ],
             activeTab: 'all',
@@ -119,27 +121,27 @@ export default {
         emptyForm() {
             const baseForm = {
                 src: '/images/empty/search.png',
-                title: 'Ничего не нашлось',
+                title: this.$lang.nothingFound,
             };
 
             switch (this.activeTab) {
                 case 'all':
                     return {
                         src: '/images/empty/wallet.png',
-                        title: 'У вас еще нет сделок',
-                        subtitle: 'Здесь будут храниться все сделки по продаже',
+                        title: this.$lang.youHaveNoDeals,
+                        subtitle: this.$lang.emptySaleSubtitle.all,
                     };
                 case TRANSACTIONS_STATUSES.active.key:
-                    baseForm.subtitle = 'Здесь будут храниться все активные сделки';
+                    baseForm.subtitle = this.$lang.emptySaleSubtitle.active;
                     return baseForm;
                 case TRANSACTIONS_STATUSES.review.key:
-                    baseForm.subtitle = 'Здесь будут храниться все сделки на проверке';
+                    baseForm.subtitle = this.$lang.emptySaleSubtitle.review;
                     return baseForm;
                 case TRANSACTIONS_STATUSES.canceled.key:
-                    baseForm.subtitle = 'Здесь будут храниться все отмененные сделки ';
+                    baseForm.subtitle = this.$lang.emptySaleSubtitle.canceled;
                     return baseForm;
                 case TRANSACTIONS_STATUSES.successful.key:
-                    baseForm.subtitle = 'Здесь будут храниться все успешные сделки';
+                    baseForm.subtitle = this.$lang.emptySaleSubtitle.successful;
                     return baseForm;
             }
         },

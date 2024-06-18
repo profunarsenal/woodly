@@ -32,6 +32,7 @@
 <script>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+
 import { formatDate } from '@/helpers/date';
 
 export default {

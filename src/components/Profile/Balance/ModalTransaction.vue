@@ -2,23 +2,23 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title Перевод средств
+        .title {{ $lang.moneyTransaction }}
         .form
             v-input(
                 v-model="id"
-                label="ID получателя"
-                placeholder="ID получателя"
+                :label="$lang.recipientId"
+                :placeholder="$lang.recipientId"
             )
             v-input(
                 v-model="amount"
                 type="number"
-                label="Сумма перевода"
-                placeholder="Сумма перевода"
+                :label="$lang.transferAmount"
+                :placeholder="$lang.transferAmount"
             )
         v-button.button(
             :isDisabled="isButtonDisabled"
             @click="transfer"
-        ) Перевести
+        ) {{ $lang.transfer }}
 </template>
 
 <script>

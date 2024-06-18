@@ -8,39 +8,41 @@
             inline-svg.logo(src="/images/logo.svg")
         .content
             .form
-                .title Вход в личный кабинет
+                .title {{ $lang.loginToYourPersonalAccount }}
                 .controls
                     v-input.control(
                         v-model.trim="form.login"
-                        placeholder="Email"
+                        :placeholder="$lang.email"
                     )
                     v-input.control(
                         v-model.trim="form.password"
-                        placeholder="Пароль"
+                        :placeholder="$lang.password"
                         type="password"
                         autocomplete="new-password"
                         isPassword
                     )
                     v-input.control(
                         v-model.trim="code"
-                        placeholder="Код"
+                        :placeholder="$lang.code"
                     )
                     v-button.button(
                         :isDisabled="!isFormCompleted || isPending"
                         :isLoading="isPending"
                         @click="login"
-                    ) Войти
+                    ) {{ $lang.toComeIn }}
                 a.support(
                     href="#"
                     target="_blank"
-                ) support@woodly.ru
+                ) {{ supportEmail }}
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import { USER_PAGES } from '@/helpers/constants';
+
+import { USER_PAGES, SUPPORT_EMAIL } from '@/helpers/constants';
 
 export default {
     name: 'ProfileAuthorization',
@@ -91,6 +93,10 @@ export default {
                 this.isPending = false;
             }
         },
+    },
+
+    created() {
+        this.supportEmail = SUPPORT_EMAIL;
     },
 };
 </script>

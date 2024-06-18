@@ -56,7 +56,7 @@ export default {
                     isVisible: this.isEnabledTabActive,
                     key: 'limit',
                     icon: '/icons/settings.svg',
-                    title: 'Установить лимит',
+                    title: this.$lang.setLimit,
                     callback: (item) => {
                         this.$store.commit('modal/open', {
                             component: 'ModalSetLimit',
@@ -69,7 +69,7 @@ export default {
                     isVisible: this.isEnabledTabActive,
                     key: 'edit',
                     icon: '/icons/edit.svg',
-                    title: 'Редактировать карту',
+                    title: this.$lang.editCard,
                     callback: (item) => {
                         this.$store.commit('modal/open', {
                             component: 'ModalCard',
@@ -81,7 +81,7 @@ export default {
                     isVisible: this.isEnabledTabActive || this.isEnabledTabDeleted,
                     key: 'auto',
                     icon: '/icons/cards.svg',
-                    title: 'Автоплатежи',
+                    title: this.$lang.autoPayments,
                     callback: (item) => {
                         this.$router.push({
                             path: `${API.profile.autoPayments}/${item.cardId}`,
@@ -95,7 +95,7 @@ export default {
                     isVisible: this.isEnabledTabActive,
                     key: 'message',
                     icon: '/icons/message.svg',
-                    title: 'Общие СМС',
+                    title: this.$lang.generalSms,
                     callback: (item) => {
                         this.$router.push({
                             path: `${API.profile.cardMessages}/${item.cardId}`,
@@ -109,7 +109,7 @@ export default {
                     isVisible: this.isEnabledTabActive,
                     key: 'delete',
                     icon: '/icons/delete.svg',
-                    title: 'Удалить карту',
+                    title: this.$lang.deleteCard,
                     type: 'negative',
                     callback: (item) => {
                         this.$store.commit('modal/open', {
@@ -118,9 +118,9 @@ export default {
                             componentData: {
                                 item,
                                 type: 'negative',
-                                title: 'Удаление карты',
-                                subtitle: `Вы уверены, что хотите удалить карту ${item.title} · ${item.cardNumber}?`,
-                                buttonConfirm: 'Удалить',
+                                title: this.$lang.removingCard,
+                                subtitle: this.$lang.areYouSureYouWandDeleteCard(item.title, item.cardNumber),
+                                buttonConfirm: this.$lang.delete,
                                 callbackConfirm: () => this.deleteCard(),
                             },
                         });
@@ -130,7 +130,7 @@ export default {
                     isVisible: this.isEnabledTabDeleted,
                     key: 'recovery',
                     icon: '/icons/rotate.svg',
-                    title: 'Восстановить карту',
+                    title: this.$lang.restoreCard,
                     type: 'positive',
                     callback: (item) => {
                         this.$store.commit('modal/open', {
@@ -139,9 +139,9 @@ export default {
                             componentData: {
                                 item,
                                 type: 'positive',
-                                title: 'Восстановление карты',
-                                subtitle: `Вы уверены, что хотите восстановить карту ${item.title} · ${item.cardNumber}?`,
-                                buttonConfirm: 'Восстановить',
+                                title: this.$lang.recoveringCard,
+                                subtitle: this.$lang.areYouSureYouWandRestoreCard(item.title, item.cardNumber),
+                                buttonConfirm: this.$lang.restore,
                                 callbackConfirm: () => this.deleteCard(),
                             },
                         });

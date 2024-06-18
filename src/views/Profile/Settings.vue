@@ -1,50 +1,50 @@
 <template lang="pug">
-    profile-wrapper(title="Настройки")
+    profile-wrapper(:title="$lang.settings")
         template(#content)
             .form
                 .controls
                     v-input.control(
                         v-model="form.email"
-                        label="Email"
-                        placeholder="Введите email"
+                        :label="$lang.email"
+                        :placeholder="$lang.enterEmail"
                     )
                     v-input.control(
                         v-model="form.traderId"
-                        label="Trader ID"
-                        placeholder="Введите ID"
+                        :label="$lang.traderId"
+                        :placeholder="$lang.enterId"
                     )
                     v-input.control(
                         v-model="form.telegram"
-                        label="Контакт Telegram"
-                        placeholder="Контакт Telegram"
+                        :label="$lang.telegramContact"
+                        :placeholder="$lang.telegramContact"
                     )
                     v-input.control(
                         v-model="form.password"
-                        label="Пароль"
-                        placeholder="Введите пароль"
+                        :label="$lang.password"
+                        :placeholder="$lang.enterPassword"
                         type="password"
                         autocomplete="new-password"
                         isPassword
                     )
                     v-input.control(
                         v-model="form.apiKey"
-                        label="API KEY"
-                        placeholder="API KEY"
+                        :label="$lang.apiKey"
+                        :placeholder="$lang.apiKey"
                     )
                     v-input.control(
                         v-model="form.telegramId"
-                        label="Telegram ID"
-                        placeholder="Telegram ID"
+                        :label="$lang.telegramId"
+                        :placeholder="$lang.telegramId"
                     )
-                v-button.button(isDisabled) Сохранить
+                v-button.button(isDisabled) {{ $lang.save }}
             .header
-                .title Активные сессии
+                .title {{ $lang.activeSessions }}
                 .subtitle 6
                 v-button.close-session(
                     type="outline"
                     size="small"
                     @click="openModalSessions"
-                ) Закрыть все сессии кроме текущей
+                ) {{ $lang.closeAllSessionsExceptCurrent }}
         template(#footer)
             .footer
                 telegram-button
@@ -56,7 +56,7 @@
                     v-button.button-go(
                         size="small"
                         iconSrc="/icons/arrow.svg"
-                    ) Перейти
+                    ) {{ $lang.goTo }}
 </template>
 
 <script>

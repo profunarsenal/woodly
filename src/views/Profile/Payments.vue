@@ -1,10 +1,10 @@
 <template lang="pug">
-    profile-wrapper(title="Платежи")
+    profile-wrapper(:title="$lang.payments")
         template(#header)
             v-button(
                 type="outline"
                 iconSrc="/icons/plus.svg"
-            ) Создать платеж
+            ) {{ $lang.createPayment }}
 </template>
 
 <script>

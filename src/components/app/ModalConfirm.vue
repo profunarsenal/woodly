@@ -45,7 +45,7 @@ export default {
         },
 
         buttonCancel() {
-            return this.componentData?.buttonCancel || 'Отменить';
+            return this.componentData?.buttonCancel || this.$lang.cancel;
         },
     },
 

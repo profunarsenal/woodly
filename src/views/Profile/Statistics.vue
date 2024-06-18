@@ -1,5 +1,5 @@
 <template lang="pug">
-    profile-wrapper(title="Статистика")
+    profile-wrapper(:title="$lang.statistics")
 </template>
 
 <script>

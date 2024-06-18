@@ -2,13 +2,19 @@
     .tg-button
         inline-svg.icon(src="/icons/tg-circle.svg")
         .content
-            .title Наш телеграм бот
-            .name WoodlyNotifyBot
+            .title {{ $lang.ourTelegramBot }}
+            .name {{ telegramBot }}
 </template>
 
 <script>
+import { TELEGRAM_BOT } from '@/helpers/constants';
+
 export default {
     name: 'TelegramButton',
+
+    created() {
+        this.telegramBot = TELEGRAM_BOT;
+    },
 };
 </script>
 

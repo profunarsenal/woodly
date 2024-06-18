@@ -4,28 +4,29 @@
             v-date-picker(
                 v-model="dateStart"
                 :max-date="dateEnd"
-                label="Дата от"
+                :label="$lang.dateFrom"
             )
             v-date-picker(
                 v-model="dateEnd"
                 :min-date="dateStart"
-                label="Дата до"
+                :label="$lang.dateTo"
             )
         .buttons
             v-button(
                 :isDisabled="!canReset"
                 type="secondary"
                 @click="reset"
-            ) Сбросить
+            ) {{ $lang.reset }}
             v-button(
                 :isDisabled="!canUnload"
                 @click="unload"
-            ) Выгрузить
+            ) {{ $lang.unload }}
 </template>
 
 <script>
 import VDatePicker from '@/components/common/VDatePicker.vue';
 import VButton from '@/components/common/VButton.vue';
+
 import { formatDate } from '@/helpers/string';
 
 export default {
