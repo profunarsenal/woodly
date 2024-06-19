@@ -21,7 +21,7 @@ export default {
         },
 
         isCanceledStatus(state) {
-            return state.status === PAYMENT_STATUSES.canceled;
+            return state.status === PAYMENT_STATUSES.cancelled;
         },
     },
 

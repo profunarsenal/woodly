@@ -126,8 +126,8 @@ export default {
                 case PURCHASES_STATUSES.active.key:
                     baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.active;
                     return baseForm;
-                case PURCHASES_STATUSES.canceled.key:
-                    baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.canceled;
+                case PURCHASES_STATUSES.cancelled.key:
+                    baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.cancelled;
                     return baseForm;
                 case PURCHASES_STATUSES.successful.key:
                     baseForm.subtitle = this.$lang.emptyPurchasesSubtitle.successful;

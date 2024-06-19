@@ -137,8 +137,8 @@ export default {
                 case TRANSACTIONS_STATUSES.review.key:
                     baseForm.subtitle = this.$lang.emptySaleSubtitle.review;
                     return baseForm;
-                case TRANSACTIONS_STATUSES.canceled.key:
-                    baseForm.subtitle = this.$lang.emptySaleSubtitle.canceled;
+                case TRANSACTIONS_STATUSES.cancelled.key:
+                    baseForm.subtitle = this.$lang.emptySaleSubtitle.cancelled;
                     return baseForm;
                 case TRANSACTIONS_STATUSES.successful.key:
                     baseForm.subtitle = this.$lang.emptySaleSubtitle.successful;

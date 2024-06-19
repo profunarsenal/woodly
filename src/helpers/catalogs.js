@@ -29,8 +29,8 @@ export const TRANSACTIONS_STATUSES = {
         id: 3,
     },
 
-    canceled: {
-        key: 'canceled',
+    cancelled: {
+        key: 'cancelled',
         icon: '/icons/close.svg',
         title: 'Отмененные',
         transactionTitle: 'Отмененная',
@@ -105,8 +105,8 @@ export const PURCHASES_STATUSES = {
         id: 2,
     },
 
-    canceled: {
-        key: 'canceled',
+    cancelled: {
+        key: 'cancelled',
         icon: '/icons/close.svg',
         title: 'Отмененные',
         transactionTitle: 'Отмененная',
@@ -134,5 +134,39 @@ export const CASHBOXES_STATUSES = {
         id: 2,
         class: 'disabled',
         icon: '/icons/close-circle.svg',
+    },
+};
+
+export const PAYOUTS_STATUSES = {
+    created: {
+        key: 'created',
+        icon: '/icons/activity.svg',
+        title: 'Создана',
+        color: 'blue',
+        id: 1,
+    },
+
+    sent: {
+        key: 'sent',
+        icon: '/icons/checkbox-mark.svg',
+        title: 'Отправлена',
+        color: 'green',
+        id: 2,
+    },
+
+    waiting: {
+        key: 'waiting',
+        icon: '/icons/spinner.svg',
+        title: 'Ожидает',
+        color: 'yellow',
+        id: 3,
+    },
+
+    cancelled: {
+        key: 'cancelled',
+        icon: '/icons/close.svg',
+        title: 'Отменена',
+        color: 'red',
+        id: 4,
     },
 };

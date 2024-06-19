@@ -49,7 +49,7 @@ export const API = {
 export const PAYMENT_STATUSES = {
     fail: 'fail',
     success: 'success',
-    canceled: 'canceled',
+    cancelled: 'cancelled',
     loading: 'loading',
 };
 

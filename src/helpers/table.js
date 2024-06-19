@@ -67,3 +67,16 @@ export const CASHBOXES = [
     { title: 'Баланс', key: 'balance', style: 'width: 19.81%' },
     { title: 'API', key: 'apiKey', style: 'width: 19.81%' },
 ];
+
+export const PAYOUTS = [
+    { title: 'ID платежа', key: 'purchaseId' },
+    { title: 'Заказ', key: 'orderNumber' },
+    { title: 'Касса', key: 'cashbox' },
+    { title: 'Сумма', key: 'amount' },
+    { title: 'Списано', key: '' },
+    { title: 'Зачислено', key: '' },
+    { title: 'Способ выплаты', key: 'paymentSystem' },
+    { title: 'Реквизит', key: 'requisites' },
+    { title: 'Статус', key: 'status' },
+    { title: 'Дата', key: 'dateCreate' },
+];

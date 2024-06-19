@@ -186,7 +186,7 @@ export default {
             try {
                 await this.$store.dispatch('transactions/cancelTransaction', {
                     transactionId: this.item.transactionId,
-                    status: TRANSACTIONS_STATUSES.canceled.id,
+                    status: TRANSACTIONS_STATUSES.cancelled.id,
                 });
 
                 this.closePopup('cancel');

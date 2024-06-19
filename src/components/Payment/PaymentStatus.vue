@@ -69,7 +69,7 @@ export default {
             return {
                 [PAYMENT_STATUSES.fail]: '/icons/fail.svg',
                 [PAYMENT_STATUSES.success]: '/icons/check.svg',
-                [PAYMENT_STATUSES.canceled]: '/icons/fail.svg',
+                [PAYMENT_STATUSES.cancelled]: '/icons/fail.svg',
                 [PAYMENT_STATUSES.loading]: '',
             };
         },
@@ -78,7 +78,7 @@ export default {
             return {
                 [PAYMENT_STATUSES.fail]: 'Время истекло или <br> не удалось обработать ваш платеж',
                 [PAYMENT_STATUSES.success]: 'Платеж успешно зачислен',
-                [PAYMENT_STATUSES.canceled]: 'Пополнение отменено',
+                [PAYMENT_STATUSES.cancelled]: 'Пополнение отменено',
                 [PAYMENT_STATUSES.loading]: 'Ожидаем поступления платежа',
             };
         },
@@ -87,7 +87,7 @@ export default {
             return {
                 [PAYMENT_STATUSES.fail]: 'Начните заново или, если вы оплатили — прикрепите чек для проверки платежа',
                 [PAYMENT_STATUSES.success]: 'Вы можете перейти на сайт магазина, <br> нажав кнопку ниже',
-                [PAYMENT_STATUSES.canceled]: 'Вы можете вернуться на главную страницу нажав кнопку ниже',
+                [PAYMENT_STATUSES.cancelled]: 'Вы можете вернуться на главную страницу нажав кнопку ниже',
                 [PAYMENT_STATUSES.loading]: 'Не закрывайте страницу. Перевод зачисляется автоматически.',
             };
         },

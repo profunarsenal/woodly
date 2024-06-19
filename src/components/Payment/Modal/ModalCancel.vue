@@ -32,7 +32,7 @@ export default {
         },
 
         cancelPayment() {
-            this.$store.commit('payment/setStatus', PAYMENT_STATUSES.canceled);
+            this.$store.commit('payment/setStatus', PAYMENT_STATUSES.cancelled);
             this.close();
         },
     },

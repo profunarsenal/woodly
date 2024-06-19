@@ -166,7 +166,7 @@ export default {
             try {
                 await this.$store.dispatch('purchases/cancelPurchase', {
                     purchaseId: this.item.purchaseId,
-                    status: PURCHASES_STATUSES.canceled.id,
+                    status: PURCHASES_STATUSES.cancelled.id,
                 });
 
                 this.closePopup('cancel');
@@ -205,7 +205,7 @@ export default {
             try {
                 await this.$store.dispatch('purchases/cancelPurchase', {
                     purchaseId: this.item.purchaseId,
-                    status: PURCHASES_STATUSES.canceled.id,
+                    status: PURCHASES_STATUSES.cancelled.id,
                 });
 
                 this.closePopup('cancel');
