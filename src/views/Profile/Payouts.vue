@@ -143,7 +143,14 @@ export default {
             }
         },
 
-        openModalCreatePayout() {},
+        openModalCreatePayout() {
+            this.$store.commit('modal/open', {
+                component: 'ModalCreatePayout',
+                componentData: {
+                    cashboxes: this.cashboxes,
+                },
+            });
+        },
 
         openModalExport() {
             this.$store.commit('modal/open', {

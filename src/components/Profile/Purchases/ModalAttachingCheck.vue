@@ -2,8 +2,8 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title Прикрепление чека
-        .subtitle(v-if="purchaseId") к сделке: {{ purchaseId }}
+        .title {{ $lang.attachingCheck }}
+        .subtitle(v-if="purchaseId") {{ $lang.toDeal }} {{ purchaseId }}
         v-file-loader.file-loader(
             v-model="files"
             :extensions="imageExtensions"
@@ -12,7 +12,7 @@
             :isDisabled="!files.length"
             :isLoading="isUploading"
             @click="sendCheck"
-        ) Отправить
+        ) {{ $lang.send }}
 </template>
 
 <script>

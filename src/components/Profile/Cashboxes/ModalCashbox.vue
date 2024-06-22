@@ -6,47 +6,47 @@
         .form
             v-input(
                 v-model="form.title"
-                label="Название кассы"
-                placeholder="Введите название кассы"
+                :label="$lang.cashboxName"
+                :placeholder="$lang.enterCashboxName"
             )
             v-input(
                 v-model="form.url"
-                label="URL"
-                placeholder="Введите URL"
+                :label="$lang.url"
+                :placeholder="$lang.enterUrl"
             )
             v-input(
                 v-model="form.successUrl"
-                label="Success URL"
-                placeholder="Введите success URL"
+                :label="$lang.successUrl"
+                :placeholder="$lang.enterSuccessUrl"
             )
             v-input(
                 v-model="form.errorUrl"
-                label="Error URL"
-                placeholder="Введите error URL"
+                :label="$lang.errorUrl"
+                :placeholder="$lang.enterErrorUrl"
             )
             v-input(
                 v-model="form.notificationUrlPayments"
-                label="Notification URL (платежи)"
-                placeholder="Введите notification URL (платежи)"
+                :label="$lang.notificationUrlPayments"
+                :placeholder="$lang.enterNotificationUrlPayments"
             )
             v-input(
                 v-model="form.notificationUrlPayOff"
-                label="Notification URL (выплаты)"
-                placeholder="Введите notification URL (выплаты)"
+                :label="$lang.notificationUrlPayouts"
+                :placeholder="$lang.enterNotificationUrlPayouts"
             )
             v-dropdown(
                 v-model="form.commissionPayer"
                 :list="comissionPayers"
-                label="Кто платит комиссию"
-                placeholder="Выберите из списка"
+                :label="$lang.whoPaysComission"
+                :placeholder="$lang.selectFromList"
             )
             v-input(
                 v-if="isEdit"
                 v-model="form.apiKey"
                 isDisabled
                 isReadonly
-                label="API KEY"
-                placeholder="API KEY"
+                :label="$lang.apiKey"
+                :placeholder="$lang.apiKey"
             )
         v-button.button(
             :isLoading="isPending"
@@ -109,11 +109,11 @@ export default {
         },
 
         title() {
-            return this.isEdit ? 'Редактирование кассы' : 'Добавление новой кассы';
+            return this.isEdit ? this.$lang.editingCashbox : this.$lang.addingNewCashbox;
         },
 
         buttonTitle() {
-            return this.isEdit ? 'Сохранить' : 'Добавить';
+            return this.isEdit ? this.$lang.save : this.$lang.add;
         },
     },
 

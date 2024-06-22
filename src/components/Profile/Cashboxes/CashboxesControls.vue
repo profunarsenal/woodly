@@ -8,7 +8,7 @@
                 )
                 v-tooltip.tooltip(
                     position="right"
-                    text="Информация о тарифах"
+                    :text="$lang.tariffInformation"
                 )
             .control
                 button-mini(
@@ -17,7 +17,7 @@
                 )
                 v-tooltip.tooltip(
                     position="right"
-                    text="Редактировать кассу"
+                    :text="$lang.editCashbox"
                 )
 </template>
 

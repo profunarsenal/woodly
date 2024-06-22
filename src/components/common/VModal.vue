@@ -41,6 +41,7 @@ export default {
         ModalUser: defineAsyncComponent(() => import('@/components/Profile/Users/ModalUser.vue')),
         ModalCashbox: defineAsyncComponent(() => import('@/components/Profile/Cashboxes/ModalCashbox.vue')),
         ModalPayoutInfo: defineAsyncComponent(() => import('@/components/Profile/Payouts/ModalInfo.vue')),
+        ModalCreatePayout: defineAsyncComponent(() => import('@/components/Profile/Payouts/ModalCreatePayout.vue')),
     },
 
     computed: {

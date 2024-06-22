@@ -43,7 +43,7 @@ export default {
         },
 
         tooltipText() {
-            return this.isVisible ? 'Скрыть API' : 'Показать API';
+            return this.isVisible ? this.$lang.hideApi : this.$lang.showApi;
         },
     },
 

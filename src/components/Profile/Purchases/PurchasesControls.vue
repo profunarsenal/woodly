@@ -9,7 +9,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Принять сделку"
+                        :text="$lang.acceptDeal"
                     )
                     popup-confirm.popup(
                         v-if="popup.accept.isOpen"
@@ -25,7 +25,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Подтвердить сделку"
+                        :text="$lang.confirmDeal"
                     )
                     popup-confirm.popup(
                         v-if="popup.confirm.isOpen"
@@ -39,7 +39,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Отменить сделку"
+                        :text="$lang.cancelDeal"
                     )
                     popup-confirm.popup(
                         v-if="popup.cancel.isOpen"
@@ -53,7 +53,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Прикрепить чек"
+                        :text="$lang.attachCheck"
                     )
     template(v-else-if="isSuccessfulStatus")
         td.tbody-item
@@ -65,7 +65,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Посмотреть чек"
+                        :text="$lang.viewCheck"
                     )
     template(v-else)
         td.tbody-item
@@ -107,26 +107,26 @@ export default {
                 },
             },
             popupAcceptComponentData: {
-                title: 'Принять сделку',
-                subtitle: 'Вы уверены, что хотите принять сделку?',
-                buttonCancel: 'Отменить',
-                buttonConfirm: 'Принять',
+                title: this.$lang.acceptDeal,
+                subtitle: this.$lang.areYouSureYouWantAcceptDeal,
+                buttonCancel: this.$lang.cancel,
+                buttonConfirm: this.$lang.accept,
                 callbackConfirm: () => this.accept(),
                 callbackCancel: () => this.closePopup('accept'),
             },
             popupConfirmComponentData: {
-                title: 'Подтвердить сделку',
-                subtitle: 'Вы уверены, что хотите подтвердить сделку?',
-                buttonCancel: 'Отменить',
-                buttonConfirm: 'Подтвердить',
+                title: this.$lang.confirmDeal,
+                subtitle: this.$lang.areYouSureYouWantConfirmDeal,
+                buttonCancel: this.$lang.cancel,
+                buttonConfirm: this.$lang.confirm,
                 callbackConfirm: () => this.confirm(),
                 callbackCancel: () => this.closePopup('confirm'),
             },
             popupCancelComponentData: {
-                title: 'Отменить сделку',
-                subtitle: 'Вы уверены, что хотите отменить сделку?',
-                buttonCancel: 'Закрыть',
-                buttonConfirm: 'Отменить сделку',
+                title: this.$lang.cancelDeal,
+                subtitle: this.$lang.areYouSureYouWantCancelDeal,
+                buttonCancel: this.$lang.close,
+                buttonConfirm: this.$lang.cancelDeal,
                 callbackConfirm: () => this.cancel(),
                 callbackCancel: () => this.closePopup('cancel'),
             },

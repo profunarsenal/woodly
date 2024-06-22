@@ -6,84 +6,85 @@
         .form
             v-input(
                 v-model="form.title"
-                label="Название карты"
-                placeholder="Введите название карты"
+                :label="$lang.cardName"
+                :placeholder="$lang.enterCardName"
             )
             v-input(
                 v-model="form.cardNumber"
                 v-mask="'#### #### #### ####'"
-                label="Номер карты"
+                :label="$lang.cardNumber"
                 placeholder="0000 0000 0000 0000"
             )
             v-input(
                 v-model="form.fio"
-                label="ФИО владельца карты"
-                placeholder="Введите ФИО владельца карты"
+                :label="$lang.fullNameCardOwner"
+                :placeholder="$lang.enterFullNameCardOwner"
             )
             v-dropdown(
                 v-model="form.bankType"
                 :list="banks"
-                label="Банк"
-                placeholder="Выберите банк"
+                :label="$lang.bank"
+                :placeholder="$lang.chooseBank"
             )
             v-dropdown(
                 v-model="form.processMethod"
                 :list="processMethods"
-                label="Метод обработки"
-                placeholder="Выберите метод обработки"
+                :label="$lang.processingMethod"
+                :placeholder="$lang.chooseProcessingMethod"
             )
             v-dropdown(
                 v-model="form.currency"
                 :list="currencies"
-                label="Валюта карты"
-                placeholder="Выберите валюту карты"
+                :label="$lang.cardCurrency"
+                :placeholder="$lang.chooseCardCurrency"
             )
             v-input(
                 v-if="isEdit"
                 v-model="form.deviceId"
-                label="ID устройства"
-                placeholder="ID устройства"
+                :label="$lang.deviceId"
+                :placeholder="$lang.deviceId"
             )
             v-input(
                 v-model="form.apiKey"
-                label="API KEY"
-                placeholder="API KEY"
+                :label="$lang.apiKey"
+                :placeholder="$lang.apiKey"
             )
             v-dropdown(
                 v-model="form.slotSim"
                 :list="slotsSim"
-                label="Слот для SIM"
-                placeholder="Выберите cлот для SIM"
+                :label="$lang.slotSim"
+                :placeholder="$lang.chooseSlotSim"
             )
             .checkboxes
                 v-checkbox(
                     v-model="form.isSbp"
                     id="sbp"
-                    label="Разрешить перевод по СБП"
+                    :label="$lang.allowTransferSbp"
                 )
             v-input(
                 v-model="form.phone"
                 v-mask="'+7(###)-###-##-##'"
-                label="СБП телефон"
-                placeholder="Введите телефон"
+                :label="$lang.sbpPhone"
+                :placeholder="$lang.enterPhone"
             )
             v-input(
                 v-model="form.recipient"
-                label="СБП имя получателя"
-                placeholder="Введите имя получателя"
+                :label="$lang.sbpRecipientName"
+                :placeholder="$lang.enterRecipientName"
             )
         v-button.button(
             :isLoading="isPending"
             @click="save"
-        ) Сохранить
+        ) {{ $lang.save }}
 </template>
 
 <script>
+import { mask } from 'vue-the-mask';
+
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VDropdown from '@/components/common/VDropdown.vue';
 import VCheckbox from '@/components/common/VCheckbox.vue';
-import { mask } from 'vue-the-mask';
 
 import { BANKS, PROCESS_METHODS, CURRENСIES, SLOTS_SIM } from '@/helpers/testData';
 
@@ -112,7 +113,7 @@ export default {
         },
 
         title() {
-            return this.isEdit ? 'Редактирование карты' : 'Добавление новой карты';
+            return this.isEdit ? this.$lang.editingCard : this.$lang.addingNewCard;
         },
 
         cardId() {

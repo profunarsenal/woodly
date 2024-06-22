@@ -2,29 +2,29 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title Установка лимитов
+        .title {{ $lang.settingsLimit }}
         .form
             v-input(
                 v-model="form.paymentsLimitPerDay"
-                label="Суточный оборот"
+                :label="$lang.dailyTurnover"
                 type="number"
             )
             v-input(
                 v-model="form.transactionsLimitPerDay"
-                label="Максимальное количество платежей (сутки)"
+                :label="$lang.maxCountTransactionsDay"
                 type="number"
             )
             v-input(
                 v-model="form.paymentMin"
-                label="Минимальный платеж"
+                :label="$lang.minPayment"
                 type="number"
             )
             v-input(
                 v-model="form.paymentMax"
-                label="Максимальный платеж"
+                :label="$lang.maxPayment"
                 type="number"
             )
-        v-button.button(@click="saveLimit") Подтвердить
+        v-button.button(@click="saveLimit") {{ $lang.confirm }}
 </template>
 
 <script>

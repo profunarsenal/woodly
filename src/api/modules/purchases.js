@@ -7,6 +7,10 @@ export default class Purchases extends AbstractService {
         return new PurchasesModel(data);
     };
 
+    async createPurchase(params) {
+        return await this.axios.post('/purchases/create', params);
+    };
+
     async exportPurchases(params) {
         return await this.axios.get('/purchases/export', {
             params,
