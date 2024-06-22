@@ -104,4 +104,8 @@ export default {
     exchangeCurrencies: 'Курсы валют',
     allPayouts: 'Все выплаты',
     payoutInformation: 'Информация о выплате',
+    cashbox: 'Касса',
+    all: 'Все',
+    exportData: 'Экспорт данных',
+    date: 'Дата',
 };

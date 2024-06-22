@@ -68,6 +68,7 @@ import PayoutsControls from '@/components/Profile/Payouts/PayoutsControls.vue';
 
 import { PAYOUTS_STATUSES } from '@/helpers/catalogs';
 import { PAYOUTS } from '@/helpers/table';
+import { downloadFile } from '@/helpers/url';
 
 export default {
     name: 'ProfilePayments',
@@ -100,6 +101,7 @@ export default {
         ...mapState({
             payouts: ({ purchases }) => purchases.purchases,
             pagination: ({ purchases }) => purchases.pagination,
+            cashboxes: ({ cashboxes }) => cashboxes.cashboxes,
         }),
     },
 
@@ -132,8 +134,28 @@ export default {
             return statusItem[key] || '';
         },
 
+        async exportPayouts(params) {
+            try {
+                const { data: blob } = await this.$api.purchases.exportPurchases(params);
+                downloadFile(blob, 'payouts.xlsx');
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         openModalCreatePayout() {},
-        openModalExport() {},
+
+        openModalExport() {
+            this.$store.commit('modal/open', {
+                component: 'ModalExport',
+                positionCenter: true,
+                componentData: {
+                    callback: (params) => this.exportPayouts(params),
+                    cashboxes: this.cashboxes,
+                },
+            });
+        },
+
         openCurrencies() {},
     },
 
@@ -149,6 +171,10 @@ export default {
 
     async created() {
         await this.getPayouts();
+
+        if (!this.cashboxes.length) {
+            await this.$store.dispatch('cashboxes/getCashboxes');
+        }
     },
 };
 </script>

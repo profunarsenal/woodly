@@ -24,8 +24,21 @@ export default {
         VTooltip,
     },
 
+    props: {
+        item: {
+            type: Object,
+            default: () => ({}),
+        },
+    },
+
     methods: {
-        openModalInfo() {},
+        openModalInfo() {
+            this.$store.commit('modal/open', {
+                component: 'ModalPayoutInfo',
+                positionCenter: true,
+                componentData: this.item,
+            });
+        },
     },
 };
 </script>

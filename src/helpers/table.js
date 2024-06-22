@@ -80,3 +80,11 @@ export const PAYOUTS = [
     { title: 'Статус', key: 'status' },
     { title: 'Дата', key: 'dateCreate' },
 ];
+
+export const PAYOUTS_INFO = [
+    { title: 'Номер заказа', key: 'orderNumber' },
+    { title: 'Реквизит', key: 'requisites' },
+    { title: 'Дата создания', key: 'dateCreate' },
+    { title: 'Дата выплаты', key: '' },
+    { title: 'Сумма зачисления', key: '' },
+];

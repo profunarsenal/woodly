@@ -1,5 +1,5 @@
 <template lang="pug">
-    .datepicker
+    .datepicker(:class="datepickerClasses")
         .label(v-if="label") {{ label }}
         vue-date-picker(
             v-model="date"
@@ -7,12 +7,15 @@
             :format="format"
             :min-date="minDate"
             :max-date="maxDate"
+            :placeholder="placeholder"
+            :range="isRange"
             auto-apply
             position="left"
             locale="ru"
-            placeholder="ДД/ММ/ГГ"
             menu-class-name="datepicker-menu"
             input-class-name="datepicker-input"
+            @open="open"
+            @closed="close"
         )
             template(#arrow-left)
                 inline-svg.arrow.arrow-left(src="/icons/chevron.svg")
@@ -48,8 +51,13 @@ export default {
             default: '',
         },
 
+        placeholder: {
+            type: String,
+            default: 'ДД/ММ/ГГ',
+        },
+
         modelValue: {
-            type: [null, Date],
+            type: [null, Date, Array],
             default: null,
         },
 
@@ -62,13 +70,49 @@ export default {
             type: [Date],
             default: null,
         },
+
+        isRange: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
         return {
             date: this.modelValue,
-            format: formatDate,
+            isOpen: false,
         };
+    },
+
+    computed: {
+        datepickerClasses() {
+            return {
+                focus: this.isOpen,
+            };
+        },
+    },
+
+    methods: {
+        getFormat() {
+            if (!this.date) {
+                return this.date;
+            }
+
+            if (this.isRange && this.date.length) {
+                const [dateFrom, dateTo] = this.date;
+                return `${formatDate(dateFrom)} — ${formatDate(dateTo)}` ;
+            }
+
+            return formatDate(this.date);
+        },
+
+        open() {
+            this.isOpen = true;
+        },
+
+        close() {
+            this.isOpen = false;
+        },
     },
 
     watch: {
@@ -80,10 +124,25 @@ export default {
             this.$emit('update:modelValue', newDate);
         },
     },
+
+    created() {
+        this.format = this.getFormat(this.date);
+    },
 };
 </script>
 
 <style lang="sass">
+.datepicker
+    &.focus
+        .datepicker-input
+            border: 0.1rem solid $color-violet-100
+            @media(any-hover:hover)
+                &:hover
+                    border: 0.1rem solid $color-violet-100
+        .calendar,
+        .clear
+            fill: $color-violet-100
+
 .label
     font-size: 1.4rem
     line-height: 2rem
@@ -96,6 +155,13 @@ export default {
     font-size: 1.6rem
     line-height: 2.4rem
     padding: 1.2rem 1.2rem 1.2rem 4rem
+    border: none
+    background-color: $color-gray-light
+    border: 0.1rem solid $color-gray-light
+    transition: none
+    @media(any-hover:hover)
+        &:hover
+            border: 0.1rem solid $color-gray-100
 
 .dp__main
     .dp__input_icon,
@@ -129,11 +195,27 @@ export default {
         color: $color-black
     .dp__cell_offset
         color: $color-silver-light
+    .dp__range_start
+        background-color: $color-violet-100
+        border-radius: 1rem 0 0 1rem
+        color: $color-white
+        border: none
+    .dp__range_between
+        background-color: rgba($color-violet-100, 0.1)
+        color: $color-black
+        border: none
+    .dp__range_end
+        background-color: $color-violet-100
+        border-radius: 0 1rem 1rem 0
+        color: $color-white
+        border: none
     .dp__today
         color: $color-violet-100
         background-color: rgba($color-violet-100, 0.1)
         border: none
         border-radius: 1rem
+        &.dp__range_between
+            border-radius: 0
     .dp__active_date,
     .dp__overlay_cell_active
         border: none
@@ -148,12 +230,13 @@ export default {
     .dp__overlay_cell:hover,
     .dp__button:hover,
     .dp--arrow-btn-nav:hover
-        color: $color-black
-        background-color: $color-gray-light
-        border: none
-        border-radius: 1rem
-        .arrow
-            fill: $color-gray-dark
+        &:not(.dp__range_between)
+            color: $color-black
+            background-color: $color-gray-light
+            border: none
+            border-radius: 1rem
+            .arrow
+                fill: $color-gray-dark
     .dp__arrow_top,
     .dp__calendar_header_separator
         display: none

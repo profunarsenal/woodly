@@ -21,6 +21,7 @@ export default {
     components: {
         ModalConfirm: defineAsyncComponent(() => import('@/components/app/ModalConfirm.vue')),
         ModalImage: defineAsyncComponent(() => import('@/components/app/ModalImage.vue')),
+        ModalExport: defineAsyncComponent(() => import('@/components/Profile/ModalExport.vue')),
         ModalCancelPayment: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalCancel.vue')),
         ModalInsurance: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalInsurance.vue')),
         ModalQR: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalQR.vue')),
@@ -39,6 +40,7 @@ export default {
         ModalAttachingCheck: defineAsyncComponent(() => import('@/components/Profile/Purchases/ModalAttachingCheck.vue')),
         ModalUser: defineAsyncComponent(() => import('@/components/Profile/Users/ModalUser.vue')),
         ModalCashbox: defineAsyncComponent(() => import('@/components/Profile/Cashboxes/ModalCashbox.vue')),
+        ModalPayoutInfo: defineAsyncComponent(() => import('@/components/Profile/Payouts/ModalInfo.vue')),
     },
 
     computed: {
