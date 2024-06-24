@@ -96,6 +96,7 @@ export default {
     flex-direction: column
     gap: 0.6rem
     .label
+        align-self: flex-start
         font-size: 1.4rem
         line-height: 2rem
         color: $color-gray-dark

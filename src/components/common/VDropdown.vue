@@ -108,6 +108,7 @@ export default {
     flex-direction: column
     gap: 0.6rem
     .label
+        align-self: flex-start
         font-size: 1.4rem
         line-height: 2rem
         color: $color-gray-dark
@@ -146,9 +147,11 @@ export default {
             transition: transform 0.3s ease
     .list-wrapper
         position: absolute
-        z-index: 10
+        z-index: 20
         top: calc( 100% + 0.4rem )
         width: 100%
+        max-height: 21.6rem
+        overflow-y: auto
         padding: 0.8rem
         border-radius: 1.2rem
         background-color: $color-white

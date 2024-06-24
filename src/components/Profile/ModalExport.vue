@@ -55,10 +55,10 @@ export default {
     computed: {
         cashboxesList() {
             const cashboxes = this.componentData?.cashboxes || [];
-            const cashboxesList = cashboxes.map((cashbox) => {
+            const cashboxesList = cashboxes.map(({ cashboxId, title }) => {
                 return {
-                    id: cashbox.cashboxId,
-                    title: cashbox.title,
+                    id: cashboxId,
+                    title,
                 };
             });
 

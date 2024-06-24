@@ -82,11 +82,11 @@ export default {
         line-height: 3.2rem
 
 .pagination
-    position: fixed
+    position: absolute
     bottom: 3.8rem
     right: 0
     width: calc( 100% - 22rem )
-    z-index: 50
+    z-index: 10
 
 .loader
     display: flex
@@ -96,9 +96,9 @@ export default {
     fill: $color-violet-100
 
 .footer
-    position: fixed
+    position: absolute
     bottom: 0
     right: 0
     width: calc( 100% - 22rem )
-    z-index: 50
+    z-index: 10
 </style>

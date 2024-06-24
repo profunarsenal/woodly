@@ -183,4 +183,10 @@ export default {
     areYouSureYouWantConfirmDeal: 'Вы уверены, что хотите принять сделку?',
     areYouSureYouWantCancelDeal: 'Вы уверены, что хотите отменить сделку?',
     close: 'Закрыть',
+    id: 'ID',
+    paymentStatus: 'Статус платежа',
+    apply: 'Применить',
+    order: 'Заказ',
+    enterPaymentId: 'Введите ID платежа',
+    paymentMethod: 'Метод оплаты',
 };

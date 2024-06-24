@@ -70,17 +70,24 @@ export default {
     .icon
         width: 2rem
         height: 2rem
-    &.medium
+    &.large
         height: 4.4rem
-    &.small
+    &.medium
         height: 4rem
         .icon
             width: 1.6rem
             height: 1.6rem
-    &.mini
-        height: 3.4rem
+    &.small
         font-size: 1.2rem
         line-height: 1.8rem
+        height: 3.4rem
+        .icon
+            width: 1.6rem
+            height: 1.6rem
+    &.mini
+        height: 2.4rem
+        font-size: 1rem
+        line-height: 1.4rem
     &.primary
         background-color: $color-violet-100
         color: $color-white

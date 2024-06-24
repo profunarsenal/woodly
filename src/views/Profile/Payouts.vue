@@ -20,7 +20,61 @@
                     ) {{ $lang.exchangeCurrencies }}
 
                 .right-controls
-                    v-search(v-model="searchField")
+                    keep-alive
+                        v-search(
+                            v-model="searchField"
+                            :filtersCount="filtersCount.length"
+                        )
+                            template(#filters)
+                                .filters-block
+                                    .filters
+                                        v-input(
+                                            v-model="filters.purchaseId"
+                                            :label="$lang.id"
+                                            :placeholder="$lang.enterPaymentId"
+                                        )
+                                        v-dropdown(
+                                            v-model="filters.status"
+                                            :list="listsForFilters.statuses"
+                                            :label="$lang.paymentStatus"
+                                        )
+                                        v-input(
+                                            v-model="filters.orderNumber"
+                                            :label="$lang.order"
+                                            :placeholder="$lang.enterOrderNumber"
+                                        )
+                                        v-dropdown(
+                                            v-model="filters.paymentSystem"
+                                            :list="listsForFilters.paymentSystems"
+                                            :label="$lang.paymentMethod"
+                                        )
+                                        v-input(
+                                            v-model="filters.requisites"
+                                            :label="$lang.recipientRequisites"
+                                            :placeholder="$lang.enterRecipientRequisites"
+                                        )
+                                        v-dropdown(
+                                            v-model="filters.cashbox"
+                                            :list="listsForFilters.cashboxes"
+                                            :label="$lang.cashbox"
+                                        )
+                                        v-dropdown(
+                                            v-model="filters.bankType"
+                                            :list="listsForFilters.banks"
+                                            :label="$lang.bank"
+                                        )
+                                    .filters-buttons
+                                        v-button(
+                                            type="secondary"
+                                            size="large"
+                                            :isDisabled="!filtersCount.length"
+                                            @click="resetFilters"
+                                        ) {{ $lang.reset }}
+                                        v-button(
+                                            size="large"
+                                            :isDisabled="!filtersCount.length"
+                                            @click="applyFilters"
+                                        ) {{ $lang.apply }}
 
                     v-button(
                         type="outline"
@@ -65,10 +119,23 @@ import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 import PayoutsControls from '@/components/Profile/Payouts/PayoutsControls.vue';
+import VInput from '@/components/common/VInput.vue';
+import VDropdown from '@/components/common/VDropdown.vue';
 
 import { PAYOUTS_STATUSES } from '@/helpers/catalogs';
 import { PAYOUTS } from '@/helpers/table';
 import { downloadFile } from '@/helpers/url';
+import { BANKS } from '@/helpers/testData';
+
+const FILTERS = {
+    purchaseId: '',
+    status: 0,
+    orderNumber: '',
+    paymentSystem: 0,
+    requisites: '',
+    cashbox: 0,
+    bankType: 0,
+};
 
 export default {
     name: 'ProfilePayments',
@@ -81,6 +148,8 @@ export default {
         VTable,
         TableDate,
         PayoutsControls,
+        VInput,
+        VDropdown,
     },
 
     data() {
@@ -94,6 +163,7 @@ export default {
             tableHeaders: PAYOUTS,
             isLoading: false,
             urlParams: Object.assign({}, this.$route.query),
+            filters: Object.assign({}, FILTERS),
         };
     },
 
@@ -103,6 +173,31 @@ export default {
             pagination: ({ purchases }) => purchases.pagination,
             cashboxes: ({ cashboxes }) => cashboxes.cashboxes,
         }),
+
+        listsForFilters() {
+            const FIRST_ELEMENT = { id: 0, title: this.$lang.all };
+            const statuses = Object.values(PAYOUTS_STATUSES).map(({ id, title }) => {
+                return { id, title };
+            });
+            const paymentSystems = [];
+            const cashboxes = this.cashboxes.map(({ cashboxId, title }) => {
+                return {
+                    id: cashboxId,
+                    title,
+                };
+            });
+
+            return {
+                statuses: [ FIRST_ELEMENT, ...statuses ],
+                paymentSystems: [ FIRST_ELEMENT, ...paymentSystems ],
+                cashboxes: [ FIRST_ELEMENT, ...cashboxes ],
+                banks: [ FIRST_ELEMENT, ...BANKS ],
+            };
+        },
+
+        filtersCount() {
+            return Object.values(this.filters).filter(filter => filter);
+        },
     },
 
     methods: {
@@ -164,6 +259,38 @@ export default {
         },
 
         openCurrencies() {},
+
+        resetFilters() {
+            this.filters = Object.assign({}, FILTERS);
+
+            for (const filter in this.filters) {
+                if (this.urlParams[filter]) {
+                    delete this.urlParams[filter];
+                }
+            }
+
+            this.$router.push({ query: this.urlParams });
+        },
+
+        applyFilters() {
+            for (const filter in this.filters) {
+                if (this.filters[filter]) {
+                    this.urlParams[filter] = this.filters[filter];
+                }
+            }
+
+            this.$router.push({ query: this.urlParams });
+        },
+
+        setFilters() {
+            for (const filter in this.filters) {
+                if (this.urlParams[filter]) {
+                    this.filters[filter] = Number.isFinite(this.filters[filter]) ?
+                        +this.urlParams[filter]:
+                        this.urlParams[filter];
+                }
+            }
+        },
     },
 
     watch: {
@@ -183,6 +310,10 @@ export default {
             await this.$store.dispatch('cashboxes/getCashboxes');
         }
     },
+
+    mounted() {
+        this.setFilters();
+    },
 };
 </script>
 
@@ -199,6 +330,27 @@ export default {
 
 .table-tabs
     margin-bottom: 0.8rem
+
+.filters-block
+    position: absolute
+    z-index: 50
+    top: 4.4rem
+    right: 0
+    width: 67.2rem
+    display: flex
+    flex-direction: column
+    gap: 2.4rem
+    background-color: $color-white
+    border: 0.1rem solid $color-gray-100
+    border-radius: 2rem
+    padding: 1.2rem 1.6rem 1.6rem 1.6rem
+    .filters,
+    .filters-buttons
+        display: flex
+        flex-wrap: wrap
+        gap: 1.2rem
+        > *
+            flex: 0 0 calc( 50% - 0.6rem)
 
 .status
     display: flex

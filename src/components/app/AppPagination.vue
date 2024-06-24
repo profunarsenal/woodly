@@ -1,9 +1,9 @@
 <template lang="pug">
     .pagination
         .info
-            .title {{ $lang.pagination.total }}
+            .title {{ $lang.pagination.total }} 
                 span.count {{ total }}
-            .title {{ $lang.pagination.shownOnPage }}
+            .title {{ $lang.pagination.shownOnPage }} 
                 span.count {{ count }}
         .navigation
             ul.items
