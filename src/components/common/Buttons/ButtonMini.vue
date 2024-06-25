@@ -30,7 +30,8 @@ export default {
         @media(any-hover:hover)
             &:hover
                 &.confirm,
-                &.decline
+                &.decline,
+                &.redirect
                     &:deep(rect)
                         fill-opacity: 1
                 &.add,

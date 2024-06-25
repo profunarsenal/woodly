@@ -20,61 +20,61 @@
                     ) {{ $lang.exchangeCurrencies }}
 
                 .right-controls
-                    keep-alive
-                        v-search(
-                            v-model="searchField"
-                            :filtersCount="filtersCount.length"
-                        )
-                            template(#filters)
-                                .filters-block
-                                    .filters
-                                        v-input(
-                                            v-model="filters.purchaseId"
-                                            :label="$lang.id"
-                                            :placeholder="$lang.enterPaymentId"
-                                        )
-                                        v-dropdown(
-                                            v-model="filters.status"
-                                            :list="listsForFilters.statuses"
-                                            :label="$lang.paymentStatus"
-                                        )
-                                        v-input(
-                                            v-model="filters.orderNumber"
-                                            :label="$lang.order"
-                                            :placeholder="$lang.enterOrderNumber"
-                                        )
-                                        v-dropdown(
-                                            v-model="filters.paymentSystem"
-                                            :list="listsForFilters.paymentSystems"
-                                            :label="$lang.paymentMethod"
-                                        )
-                                        v-input(
-                                            v-model="filters.requisites"
-                                            :label="$lang.recipientRequisites"
-                                            :placeholder="$lang.enterRecipientRequisites"
-                                        )
-                                        v-dropdown(
-                                            v-model="filters.cashbox"
-                                            :list="listsForFilters.cashboxes"
-                                            :label="$lang.cashbox"
-                                        )
-                                        v-dropdown(
-                                            v-model="filters.bankType"
-                                            :list="listsForFilters.banks"
-                                            :label="$lang.bank"
-                                        )
-                                    .filters-buttons
-                                        v-button(
-                                            type="secondary"
-                                            size="large"
-                                            :isDisabled="!filtersCount.length"
-                                            @click="resetFilters"
-                                        ) {{ $lang.reset }}
-                                        v-button(
-                                            size="large"
-                                            :isDisabled="!filtersCount.length"
-                                            @click="applyFilters"
-                                        ) {{ $lang.apply }}
+                    v-search(
+                        v-model="searchField"
+                        :filtersCount="appliedfilters"
+                        @toggleFilters="setFilters"
+                    )
+                        template(#filters)
+                            .filters-block
+                                .filters
+                                    v-input(
+                                        v-model="filters.purchaseId"
+                                        :label="$lang.id"
+                                        :placeholder="$lang.enterPaymentId"
+                                    )
+                                    v-dropdown(
+                                        v-model="filters.status"
+                                        :list="listsForFilters.statuses"
+                                        :label="$lang.paymentStatus"
+                                    )
+                                    v-input(
+                                        v-model="filters.orderNumber"
+                                        :label="$lang.order"
+                                        :placeholder="$lang.enterOrderNumber"
+                                    )
+                                    v-dropdown(
+                                        v-model="filters.paymentSystem"
+                                        :list="listsForFilters.paymentSystems"
+                                        :label="$lang.paymentMethod"
+                                    )
+                                    v-input(
+                                        v-model="filters.requisites"
+                                        :label="$lang.recipientRequisites"
+                                        :placeholder="$lang.enterRecipientRequisites"
+                                    )
+                                    v-dropdown(
+                                        v-model="filters.cashbox"
+                                        :list="listsForFilters.cashboxes"
+                                        :label="$lang.cashbox"
+                                    )
+                                    v-dropdown(
+                                        v-model="filters.bankType"
+                                        :list="listsForFilters.banks"
+                                        :label="$lang.bank"
+                                    )
+                                .filters-buttons
+                                    v-button(
+                                        type="secondary"
+                                        size="large"
+                                        :isDisabled="!filtersCount.length"
+                                        @click="resetFilters"
+                                    ) {{ $lang.reset }}
+                                    v-button(
+                                        size="large"
+                                        :isDisabled="!filtersCount.length"
+                                        @click="applyFilters"
+                                    ) {{ $lang.apply }}
 
                     v-button(
                         type="outline"
@@ -164,6 +164,7 @@ export default {
             isLoading: false,
             urlParams: Object.assign({}, this.$route.query),
             filters: Object.assign({}, FILTERS),
+            appliedfilters: 0,
         };
     },
 
@@ -266,6 +267,7 @@ export default {
             for (const filter in this.filters) {
                 if (this.urlParams[filter]) {
                     delete this.urlParams[filter];
+                    this.appliedfilters--;
                 }
             }
 
@@ -276,6 +278,7 @@ export default {
             for (const filter in this.filters) {
                 if (this.filters[filter]) {
                     this.urlParams[filter] = this.filters[filter];
+                    this.appliedfilters++;
                 }
             }
 
@@ -290,6 +293,8 @@ export default {
                         this.urlParams[filter];
                 }
             }
+
+            this.appliedfilters = this.filtersCount.length;
         },
     },
 

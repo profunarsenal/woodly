@@ -37,7 +37,7 @@
 export default {
     name: 'VSearch',
 
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'toggleFilters'],
 
     props: {
         modelValue: {
@@ -87,6 +87,7 @@ export default {
 
         toggleFilters() {
             this.isOpened = !this.isOpened;
+            this.$emit('toggleFilters');
         },
     },
 };

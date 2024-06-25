@@ -189,4 +189,9 @@ export default {
     order: 'Заказ',
     enterPaymentId: 'Введите ID платежа',
     paymentMethod: 'Метод оплаты',
+    confirmPayout: 'Подтвердить выплату',
+    cancelPayout: 'Отменить выплату',
+    areYouSureYouWantConfirmPayout: 'Вы уверены, что хотите подтвердить выплату?',
+    areYouSureYouWantCancelPayout: 'Вы уверены, что хотите отменить выплату?',
+    redirectPayout: 'Перенаправить выплату',
 };

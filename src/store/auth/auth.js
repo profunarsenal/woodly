@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash';
 import ApiModule from '@/api/apiModule';
 import request from '@/helpers/http';
+import { ROLES } from '@/helpers/constants';
 
 const api = new ApiModule();
 
@@ -23,6 +24,10 @@ export default {
 
         role(state) {
             return localStorage.getItem('role') || state.user?.role || '';
+        },
+
+        isAdmin(_, getters) {
+            return getters.role === ROLES.admin;
         },
     },
 

@@ -3,13 +3,26 @@
 </template>
 
 <script>
-import { API } from '@/helpers/constants';
+import { mapGetters } from 'vuex';
+import { API, USER_PAGES } from '@/helpers/constants';
 
 export default {
     name: 'HomeView',
 
+    computed: {
+        ...mapGetters({
+            isAuth: 'auth/isAuth',
+            role: 'auth/role',
+        }),
+    },
+
     mounted() {
-        this.$router.push(API.profile.cards);
+        if (!this.isAuth) {
+            this.$router.push(API.auth);
+        } else {
+            const [firstPage] = USER_PAGES[this.role];
+            this.$router.push(firstPage.path);
+        }
     },
 };
 </script>
