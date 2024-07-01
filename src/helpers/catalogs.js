@@ -170,3 +170,37 @@ export const PAYOUTS_STATUSES = {
         id: 4,
     },
 };
+
+export const PAYMENTS_STATUSES = {
+    waiting: {
+        key: 'waiting',
+        icon: '/icons/time.svg',
+        title: 'Ожидаем оплату',
+        color: 'yellow',
+        id: 2,
+    },
+
+    review: {
+        key: 'review',
+        icon: '/icons/spinner.svg',
+        title: 'На проверке',
+        color: 'blue',
+        id: 3,
+    },
+
+    cancelled: {
+        key: 'cancelled',
+        icon: '/icons/close.svg',
+        title: 'Отменен',
+        color: 'red',
+        id: 4,
+    },
+
+    completed: {
+        key: 'completed',
+        icon: '/icons/checkbox-mark.svg',
+        title: 'Выполнен',
+        color: 'green',
+        id: 5,
+    },
+};

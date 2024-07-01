@@ -17,8 +17,16 @@ export default class Cards extends AbstractService {
         return await this.axios.patch('/cards/edit', form);
     };
 
-    async changeCardStatus(payload) {
-        return await this.axios.patch('/cards/change-status', payload);
+    async activateCard(cardId) {
+        return await this.axios.patch(`/cards/activate/${cardId}`);
+    };
+
+    async disableCard(cardId) {
+        return await this.axios.patch(`/cards/disable/${cardId}`);
+    };
+
+    async deleteCard(cardId) {
+        return await this.axios.patch(`/cards/delete/${cardId}`);
     };
 
     async setLimit(payload) {

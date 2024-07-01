@@ -10,8 +10,10 @@
         template(#content)
             .currencies
                 currency-block(
-                    imageSrc="/icons/currencies/rouble.svg"
+                    v-for="balance in balances"
+                    :key="balance.address"
                     :balance="balance"
+                    imageSrc="/icons/currencies/rouble.svg"
                 )
             .table-header
                 v-tabs.table-tabs(
@@ -99,7 +101,7 @@ export default {
     computed: {
         ...mapState({
             user: ({ auth }) => auth.user,
-            balance: ({ balance }) => balance.balance,
+            balances: ({ balance }) => balance.balances,
             balanceTransactions: ({ balance }) => balance.balanceTransactions,
             pagination: ({ balance }) => balance.pagination,
         }),

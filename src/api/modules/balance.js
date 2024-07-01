@@ -5,7 +5,7 @@ import BalanceTransactionsModel from "@/models/Balance/Transactions";
 export default class Balance extends AbstractService {
     async getBalance() {
         const { data } = await this.axios.get('/balance');
-        return new BalanceModel(data);
+        return data.map(item => new BalanceModel(item));
     };
 
     async getBalanceTransactions(params = {}) {

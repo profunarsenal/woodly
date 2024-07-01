@@ -35,9 +35,9 @@ export const CARD_MESSAGES = [
 ];
 
 export const BALANCE_TRANSACTIONS = [
-    { title: 'ID операции', key: '' },
+    { title: 'ID операции', key: 'transactionId' },
     { title: 'Тип операции', key: 'status' },
-    { title: 'ID платежа', key: 'transactionId' },
+    { title: 'ID платежа', key: 'paymentId' },
     { title: 'Сумма', key: 'amount' },
     { title: 'Дата и время', key: 'date' },
 ];

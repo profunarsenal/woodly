@@ -15,6 +15,12 @@
                 isRange
                 placeholder="ДД/ММ/ГГ — ДД/ММ/ГГ"
             )
+            v-dropdown(
+                v-if="statuses.length"
+                v-model="status"
+                :list="statuses"
+                :label="$lang.paymentStatus"
+            )
         v-button.button(
             :isLoading="isLoading"
             @click="callbackExport"
@@ -47,6 +53,7 @@ export default {
     data() {
         return {
             cashbox: 0,
+            status: 0,
             date: null,
             isLoading: false,
         };
@@ -66,6 +73,10 @@ export default {
                 { id: 0, title: this.$lang.all },
                 ...cashboxesList,
             ];
+        },
+
+        statuses() {
+            return this.componentData?.statuses || [];
         },
     },
 

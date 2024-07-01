@@ -6,7 +6,7 @@
             .item
                 .title {{ $lang.balanceInRubles }}
                 .balance
-                    .value {{ getCurrencyValue(balance.balanceRub) }}
+                    .value {{ getCurrencyValue(balance.balance) }}
                     .button
                         button-mini(
                             type="payout"
@@ -18,15 +18,15 @@
                         )
             .item
                 .title {{ $lang.frozen }}
-                .value {{ getCurrencyValue(balance.balanceRubFreeze) }}
+                .value {{ getCurrencyValue(balance.freeze) }}
             .item
                 .title {{ currencies.usdt }} / {{ currencies.rub }}
                 .currencies
                     .value {{ balance.rate }}
                     v-badge.percent(
-                        v-if="balance.percent"
+                        v-if="balance.ratePercent"
                         type="positive"
-                        :value="balance.percent"
+                        :value="percent"
                     )
 
                     .value
@@ -35,7 +35,7 @@
             .item
                 .title {{ titleCrypto }}
                 .crypto
-                    .value {{ balance.tokenId }}
+                    .value {{ balance.address }}
                     .button
                         button-mini(type="qr")
                         v-tooltip.table-tooltip.right(
@@ -80,6 +80,10 @@ export default {
     computed: {
         titleCrypto() {
             return `${this.$lang.yourWallet} ${this.currencies.usdt} (${this.crypto.trc}) ${this.currencies.rub}`;
+        },
+
+        percent() {
+            return `+${this.balance.ratePercent}%`;
         },
     },
 

@@ -9,6 +9,7 @@ class BalanceTransaction {
         this.status = getNumber(params.status);
         this.amount = getNumber(params.amount);
         this.date = getString(params.date);
+        this.paymentId = getString(params.paymentId);
     }
 };
 

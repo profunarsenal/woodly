@@ -6,14 +6,14 @@ export default {
     namespaced: true,
 
     state: {
-        balance: {},
+        balances: [],
         balanceTransactions: [],
         pagination: {},
     },
 
     mutations: {
-        setBalance(state, balance) {
-            state.balance = balance;
+        setBalances(state, balances) {
+            state.balances = balances;
         },
 
         setBalanceTransactions(state, balanceTransactions) {
@@ -28,8 +28,8 @@ export default {
     actions: {
         async getBalance({ commit }) {
             try {
-                const balance = await api.balance.getBalance();
-                commit('setBalance', balance);
+                const balances = await api.balance.getBalance();
+                commit('setBalances', balances);
             } catch (error) {
                 console.log(error);
             }

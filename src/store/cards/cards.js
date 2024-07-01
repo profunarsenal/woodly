@@ -32,11 +32,27 @@ export default {
             commit('setPagination', pagination);
         },
 
-        async changeStatus(_, params) {
+        async deleteCard(_, cardId) {
             try {
-                await api.cards.changeCardStatus(params);
+                await api.cards.deleteCard(cardId);
             } catch (error) {
-                console.log(error)
+                console.log(error);
+            }
+        },
+
+        async activateCard(_, cardId) {
+            try {
+                await api.cards.activateCard(cardId);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async disableCard(_, cardId) {
+            try {
+                await api.cards.disableCard(cardId);
+            } catch (error) {
+                console.log(error);
             }
         },
 
@@ -50,7 +66,7 @@ export default {
                 await api.auth.switchTransactionsFlag();
                 commit('setTransactionsStatus', !state.isWorkTransactions);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
         },
     },

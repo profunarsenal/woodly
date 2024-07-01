@@ -15,7 +15,6 @@
 <script>
 import VActionMenu from '@/components/common/VActionMenu.vue';
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
-import { CARD_STATUSES } from '@/helpers/catalogs';
 import { API } from '@/helpers/constants';
 
 export default {
@@ -142,7 +141,7 @@ export default {
                                 title: this.$lang.recoveringCard,
                                 subtitle: this.$lang.areYouSureYouWandRestoreCard(item.title, item.cardNumber),
                                 buttonConfirm: this.$lang.restore,
-                                callbackConfirm: () => this.deleteCard(),
+                                callbackConfirm: () => this.recoveryCard(),
                             },
                         });
                     },
@@ -163,26 +162,22 @@ export default {
         },
 
         async deleteCard() {
-            await this.$api.cards.changeCardStatus({
-                cardId: this.item?.cardId,
-                status: CARD_STATUSES.deleted,
-            });
-
-            this.$store.dispatch('cards/getCards', this.$route.query);
+            try {
+                await this.$store.dispatch('cards/deleteCard', this.item?.cardId);
+                await this.$store.dispatch('cards/getCards', this.$route.query);
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         async recoveryCard() {
-            await this.$api.cards.changeCardStatus({
-                cardId:  this.item?.cardId,
-                status: CARD_STATUSES.active,
-            });
-
-            this.$store.dispatch('cards/getCards', this.$route.query);
+            try {
+                await this.$store.dispatch('cards/activateCard', this.item?.cardId);
+                await this.$store.dispatch('cards/getCards', this.$route.query);
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
 };
 </script>
-
-<style lang="sass" scoped>
-
-</style>
