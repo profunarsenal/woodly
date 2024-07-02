@@ -93,25 +93,25 @@ export default {
     },
 
     methods: {
-        getFormat() {
-            if (!this.date) {
-                return this.date;
-            }
-
-            if (this.isRange && this.date.length) {
-                const [dateFrom, dateTo] = this.date;
-                return `${formatDate(dateFrom)} — ${formatDate(dateTo)}` ;
-            }
-
-            return formatDate(this.date);
-        },
-
         open() {
             this.isOpen = true;
         },
 
         close() {
             this.isOpen = false;
+        },
+
+        format() {
+            if (!this.date) {
+                return this.date;
+            }
+
+            if (this.isRange && this.date.length) {
+                const [dateFrom, dateTo] = this.date;
+                return `${formatDate(dateFrom)} — ${formatDate(dateTo)}`;
+            }
+
+            return formatDate(this.date);
         },
     },
 
@@ -123,10 +123,6 @@ export default {
         date(newDate) {
             this.$emit('update:modelValue', newDate);
         },
-    },
-
-    created() {
-        this.format = this.getFormat(this.date);
     },
 };
 </script>
