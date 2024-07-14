@@ -28,6 +28,11 @@
                 autocomplete="new-password"
                 isPassword
             )
+            v-input(
+                v-model="form.address"
+                label="Адрес кошелька"
+                placeholder="Введите адрес кошелька"
+            )
             v-dropdown(
                 v-model="form.role"
                 :list="typesAccount"
@@ -100,6 +105,7 @@ export default {
                 login: '',
                 password: '',
                 role: '',
+                address: '',
                 permissions: [],
             },
             checkboxes: {},
@@ -168,6 +174,7 @@ export default {
                 password: this.form.password,
                 role: this.form.role,
                 permissions: this.form.permissions,
+                address: this.form.address,
             };
 
             return this.$store.dispatch('users/editUser', user);
