@@ -61,6 +61,7 @@ export default {
 .search
     display: flex
     align-items: center
+    justify-content: space-between
     gap: 1.2rem
     cursor: pointer
     @media(any-hover:hover)

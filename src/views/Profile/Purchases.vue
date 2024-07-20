@@ -12,10 +12,12 @@
                     size="small"
                     @click="openExport"
                 ) {{ $lang.export }}
-                export-window(
+                range-window(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
-                    @unload="exportPurchases"
+                    isDate
+                    :applyButton="$lang.unload"
+                    @apply="exportPurchases"
                 )
 
         template(#content)
@@ -59,7 +61,7 @@ import debounce from 'lodash/debounce';
 
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
-import ExportWindow from '@/components/Profile/ExportWindow.vue';
+import RangeWindow from '@/components/app/RangeWindow.vue';
 import VTable from '@/components/common/VTable.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
@@ -77,7 +79,7 @@ export default {
     components: {
         ProfileWrapper,
         VButton,
-        ExportWindow,
+        RangeWindow,
         VTable,
         TableDate,
         VTabs,

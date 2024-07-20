@@ -3,7 +3,7 @@
         v-loader(size="big")
     .wrapper(v-else)
         table.table(
-            v-if="items.length || isSearch"
+            v-if="items.length || (isSearch || isActiveFilters)"
             cellspacing="0"
         )
             table-header(:headers="headers")
@@ -20,6 +20,12 @@
                         :item="item"
                         @input="search($event, item.key)"
                     )
+                    table-filter(
+                        v-else-if="item.filterable"
+                        :item="item"
+                    )
+                        template(#filter)
+                            slot(:name="`filter-${item.key}`")
                     slot(
                         v-else
                         :name="item.headerKey"
@@ -51,7 +57,7 @@
             name="empty"
         )
         empty-form(
-            v-if="!items.length && isSearch"
+            v-if="!items.length && (isSearch || isActiveFilters)"
             imageSrc="/images/empty/search.png"
             :title="$lang.nothingFound"
             :subtitle="$lang.tryChangingYourQuery"
@@ -63,6 +69,7 @@ import VLoader from '@//components/common/VLoader.vue';
 import TableHeader from '@/components/common/Table/TableHeader.vue';
 import TableItem from '@/components/common/Table/TableItem.vue';
 import TableSearch from '@/components/common/Table/TableSearch.vue';
+import TableFilter from '@/components/common/Table/TableFilter.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 
 export default {
@@ -72,6 +79,7 @@ export default {
         TableHeader,
         TableItem,
         TableSearch,
+        TableFilter,
         EmptyForm,
         VLoader,
     },
@@ -88,6 +96,11 @@ export default {
         },
 
         isLoading: {
+            type: Boolean,
+            default: false,
+        },
+
+        isActiveFilters: {
             type: Boolean,
             default: false,
         },

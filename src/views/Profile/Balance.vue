@@ -28,20 +28,24 @@
                         size="small"
                         @click="openExport"
                     ) {{ $lang.export }}
-                    export-window(
+                    range-window(
                         v-if="isOpenExport"
                         v-click-outside="closeExport"
-                        @unload="exportBalance"
+                        isDate
+                        :applyButton="$lang.unload"
+                        @apply="exportBalance"
                     )
             v-table.table(
                 :headers="tableHeaders"
                 :items="balanceTransactions"
                 :isLoading="isLoadingTransactions"
+                :isActiveFilters="isActiveFilters"
+                @search="search"
             )
                 template(#status="{ item }")
-                    .status(:class="setStatus(item.status, 'color')")
-                        inline-svg.status-icon(:src="setStatus(item.status, 'icon')")
-                        .status-text {{ setStatus(item.status, 'transactionTitle') }}
+                    .status(:class="getStatus(item.status).key")
+                        inline-svg.status-icon(:src="getStatus(item.status).icon")
+                        .status-text {{ getStatus(item.status).transactionTitle }}
                 template(#amount="{ item }")
                     .bank {{ getCurrencyValue(item.amount) }}
                 template(#date="{ item }")
@@ -49,10 +53,26 @@
                         v-if="item.date"
                         :date="item.date"
                     )
+                template(#filter-date="{ item }")
+                    range-window(
+                        isDate
+                        :value="[filters.dateStart, filters.dateEnd]"
+                        :applyButton="$lang.applyFilter"
+                        @apply="prepareFilterByDate"
+                    )
+                template(#filter-amount="{ item }")
+                    range-window(
+                        :labels="[$lang.amountFrom, $lang.amountUpTo]"
+                        :placeholders="[$lang.enterAmount, $lang.enterAmount]"
+                        :applyButton="$lang.applyFilter"
+                        :value="[filters.amountStart, filters.amountEnd]"
+                        @apply="prepareFilterByAmount"
+                    )
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
+import debounce from 'lodash/debounce';
 
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import CurrencyBlock from '@/components/Profile/Balance/CurrencyBlock.vue';
@@ -60,7 +80,7 @@ import VTable from '@/components/common/VTable.vue';
 import AppPagination from '@/components/app/AppPagination.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VButton from '@/components/common/VButton.vue';
-import ExportWindow from '@/components/Profile/ExportWindow.vue';
+import RangeWindow from '@/components/app/RangeWindow.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { BALANCE_TRANSACTIONS } from '@/helpers/table';
@@ -78,7 +98,7 @@ export default {
         AppPagination,
         VTabs,
         VButton,
-        ExportWindow,
+        RangeWindow,
         TableDate,
     },
 
@@ -87,14 +107,16 @@ export default {
             isLoading: false,
             isLoadingTransactions: false,
             isOpenExport: false,
+            isActiveFilters: false,
+            filters: {
+                dateStart: '',
+                dateEnd: '',
+            },
             urlParams: Object.assign({}, this.$route.query),
             tableHeaders: BALANCE_TRANSACTIONS,
             getCurrencyValue: getCurrencyValue,
             activeTab: 'all',
-            tableTabs: [
-                { key: 'all', title: this.$lang.allTransactions },
-                ...Object.values(BALANCE_STATUSES),
-            ],
+            search: debounce(this.searchOnTable, 500),
         };
     },
 
@@ -105,6 +127,17 @@ export default {
             balanceTransactions: ({ balance }) => balance.balanceTransactions,
             pagination: ({ balance }) => balance.pagination,
         }),
+
+        ...mapGetters({
+            role: 'auth/role',
+        }),
+
+        tableTabs() {
+            return [
+                { key: 'all', title: this.$lang.allTransactions },
+                ...BALANCE_STATUSES[this.role],
+            ];
+        },
     },
 
     methods: {
@@ -112,16 +145,15 @@ export default {
             if (this.activeTab === 'all') {
                 delete this.urlParams.status;
             } else {
-                const status = BALANCE_STATUSES[this.activeTab];
+                const status = this.tableTabs.find(tab => tab.key === this.activeTab);
                 this.urlParams.status = status.id;
             }
 
             this.$router.push({ query: this.urlParams });
         },
 
-        setStatus(status, key) {
-            const statusItem = Object.values(BALANCE_STATUSES).find(item => item.id === status);
-            return statusItem[key] || '';
+        getStatus(status) {
+            return this.tableTabs.find(item => item.id === status);
         },
 
         async getBalanceTransactions() {
@@ -162,6 +194,49 @@ export default {
                 console.log(error);
             }
         },
+
+        searchOnTable(value, key) {
+            this.urlParams[key] = value;
+            this.$router.push({ query: this.urlParams });
+        },
+
+        prepareFilterByDate(values) {
+            const filters = {
+                dateStart: values.start,
+                dateEnd: values.end,
+            };
+
+            this.filterOnTable(filters);
+        },
+
+        prepareFilterByAmount(values) {
+            const filters = {
+                amountStart: values.start,
+                amountEnd: values.end,
+            };
+
+            this.filterOnTable(filters);
+        },
+
+        filterOnTable(filters) {
+            this.isActiveFilters = true;
+
+            for(const key in filters) {
+                this.urlParams[key] = filters[key];
+                this.filters[key] = filters[key];
+            }
+
+            this.$router.push({ query: this.urlParams });
+        },
+
+        initFilters() {
+            Object.keys(this.filters).forEach((key) => {
+                if (this.$route.query[key]) {
+                    this.filters[key] = this.$route.query[key];
+                    this.isActiveFilters = true;
+                }
+            });
+        },
     },
 
     watch: {
@@ -179,6 +254,8 @@ export default {
             this.getBalance(),
             this.getBalanceTransactions(),
         ]);
+
+        this.initFilters();
     },
 };
 </script>
@@ -221,33 +298,59 @@ export default {
     &-icon
         width: 1.6rem
         height: 1.6rem
-    &.blue
+    &.internal
         background-color: rgba($color-violet-100, 0.1)
         .status-icon
             fill: $color-violet-100
-    &.yellow
+    &.freeze,
+    &.depositTraders
         background-color: rgba($color-yellow-dark, 0.1)
         .status-icon
             fill: $color-yellow-dark
-    &.red
+    &.deduction,
+    &.transaction,
+    &.sent
         background-color: rgba($color-red-dark, 0.08)
         .status-icon
             fill: $color-red-dark
-            transform: rotate(-90deg)
-    &.green
+    &.deposit,
+    &.purchase,
+    &.transactionAdmin
         background-color: rgba($color-green, 0.08)
         .status-icon
             fill: $color-green
+    &.transactionAdmin,
+    &.purchase,
+    &.deposit
+        .status-icon
             transform: rotate(90deg)
+    &.sent,
+    &.transaction,
+    &.deduction
+        .status-icon
+            transform: rotate(-90deg)
 
 .table-tabs
     &:deep(.tab)
-        &.green .icon
-            transform: rotate(90deg)
-        &.red .icon
-            transform: rotate(-90deg)
+        &.deposit,
+        &.purchase,
+        &.transactionAdmin
+            .icon
+                transform: rotate(90deg)
+        &.deduction,
+        &.transaction,
+        &.sent
+            .icon
+                transform: rotate(-90deg)
 
 .table
     &:deep(.table-item-status)
         padding: 0.3rem
+    .content
+        display: flex
+        align-items: center
+        .title
+            font-weight: 500
+            font-size: 1.4rem
+            line-height: 2rem
 </style>

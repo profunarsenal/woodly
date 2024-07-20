@@ -194,4 +194,7 @@ export default {
     areYouSureYouWantConfirmPayout: 'Вы уверены, что хотите подтвердить выплату?',
     areYouSureYouWantCancelPayout: 'Вы уверены, что хотите отменить выплату?',
     redirectPayout: 'Перенаправить выплату',
+    applyFilter: 'Применить фильтр',
+    amountFrom: 'Сумма от',
+    amountUpTo: 'Сумма до',
 };

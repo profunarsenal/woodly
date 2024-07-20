@@ -12,10 +12,12 @@
                     size="small"
                     @click="openExport"
                 ) {{ $lang.export }}
-                export-window(
+                range-window(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
-                    @unload="exportTransactions"
+                    isDate
+                    :applyButton="$lang.unload"
+                    @apply="exportTransactions"
                 )
 
         template(#content)
@@ -74,7 +76,7 @@ import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import SaleControls from '@/components/Profile/Sale/SaleControls.vue';
-import ExportWindow from '@/components/Profile/ExportWindow.vue';
+import RangeWindow from '@/components/app/RangeWindow.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
@@ -92,7 +94,7 @@ export default {
         VTable,
         EmptyForm,
         SaleControls,
-        ExportWindow,
+        RangeWindow,
         TableDate,
     },
 

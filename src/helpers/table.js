@@ -35,11 +35,11 @@ export const CARD_MESSAGES = [
 ];
 
 export const BALANCE_TRANSACTIONS = [
-    { title: 'ID операции', key: 'transactionId' },
+    { title: 'ID операции', key: 'transactionId', searchable: true },
     { title: 'Тип операции', key: 'status' },
-    { title: 'ID платежа', key: 'paymentId' },
-    { title: 'Сумма', key: 'amount' },
-    { title: 'Дата и время', key: 'date' },
+    { title: 'ID платежа', key: 'paymentId', searchable: true },
+    { title: 'Сумма', key: 'amount', filterable: true },
+    { title: 'Дата и время', key: 'date', filterable: true },
 ];
 
 export const PURCHASES = [
@@ -87,4 +87,17 @@ export const PAYOUTS_INFO = [
     { title: 'Дата создания', key: 'dateCreate' },
     { title: 'Дата выплаты', key: '' },
     { title: 'Сумма зачисления', key: '' },
+];
+
+export const PAYMENTS_TABLE_HEADERS = [
+    { title: '№ сделки', key: 'transactionId' },
+    { title: 'Заказа', key: 'orderNumber' },
+    { title: 'Касса', key: 'cashbox' },
+    { title: 'Сумма', key: 'amount' },
+    { title: 'Зачислено', key: '' },
+    { title: 'ПС', key: 'paymentSystem' },
+    { title: 'Статус', key: 'status' },
+    { title: 'Дата', key: '' },
+    { title: 'ID платежа', key: '' },
+    { title: 'Клиент', key: 'clientNumber' },
 ];

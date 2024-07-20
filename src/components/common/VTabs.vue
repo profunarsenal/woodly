@@ -3,7 +3,7 @@
         .tab(
             v-for="tab in tabs"
             :key="tab.key"
-            :class="[tab.color, { selected: modelValue === tab.key }]"
+            :class="[tab.color, tab.key, { selected: modelValue === tab.key }]"
             @click="selectTab(tab.key)"
         )
             .text {{ tab.title }}

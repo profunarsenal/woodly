@@ -17,6 +17,15 @@ class Card {
     }
 }
 
+class Cashbox {
+    constructor(params) {
+        params = params ?? {};
+
+        this.cashboxId = getNumber(params.cashboxId);
+        this.creatorId = getNumber(params.creatorId);
+    }
+}
+
 class Transaction {
     constructor(params) {
         params = params ?? {};
@@ -28,7 +37,8 @@ class Transaction {
         this.dateCreate = getString(params.dateCreate);
         this.dateClose = getString(params.dateClose);
         this.orderNumber = getNumber(params.orderNumber);
-        this.cashbox = getNumber(params.cashbox);
+        this.cashbox = new Cashbox(params.cashbox);
+        this.clientNumber = getString(params.clientNumber);
     }
 };
 

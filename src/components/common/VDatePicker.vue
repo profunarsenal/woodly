@@ -129,6 +129,10 @@ export default {
 
 <style lang="sass">
 .datepicker
+    display: flex
+    align-items: flex-start
+    flex-direction: column
+    justify-content: flex-start
     &.focus
         .datepicker-input
             border: 0.1rem solid $color-violet-100

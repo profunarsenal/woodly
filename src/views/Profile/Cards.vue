@@ -101,7 +101,7 @@ export default {
             activeTab: CARD_STATUSES.active,
             isLoadingCards: false,
             isSwitching: false,
-            search: debounce(this.searchTable, 500),
+            search: debounce(this.searchOnTable, 500),
         };
     },
 
@@ -222,7 +222,7 @@ export default {
             this.$router.push({ query: this.urlParams });
         },
 
-        searchTable(value, key) {
+        searchOnTable(value, key) {
             this.urlParams[key] = value;
             this.$router.push({ query: this.urlParams });
         },

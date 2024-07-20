@@ -17,6 +17,15 @@
                         iconSrc="/icons/download.svg"
                         @click="openModalExport"
                     ) {{ $lang.export }}
+
+        template(#content)
+            v-table(
+                :headers="tableHeaders"
+                :items="payments"
+                :isLoading="isLoading"
+            )
+                template(#cashbox="{ item }")
+                    .cashbox {{ item.cashbox.cashboxId }}
 </template>
 
 <script>
@@ -24,8 +33,10 @@ import { mapState } from 'vuex';
 
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
+import VTable from '@/components/common/VTable.vue';
 
 import { PAYMENTS_STATUSES } from '@/helpers/catalogs';
+import { PAYMENTS_TABLE_HEADERS } from '@/helpers/table';
 
 export default {
     name: 'ProfilePayments',
@@ -33,6 +44,14 @@ export default {
     components: {
         ProfileWrapper,
         VButton,
+        VTable,
+    },
+
+    data() {
+        return {
+            tableHeaders: PAYMENTS_TABLE_HEADERS,
+            isLoading: false,
+        };
     },
 
     computed: {
@@ -98,7 +117,7 @@ export default {
     },
 
     async created() {
-        this.getTransactions();
+        await this.getTransactions();
 
         if (!this.cashboxes.length) {
             await this.$store.dispatch('cashboxes/getCashboxes');
