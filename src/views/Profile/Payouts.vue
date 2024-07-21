@@ -103,6 +103,12 @@
                         v-if="item.dateCreate"
                         :date="item.dateCreate"
                     )
+                template(#amount="{ item }")
+                    .amount {{ getCurrencyValue(item.amount) }}
+                template(#amountWithTraderBonus="{ item }")
+                    .amount {{ getCurrencyValue(item.amountWithTraderBonus) }}
+                template(#paymentSystem="{ item }")
+                    .payment {{ setPaymentSystem(item.paymentSystem) }}
                 template(#thead)
                     th.thead-item
                         .title {{ $lang.info }}
@@ -126,6 +132,8 @@ import VDropdown from '@/components/common/VDropdown.vue';
 import { PAYOUTS_STATUSES } from '@/helpers/catalogs';
 import { PAYOUTS } from '@/helpers/table';
 import { downloadFile } from '@/helpers/url';
+import { getCurrencyValue } from '@/helpers/string';
+import { PAYMENT_SYSTEMS } from '@/helpers/constants';
 import { BANKS } from '@/helpers/testData';
 
 const FILTERS = {
@@ -166,6 +174,7 @@ export default {
             urlParams: Object.assign({}, this.$route.query),
             filters: Object.assign({}, FILTERS),
             appliedfilters: 0,
+            getCurrencyValue, getCurrencyValue,
         };
     },
 
@@ -301,6 +310,11 @@ export default {
 
             this.appliedfilters = this.filtersCount.length;
         },
+
+        setPaymentSystem(id) {
+            const paymentSystem = Object.values(PAYMENT_SYSTEMS).find(item => item.id === id);
+            return paymentSystem?.title || '';
+        },
     },
 
     watch: {
@@ -371,9 +385,9 @@ export default {
     &-icon
         width: 1.6rem
         height: 1.6rem
-    &.created
+    &.blue
         background-color: rgba($color-violet-100, 0.1)
-        .icon
+        .status-icon
             fill: $color-violet-100
     &.yellow
         background-color: rgba($color-yellow-dark, 0.1)

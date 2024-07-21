@@ -10,6 +10,7 @@ class Purchase {
         this.paymentSystem = getNumber(params.paymentSystem);
         this.bankType = getNumber(params.bankType);
         this.amount = getNumber(params.amount);
+        this.amountWithTraderBonus = getNumber(params.amountWithTraderBonus);
         this.orderNumber = getNumber(params.orderNumber);
         this.currency = getNumber(params.currency);
         this.requisites = getString(params.requisites);

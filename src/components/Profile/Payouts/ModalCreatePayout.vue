@@ -5,7 +5,7 @@
         .title {{ $lang.createNewPayout }}
         .form
             v-dropdown(
-                v-model="form.cashbox"
+                v-model="form.cashboxId"
                 :list="cashboxesList"
                 :label="$lang.cashbox"
                 :placeholder="$lang.chooseCashbox"
@@ -84,7 +84,7 @@ export default {
     data() {
         return {
             form: {
-                cashbox: null,
+                cashboxId: 0,
                 paymentSystem: null,
                 bankType: null,
                 currency: null,
@@ -130,7 +130,7 @@ export default {
         },
 
         async create() {
-            const requisites = this.isBankSystem ? this.form.requisites.split(' ').join('') : this.form.requisites;
+            const requisites = this.form.requisites.replace(/\D/g, '');
             const form = {
                 ...this.form,
                 amount: +this.form.amount,
