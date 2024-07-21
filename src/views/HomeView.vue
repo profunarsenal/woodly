@@ -4,7 +4,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { API, USER_PAGES } from '@/helpers/constants';
+import { PAGES, USER_PAGES } from '@/helpers/constants';
 
 export default {
     name: 'HomeView',
@@ -18,7 +18,7 @@ export default {
 
     mounted() {
         if (!this.isAuth) {
-            this.$router.push(API.auth);
+            this.$router.push(PAGES.auth);
         } else {
             const [firstPage] = USER_PAGES[this.role];
             this.$router.push(firstPage.path);

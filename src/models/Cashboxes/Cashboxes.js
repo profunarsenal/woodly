@@ -1,5 +1,13 @@
 import PaginationModel from "@/models/Pagination/Pagination";
-import { getTypedArray, getString, getNumber, getBoolean } from "@/helpers/Model";
+import { getTypedArray, getString, getNumber } from "@/helpers/Model";
+
+class Balance {
+    constructor(params) {
+        params = params ?? {};
+
+        this.RUB = params.rub || 0;
+    }
+}
 
 class Cashbox {
     constructor(params) {
@@ -16,6 +24,7 @@ class Cashbox {
         this.apiKey = getString(params.apiKey);
         this.creatorId = getNumber(params.creatorId);
         this.status = getNumber(params.status);
+        this.balance = new Balance(params.balance);
     }
 };
 

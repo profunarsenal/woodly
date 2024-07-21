@@ -14,7 +14,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import VButton from '@/components/common/VButton.vue';
-import { API, USER_PAGES } from '@/helpers/constants';
+import { PAGES, USER_PAGES } from '@/helpers/constants';
 
 export default {
     name: 'Error404',
@@ -38,7 +38,7 @@ export default {
 
                 this.$router.push(redirectPath);
             } else {
-                this.$router.push(API.main)
+                this.$router.push(PAGES.main)
             }
         },
     },

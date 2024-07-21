@@ -1,7 +1,6 @@
 export const BANK_TYPES = [
     { id: 1, title: 'Сбербанк' },
-    { id: 2, title: 'Сбербанк' },
-    { id: 3, title: 'СБП' },
+    { id: 2, title: 'СБП' },
 ];
 
 export const CARD_STATUSES = {
@@ -255,6 +254,14 @@ export const PAYOUTS_STATUSES = {
 };
 
 export const PAYMENTS_STATUSES = {
+    created: {
+        key: 'created',
+        icon: '/icons/activity.svg',
+        title: 'Создан',
+        color: 'blue',
+        id: 1,
+    },
+
     waiting: {
         key: 'waiting',
         icon: '/icons/time.svg',

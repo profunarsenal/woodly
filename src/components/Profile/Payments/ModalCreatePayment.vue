@@ -2,10 +2,10 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title {{ $lang.createNewPayout }}
+        .title {{ $lang.creatingNewPayment }}
         .form
             v-dropdown(
-                v-model="form.cashbox"
+                v-model="form.cashboxId"
                 :list="cashboxesList"
                 :label="$lang.cashbox"
                 :placeholder="$lang.chooseCashbox"
@@ -15,13 +15,6 @@
                 :list="paymentSystems"
                 :label="$lang.paymentSystem"
                 :placeholder="$lang.choosePaymentSystem"
-                @onChange="clearRequisites"
-            )
-            v-dropdown(
-                v-model="form.bankType"
-                :list="banks"
-                :label="$lang.bank"
-                :placeholder="$lang.chooseBank"
             )
             v-input(
                 v-model="form.amount"
@@ -42,29 +35,26 @@
                 :placeholder="$lang.chooseCurrency"
             )
             v-input(
-                v-model="form.requisites"
-                v-mask="maskForRequisites"
-                :isDisabled="!form.paymentSystem"
-                :label="$lang.recipientRequisites"
-                :placeholder="$lang.enterRecipientRequisites"
+                v-model="form.clientNumber"
+                :label="$lang.client"
+                :placeholder="$lang.enterClientNumber"
             )
         v-button.button(
             :isLoading="isPending"
+            size="large"
             @click="create"
         ) {{ $lang.create }}
 </template>
 
 <script>
-import { mask } from 'vue-the-mask';
-
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VDropdown from '@/components/common/VDropdown.vue';
 
-import { BANKS, CURRENСIES } from '@/helpers/testData';
+import { CURRENСIES } from '@/helpers/testData';
 
 export default {
-    name: 'ModalCreatePayout',
+    name: 'ModalCreatePayment',
 
     components: {
         VInput,
@@ -79,18 +69,15 @@ export default {
         },
     },
 
-    directives: { mask },
-
     data() {
         return {
             form: {
-                cashbox: null,
+                cashboxId: null,
                 paymentSystem: null,
-                bankType: null,
                 currency: null,
                 amount: '',
                 orderNumber: '',
-                requisites: '',
+                clientNumber: '',
             },
             isPending: false,
         };
@@ -99,28 +86,13 @@ export default {
     computed: {
         cashboxesList() {
             const cashboxes = this.componentData?.cashboxes || [];
+    
             return cashboxes.map((cashbox) => {
                 return {
                     id: cashbox.cashboxId,
                     title: cashbox.title,
                 };
             });
-        },
-
-        isBankSystem() {
-            const PAYMENT_SYSTEM_IDS = {
-                bank: 1,
-                sbp: 2,
-            };
-            return this.form.paymentSystem === PAYMENT_SYSTEM_IDS.bank;
-        },
-
-        maskForRequisites() {
-            if (this.isBankSystem) {
-                return '#### #### #### ####';
-            } else {
-                return '+7(###)-###-##-##';
-            }
         },
     },
 
@@ -130,28 +102,21 @@ export default {
         },
 
         async create() {
-            const requisites = this.isBankSystem ? this.form.requisites.split(' ').join('') : this.form.requisites;
-            const form = {
-                ...this.form,
-                amount: +this.form.amount,
-                orderNumber: +this.form.orderNumber,
-                requisites,
-            };
+            const form = this.form;
+
+            form.amount = +this.form.amount;
+            form.orderNumber = +this.form.orderNumber;
 
             try {
                 this.isPending = true;
-                await this.$api.purchases.createPurchase(form);
-                await this.$store.dispatch('purchases/getPurchases', this.$route.query);
+                await this.$api.transactions.createTransaction(this.form);
+                await this.$store.dispatch('transactions/getTransactions', this.$route.query);
                 this.close();
             } catch (error) {
                 console.log(error);
             } finally {
                 this.isPending = false;
             }
-        },
-
-        clearRequisites() {
-            this.form.requisites = '';
         },
     },
 
@@ -160,7 +125,7 @@ export default {
             { id: 1, title: this.$lang.bankCard },
             { id: 2, title: this.$lang.sbp },
         ];
-        this.banks = BANKS;
+
         this.currencies = CURRENСIES;
     },
 };

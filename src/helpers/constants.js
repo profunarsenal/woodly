@@ -20,7 +20,7 @@ export const ROLES_RUSSIAN = {
     admin: 'Администратор',
 };
 
-export const API = {
+export const PAGES = {
     main: '/',
     auth: '/auth',
     profile: {
@@ -53,38 +53,49 @@ export const PAYMENT_STATUSES = {
     loading: 'loading',
 };
 
+export const PAYMENT_SYSTEMS = {
+    card: {
+        title: 'Банковская карта',
+        id: 1,
+    },
+    sbp: {
+        title: 'СБП',
+        id: 2,
+    },
+};
+
 export const MERCHANT_PAGES = [
     {
         icon: '/icons/basket.svg',
-        path: API.profile.cashboxes,
+        path: PAGES.profile.cashboxes,
         title: 'Кассы',
         permission: 'cashboxes',
         id: 0,
     },
     {
         icon: '/icons/credit-card-payout.svg',
-        path: API.profile.payments,
+        path: PAGES.profile.payments,
         title: 'Платежи',
         permission: 'transactions',
         id: 1,
     },
     {
         icon: '/icons/credit-card-payment.svg',
-        path: API.profile.payouts,
+        path: PAGES.profile.payouts,
         title: 'Выплаты',
         permission: 'purchases',
         id: 2,
     },
     {
         icon: '/icons/wallet.svg',
-        path: API.profile.balance,
+        path: PAGES.profile.balance,
         title: 'Баланс',
         permission: 'balance',
         id: 3,
     },
     {
         icon: '/icons/settings.svg',
-        path: API.profile.settings,
+        path: PAGES.profile.settings,
         title: 'Настройки',
         permission: 'settings',
         id: 4,
@@ -94,42 +105,42 @@ export const MERCHANT_PAGES = [
 export const TRADER_PAGES = [
     {
         icon: '/icons/credit-card.svg',
-        path: API.profile.cards,
+        path: PAGES.profile.cards,
         title: 'Мои карты',
         permission: 'cards',
         id: 0,
     },
     {
         icon: '/icons/credit-card-payout.svg',
-        path: API.profile.sale,
+        path: PAGES.profile.sale,
         title: 'Продажа',
         permission: 'transactions',
         id: 1,
     },
     {
         icon: '/icons/credit-card-payment.svg',
-        path: API.profile.purchases,
+        path: PAGES.profile.purchases,
         title: 'Покупка',
         permission: 'purchases',
         id: 2,
     },
     {
         icon: '/icons/chart.svg',
-        path: API.profile.statistics,
+        path: PAGES.profile.statistics,
         title: 'Статистика',
         permission: 'statistics',
         id: 3,
     },
     {
         icon: '/icons/wallet.svg',
-        path: API.profile.balance,
+        path: PAGES.profile.balance,
         title: 'Баланс',
         permission: 'balance',
         id: 4,
     },
     {
         icon: '/icons/settings.svg',
-        path: API.profile.settings,
+        path: PAGES.profile.settings,
         title: 'Настройки',
         permission: 'settings',
         id: 5,
@@ -139,49 +150,49 @@ export const TRADER_PAGES = [
 export const ADMIN_PAGES = [
     {
         icon: '/icons/basket.svg',
-        path: API.profile.cashboxes,
+        path: PAGES.profile.cashboxes,
         title: 'Кассы',
         permission: 'cashboxes',
         id: 0,
     },
     {
         icon: '/icons/credit-card-payout.svg',
-        path: API.profile.payments,
+        path: PAGES.profile.payments,
         title: 'Платежи',
         permission: 'transactions',
         id: 1,
     },
     {
         icon: '/icons/credit-card-payment.svg',
-        path: API.profile.payouts,
+        path: PAGES.profile.payouts,
         title: 'Выплаты',
         permission: 'purchases',
         id: 2,
     },
     {
         icon: '/icons/user.svg',
-        path: API.profile.users,
+        path: PAGES.profile.users,
         title: 'Пользователи',
         permission: 'users',
         id: 3,
     },
     {
         icon: '/icons/wallet.svg',
-        path: API.profile.balance,
+        path: PAGES.profile.balance,
         title: 'Баланс',
         permission: 'balance',
         id: 4,
     },
     {
         icon: '/icons/chart.svg',
-        path: API.profile.statistics,
+        path: PAGES.profile.statistics,
         title: 'Статистика',
         permission: 'statistics',
         id: 5,
     },
     {
         icon: '/icons/settings.svg',
-        path: API.profile.settings,
+        path: PAGES.profile.settings,
         title: 'Настройки',
         permission: 'settings',
         id: 6,

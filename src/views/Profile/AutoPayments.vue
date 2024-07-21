@@ -26,7 +26,7 @@ import VTable from '@/components/common/VTable.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { AUTOPAYMENTS } from '@/helpers/table';
-import { API } from '@/helpers/constants';
+import { PAGES } from '@/helpers/constants';
 
 export default {
     name: 'ProfileAutoPayments',
@@ -46,7 +46,7 @@ export default {
 
     methods: {
         back() {
-            this.$router.push(API.profile.cards);
+            this.$router.push(PAGES.profile.cards);
         },
 
         async getAutoPayments() {

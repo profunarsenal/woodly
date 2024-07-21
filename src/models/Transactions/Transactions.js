@@ -33,12 +33,14 @@ class Transaction {
         this.card = new Card(params.card);
         this.transactionId = getNumber(params.transactionId);
         this.amount = getNumber(params.amount);
+        this.amountMinusCommission = getNumber(params.amountMinusCommission);
         this.status = getNumber(params.status);
         this.dateCreate = getString(params.dateCreate);
         this.dateClose = getString(params.dateClose);
         this.orderNumber = getNumber(params.orderNumber);
         this.cashbox = new Cashbox(params.cashbox);
         this.clientNumber = getString(params.clientNumber);
+        this.paymentSystem = getNumber(params.paymentSystem);
     }
 };
 

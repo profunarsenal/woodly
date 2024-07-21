@@ -15,7 +15,7 @@
 <script>
 import VActionMenu from '@/components/common/VActionMenu.vue';
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
-import { API } from '@/helpers/constants';
+import { PAGES } from '@/helpers/constants';
 
 export default {
     name: 'CardsControls',
@@ -83,7 +83,7 @@ export default {
                     title: this.$lang.autoPayments,
                     callback: (item) => {
                         this.$router.push({
-                            path: `${API.profile.autoPayments}/${item.cardId}`,
+                            path: `${PAGES.profile.autoPayments}/${item.cardId}`,
                             query: {
                                 cardLastNumber: item.cardLastNumber,
                             },
@@ -97,7 +97,7 @@ export default {
                     title: this.$lang.generalSms,
                     callback: (item) => {
                         this.$router.push({
-                            path: `${API.profile.cardMessages}/${item.cardId}`,
+                            path: `${PAGES.profile.cardMessages}/${item.cardId}`,
                             query: {
                                 cardLastNumber: item.cardLastNumber,
                             },

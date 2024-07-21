@@ -12,7 +12,7 @@
                     @click="openModalCreatePayout"
                 ) {{ $lang.createPayout }}
 
-                .currencies
+                .currencies(v-if="isAdmin")
                     v-button(
                         type="outline"
                         iconSrc="/icons/chevron-dropdown.svg"
@@ -92,6 +92,7 @@
                 :headers="tableHeaders"
                 :items="payouts"
                 :isLoading="isLoading"
+                :isActiveFilters="!!appliedfilters"
             )
                 template(#status="{ item }")
                     .status(:class="setStatus(item.status, 'color')")
@@ -110,7 +111,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
@@ -173,6 +174,10 @@ export default {
             payouts: ({ purchases }) => purchases.purchases,
             pagination: ({ purchases }) => purchases.pagination,
             cashboxes: ({ cashboxes }) => cashboxes.cashboxes,
+        }),
+
+        ...mapGetters({
+            isAdmin: 'auth/isAdmin',
         }),
 
         listsForFilters() {
@@ -366,9 +371,9 @@ export default {
     &-icon
         width: 1.6rem
         height: 1.6rem
-    &.blue
+    &.created
         background-color: rgba($color-violet-100, 0.1)
-        .status-icon
+        .icon
             fill: $color-violet-100
     &.yellow
         background-color: rgba($color-yellow-dark, 0.1)

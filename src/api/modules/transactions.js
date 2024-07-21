@@ -7,6 +7,10 @@ export default class Transactions extends AbstractService {
         return new TransactionsModel(data);
     };
 
+    async createTransaction(params = {}) {
+        return await this.axios.post('/transactions/create', params);
+    };
+
     async editTransaction(params = {}) {
         return await this.axios.patch('/transactions/edit', params);
     };

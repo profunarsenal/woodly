@@ -22,6 +22,13 @@
                         inline-svg.icon(:src="setStatus(item.status).icon")
                 template(#apiKey="{ item }")
                     api-control(:apiKey="item.apiKey")
+                template(#balance="{ item }")
+                    .balance(
+                        v-for="balance in Object.entries(item.balance)"
+                        :key="balance[0]"
+                    )
+                        .amount {{ balance[1] }}
+                        .currency {{ balance[0] }}
                 template(#thead)
                     th.thead-item
                         .title {{ $lang.info }}
@@ -146,7 +153,14 @@ export default {
         .icon
             width: 2rem
             height: 2rem
-
+    .balance
+        display: flex
+        align-items: center
+        gap: 0.2rem
+        font-size: 1.2rem
+        line-height: 1.8rem
+        .currency
+            color: $color-gray-dark
     .thead-item
         width: 6.23%
         .title

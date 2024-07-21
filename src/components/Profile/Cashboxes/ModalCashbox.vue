@@ -141,7 +141,9 @@ export default {
         },
 
         create() {
-            return this.$store.dispatch('cashboxes/createCashbox', this.form);
+            const form = this.form;
+            form.commissionPayer = +this.form.commissionPayer;
+            return this.$store.dispatch('cashboxes/createCashbox', form);
         },
 
         setCashbox() {

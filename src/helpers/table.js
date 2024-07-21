@@ -94,10 +94,10 @@ export const PAYMENTS_TABLE_HEADERS = [
     { title: 'Заказа', key: 'orderNumber' },
     { title: 'Касса', key: 'cashbox' },
     { title: 'Сумма', key: 'amount' },
-    { title: 'Зачислено', key: '' },
+    { title: 'Зачислено', key: 'amountMinusCommission' },
     { title: 'ПС', key: 'paymentSystem' },
     { title: 'Статус', key: 'status' },
-    { title: 'Дата', key: '' },
+    { title: 'Дата', key: 'dateCreate' },
     { title: 'ID платежа', key: '' },
     { title: 'Клиент', key: 'clientNumber' },
 ];

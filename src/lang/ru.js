@@ -197,4 +197,9 @@ export default {
     applyFilter: 'Применить фильтр',
     amountFrom: 'Сумма от',
     amountUpTo: 'Сумма до',
+    creatingNewPayment: 'Создание нового платежа',
+    client: 'Клиент',
+    enterClientNumber: 'Введите номер клиента',
+    numberDeal: '№ сделки',
+    enterNumberDeal: 'Введите номер сделки',
 };

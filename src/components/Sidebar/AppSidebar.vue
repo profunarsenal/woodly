@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { API } from '@/helpers/constants';
+import { PAGES } from '@/helpers/constants';
 
 export default {
     name: 'AppSidebar',
@@ -48,7 +48,7 @@ export default {
 
         logout() {
             this.$store.commit('auth/logout');
-            this.$router.push(API.auth);
+            this.$router.push(PAGES.auth);
         },
     },
 };

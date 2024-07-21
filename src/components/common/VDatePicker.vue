@@ -57,7 +57,7 @@ export default {
         },
 
         modelValue: {
-            type: [null, Date, Array],
+            type: [null, Date, Array, String],
             default: null,
         },
 
@@ -72,6 +72,11 @@ export default {
         },
 
         isRange: {
+            type: Boolean,
+            default: false,
+        },
+
+        needFormatDate: {
             type: Boolean,
             default: false,
         },
@@ -117,10 +122,21 @@ export default {
 
     watch: {
         modelValue(newDate) {
+            if (typeof newDate === 'string') {
+                const reverseDate = newDate.split('/').reverse().join('-');
+                this.date = new Date(reverseDate);
+                return;
+            }
+
             this.date = newDate;
         },
 
         date(newDate) {
+            if (this.needFormatDate) {
+                this.$emit('update:modelValue', this.format());
+                return;
+            }
+
             this.$emit('update:modelValue', newDate);
         },
     },

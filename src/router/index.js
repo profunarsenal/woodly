@@ -1,18 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store/index';
 import HomeView from '@/views/HomeView.vue';
-import { ROLES, API } from '@/helpers/constants';
+import { ROLES, PAGES } from '@/helpers/constants';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: API.main,
+            path: PAGES.main,
             name: 'HomeView',
             component: HomeView,
         },
         {
-            path: API.auth,
+            path: PAGES.auth,
             name: 'Authorization',
             component: () => import('@/views/Authorization.vue'),
             meta: {
@@ -20,7 +20,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.cards,
+            path: PAGES.profile.cards,
             name: 'ProfileCards',
             component: () => import('@/views/Profile/Cards.vue'),
             meta: {
@@ -29,7 +29,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.sale,
+            path: PAGES.profile.sale,
             name: 'ProfileSale',
             component: () => import('@/views/Profile/Sale.vue'),
             meta: {
@@ -38,7 +38,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.settings,
+            path: PAGES.profile.settings,
             name: 'ProfileSettings',
             component: () => import('@/views/Profile/Settings.vue'),
             meta: {
@@ -47,7 +47,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.balance,
+            path: PAGES.profile.balance,
             name: 'ProfileBalance',
             component: () => import('@/views/Profile/Balance.vue'),
             meta: {
@@ -56,7 +56,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.purchases,
+            path: PAGES.profile.purchases,
             name: 'ProfilePurchases',
             component: () => import('@/views/Profile/Purchases.vue'),
             meta: {
@@ -65,7 +65,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.cashboxes,
+            path: PAGES.profile.cashboxes,
             name: 'ProfileCashboxes',
             component: () => import('@/views/Profile/Cashboxes.vue'),
             meta: {
@@ -74,7 +74,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.payments,
+            path: PAGES.profile.payments,
             name: 'ProfilePayments',
             component: () => import('@/views/Profile/Payments.vue'),
             meta: {
@@ -83,7 +83,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.payouts,
+            path: PAGES.profile.payouts,
             name: 'ProfilePayouts',
             component: () => import('@/views/Profile/Payouts.vue'),
             meta: {
@@ -92,7 +92,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.statistics,
+            path: PAGES.profile.statistics,
             name: 'ProfileStatistics',
             component: () => import('@/views/Profile/Statistics.vue'),
             meta: {
@@ -101,7 +101,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.profile.users,
+            path: PAGES.profile.users,
             name: 'ProfileUsers',
             component: () => import('@/views/Profile/Users.vue'),
             meta: {
@@ -110,7 +110,7 @@ const router = createRouter({
             },
         },
         {
-            path: `${API.profile.autoPayments}/:id`,
+            path: `${PAGES.profile.autoPayments}/:id`,
             name: 'ProfileAutoPayments',
             component: () => import('@/views/Profile/AutoPayments.vue'),
             meta: {
@@ -119,7 +119,7 @@ const router = createRouter({
             },
         },
         {
-            path: `${API.profile.cardMessages}/:id`,
+            path: `${PAGES.profile.cardMessages}/:id`,
             name: 'ProfileCardMessages',
             component: () => import('@/views/Profile/CardMessages.vue'),
             meta: {
@@ -128,7 +128,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.payment.base,
+            path: PAGES.payment.base,
             name: 'PaymentView',
             component: () => import('@/views/PaymentViews/PaymentView.vue'),
             meta: {
@@ -136,7 +136,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.payment.qrCode,
+            path: PAGES.payment.qrCode,
             name: 'PaymentQrCode',
             component: () => import('@/views/PaymentViews/PaymentQrCode.vue'),
             meta: {
@@ -144,7 +144,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.payment.crypto,
+            path: PAGES.payment.crypto,
             name: 'PaymentCrypto',
             component: () => import('@/views/PaymentViews/PaymentCrypto.vue'),
             meta: {
@@ -152,7 +152,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.payment.acquiring,
+            path: PAGES.payment.acquiring,
             name: 'PaymentAcquiring',
             component: () => import('@/views/PaymentViews/PaymentAcquiring.vue'),
             meta: {
@@ -160,7 +160,7 @@ const router = createRouter({
             },
         },
         {
-            path: API.error404,
+            path: PAGES.error404,
             name: 'Error',
             component: () => import('@/views/Error404.vue'),
             meta: {
@@ -169,7 +169,7 @@ const router = createRouter({
         },
         {
             path: '/:pathMatch(.*)*',
-            redirect: API.error404,
+            redirect: PAGES.error404,
         },
     ],
 });
@@ -181,9 +181,9 @@ router.beforeEach((to, from, next) => {
     const userRole = store.getters['auth/role'];
 
     if (isAuthorizationRequired && isUserAuthorized) {
-        rolesWithAccess.includes(userRole) ? next() : next(API.error404);
+        rolesWithAccess.includes(userRole) ? next() : next(PAGES.error404);
     } else if (isAuthorizationRequired && !isUserAuthorized) {
-        next(API.auth)
+        next(PAGES.auth)
     } else {
         next()
     };

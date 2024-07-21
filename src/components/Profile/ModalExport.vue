@@ -103,6 +103,7 @@ export default {
             try {
                 this.isLoading = true;
                 await this.componentData.callback(params);
+                this.close();
             } catch (error) {
                 throw error;
             } finally {
