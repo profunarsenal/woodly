@@ -12,7 +12,7 @@
                     size="small"
                     @click="openExport"
                 ) {{ $lang.export }}
-                range-window(
+                popup-range(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
                     isDate
@@ -76,7 +76,7 @@ import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
 import EmptyForm from '@/components/app/EmptyForm.vue';
 import SaleControls from '@/components/Profile/Sale/SaleControls.vue';
-import RangeWindow from '@/components/app/RangeWindow.vue';
+import PopupRange from '@/components/app/PopupRange.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
@@ -94,7 +94,7 @@ export default {
         VTable,
         EmptyForm,
         SaleControls,
-        RangeWindow,
+        PopupRange,
         TableDate,
     },
 

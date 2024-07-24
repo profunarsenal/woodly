@@ -1,7 +1,7 @@
 <template lang="pug">
     profile-wrapper(:title="$lang.automaticPaymentsByCard")
         template(#header)
-            square-button.back(
+            button-square.back(
                 icon="/icons/arrow.svg"
                 @click="back"
             )
@@ -21,7 +21,7 @@
 
 <script>
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
-import SquareButton from '@/components/common/Buttons/SquareButton.vue';
+import ButtonSquare from '@/components/common/Buttons/ButtonSquare.vue';
 import VTable from '@/components/common/VTable.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
@@ -33,7 +33,7 @@ export default {
 
     components: {
         ProfileWrapper,
-        SquareButton,
+        ButtonSquare,
         VTable,
         TableDate,
     },

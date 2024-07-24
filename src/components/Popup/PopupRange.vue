@@ -44,7 +44,7 @@ import VInput from '@/components/common/VInput.vue';
 import { formatDate } from '@/helpers/string';
 
 export default {
-    name: 'RangeWindow',
+    name: 'PopupRange',
 
     components: {
         VDatePicker,

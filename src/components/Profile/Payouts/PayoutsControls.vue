@@ -73,7 +73,7 @@ import { mapGetters } from 'vuex';
 
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
-import PopupConfirm from '@/components/app/PopupConfirm.vue';
+import PopupConfirm from '@/components/Popup/PopupConfirm.vue';
 
 import { PAYOUTS_STATUSES } from '@/helpers/catalogs';
 

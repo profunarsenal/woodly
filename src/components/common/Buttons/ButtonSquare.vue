@@ -5,7 +5,7 @@
 
 <script>
 export default {
-    name: 'SquareButton',
+    name: 'ButtonSquare',
 
     props: {
         icon: {

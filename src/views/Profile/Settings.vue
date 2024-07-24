@@ -47,9 +47,9 @@
                 ) {{ $lang.closeAllSessionsExceptCurrent }}
         template(#footer)
             .footer
-                telegram-button
+                button-telegram
                 .buttons
-                    square-button(
+                    button-square(
                         icon="/icons/qr-code.svg"
                         @click="openQR"
                     )
@@ -63,8 +63,8 @@
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import TelegramButton from '@/components/common/Buttons/TelegramButton.vue';
-import SquareButton from '@/components/common/Buttons/SquareButton.vue';
+import ButtonTelegram from '@/components/common/Buttons/ButtonTelegram.vue';
+import ButtonSquare from '@/components/common/Buttons/ButtonSquare.vue';
 
 export default {
     name: 'ProfileSettings',
@@ -73,8 +73,8 @@ export default {
         ProfileWrapper,
         VInput,
         VButton,
-        TelegramButton,
-        SquareButton,
+        ButtonTelegram,
+        ButtonSquare,
     },
 
     data() {

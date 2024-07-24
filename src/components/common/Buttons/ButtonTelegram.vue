@@ -10,7 +10,7 @@
 import { TELEGRAM_BOT } from '@/helpers/constants';
 
 export default {
-    name: 'TelegramButton',
+    name: 'ButtonTelegram',
 
     created() {
         this.telegramBot = TELEGRAM_BOT;

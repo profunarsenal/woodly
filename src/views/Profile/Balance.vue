@@ -28,7 +28,7 @@
                         size="small"
                         @click="openExport"
                     ) {{ $lang.export }}
-                    range-window(
+                    popup-range(
                         v-if="isOpenExport"
                         v-click-outside="closeExport"
                         isDate
@@ -54,14 +54,14 @@
                         :date="item.date"
                     )
                 template(#filter-date="{ item }")
-                    range-window(
+                    popup-range(
                         isDate
                         :value="[filters.dateStart, filters.dateEnd]"
                         :applyButton="$lang.applyFilter"
                         @apply="prepareFilterByDate"
                     )
                 template(#filter-amount="{ item }")
-                    range-window(
+                    popup-range(
                         :labels="[$lang.amountFrom, $lang.amountUpTo]"
                         :placeholders="[$lang.enterAmount, $lang.enterAmount]"
                         :applyButton="$lang.applyFilter"
@@ -80,7 +80,7 @@ import VTable from '@/components/common/VTable.vue';
 import AppPagination from '@/components/app/AppPagination.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VButton from '@/components/common/VButton.vue';
-import RangeWindow from '@/components/app/RangeWindow.vue';
+import PopupRange from '@/components/app/PopupRange.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { BALANCE_TRANSACTIONS } from '@/helpers/table';
@@ -98,7 +98,7 @@ export default {
         AppPagination,
         VTabs,
         VButton,
-        RangeWindow,
+        PopupRange,
         TableDate,
     },
 

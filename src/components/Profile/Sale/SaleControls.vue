@@ -74,7 +74,7 @@
 <script>
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
-import PopupConfirm from '@/components/app/PopupConfirm.vue';
+import PopupConfirm from '@/components/Popup/PopupConfirm.vue';
 import VActionMenu from '@/components/common/VActionMenu.vue';
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';
 

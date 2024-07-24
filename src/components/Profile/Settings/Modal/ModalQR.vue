@@ -5,17 +5,17 @@
         .title {{ $lang.scanQrCode }}
         .text {{ $lang.hintForScanningQrCode }}
         img.code(src="/images/code.png")
-        telegram-button
+        button-telegram
 </template>
 
 <script>
-import TelegramButton from '@/components/common/Buttons/TelegramButton.vue';
+import ButtonTelegram from '@/components/common/Buttons/ButtonTelegram.vue';
 
 export default {
     name: 'ModalSettingsQR',
 
     components: {
-        TelegramButton,
+        ButtonTelegram,
     },
 
     methods: {

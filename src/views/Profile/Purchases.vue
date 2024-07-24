@@ -12,7 +12,7 @@
                     size="small"
                     @click="openExport"
                 ) {{ $lang.export }}
-                range-window(
+                popup-range(
                     v-if="isOpenExport"
                     v-click-outside="closeExport"
                     isDate
@@ -61,7 +61,7 @@ import debounce from 'lodash/debounce';
 
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
-import RangeWindow from '@/components/app/RangeWindow.vue';
+import PopupRange from '@/components/app/PopupRange.vue';
 import VTable from '@/components/common/VTable.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
@@ -79,7 +79,7 @@ export default {
     components: {
         ProfileWrapper,
         VButton,
-        RangeWindow,
+        PopupRange,
         VTable,
         TableDate,
         VTabs,

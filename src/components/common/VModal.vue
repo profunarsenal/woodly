@@ -19,9 +19,9 @@ export default {
     name: 'VModal',
 
     components: {
-        ModalConfirm: defineAsyncComponent(() => import('@/components/app/ModalConfirm.vue')),
-        ModalImage: defineAsyncComponent(() => import('@/components/app/ModalImage.vue')),
-        ModalExport: defineAsyncComponent(() => import('@/components/Profile/ModalExport.vue')),
+        ModalConfirm: defineAsyncComponent(() => import('@/components/Modal/ModalConfirm.vue')),
+        ModalImage: defineAsyncComponent(() => import('@/components/Modal/ModalImage.vue')),
+        ModalExport: defineAsyncComponent(() => import('@/components/Modal/ModalExport.vue')),
         ModalCancelPayment: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalCancel.vue')),
         ModalInsurance: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalInsurance.vue')),
         ModalQR: defineAsyncComponent(() => import('@/components/Payment/Modal/ModalQR.vue')),
