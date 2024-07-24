@@ -74,9 +74,9 @@ import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VTable from '@/components/common/VTable.vue';
-import EmptyForm from '@/components/app/EmptyForm.vue';
+import EmptyForm from '@/components/Profile/EmptyForm.vue';
 import SaleControls from '@/components/Profile/Sale/SaleControls.vue';
-import PopupRange from '@/components/app/PopupRange.vue';
+import PopupRange from '@/components/Popup/PopupRange.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { TRANSACTIONS_STATUSES } from '@/helpers/catalogs';

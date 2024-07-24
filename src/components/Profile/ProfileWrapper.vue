@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import AppPagination from '@/components/app/AppPagination.vue';
+import AppPagination from '@/components/Pagination/AppPagination.vue';
 import AppFooter from '@/components/Footer/AppFooter.vue';
 import VLoader from '@//components/common/VLoader.vue';
 

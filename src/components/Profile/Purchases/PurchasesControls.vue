@@ -60,7 +60,7 @@
             .controls
                 .control
                     button-mini(
-                        type="add"
+                        type="receipt"
                         @click="showCheck"
                     )
                     v-tooltip.tooltip(

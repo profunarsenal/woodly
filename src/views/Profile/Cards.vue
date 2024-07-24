@@ -72,7 +72,7 @@ import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import VTable from '@/components/common/VTable.vue';
 import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
-import EmptyForm from '@/components/app/EmptyForm.vue';
+import EmptyForm from '@/components/Profile/EmptyForm.vue';
 import CardsControls from '@/components/Profile/Cards/CardsControls.vue';
 
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';

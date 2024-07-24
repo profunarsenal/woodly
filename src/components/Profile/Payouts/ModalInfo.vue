@@ -18,7 +18,7 @@
 
 <script>
 import VButton from '@/components/common/VButton.vue';
-import TableList from '@/components/app/TableList.vue';
+import TableList from '@/components/common/Table/TableList.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { PAYOUTS_INFO } from '@/helpers/table';

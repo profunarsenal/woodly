@@ -77,10 +77,10 @@ import debounce from 'lodash/debounce';
 import ProfileWrapper from '@/components/Profile/ProfileWrapper.vue';
 import CurrencyBlock from '@/components/Profile/Balance/CurrencyBlock.vue';
 import VTable from '@/components/common/VTable.vue';
-import AppPagination from '@/components/app/AppPagination.vue';
+import AppPagination from '@/components/Pagination/AppPagination.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import VButton from '@/components/common/VButton.vue';
-import PopupRange from '@/components/app/PopupRange.vue';
+import PopupRange from '@/components/Popup/PopupRange.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
 import { BALANCE_TRANSACTIONS } from '@/helpers/table';

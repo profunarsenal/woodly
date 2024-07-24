@@ -70,7 +70,7 @@ import TableHeader from '@/components/common/Table/TableHeader.vue';
 import TableItem from '@/components/common/Table/TableItem.vue';
 import TableSearch from '@/components/common/Table/TableSearch.vue';
 import TableFilter from '@/components/common/Table/TableFilter.vue';
-import EmptyForm from '@/components/app/EmptyForm.vue';
+import EmptyForm from '@/components/Profile/EmptyForm.vue';
 
 export default {
     name: 'VTable',
