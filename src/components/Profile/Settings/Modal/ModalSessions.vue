@@ -2,14 +2,14 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title Закрытие всех сессий
-        .text Вы действительно хотите закрыть все сессии кроме текущей?
+        .title {{ $lang.closingAllSessions }}
+        .text {{ $lang.areYouSureYouWantCloseAllSessions }}
         .buttons
             v-button(
                 type="secondary"
                 @click="close"
-            ) Отменить
-            v-button Закрыть
+            ) {{ $lang.cancel }}
+            v-button {{ $lang.close }}
 </template>
 
 <script>

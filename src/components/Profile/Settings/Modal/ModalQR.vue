@@ -2,8 +2,8 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title Отсканируйте QR-код
-        .text Это можно сделать в специализированном мобильном приложении или штатной камерой телефона
+        .title {{ $lang.scanQrCode }}
+        .text {{ $lang.hintForScanningQrCode }}
         img.code(src="/images/code.png")
         telegram-button
 </template>

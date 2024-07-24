@@ -11,7 +11,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Подтвердить сделку"
+                        :text="$lang.confirmDeal"
                     )
                     popup-confirm.popup(
                         v-if="popup.confirm.isOpen"
@@ -25,7 +25,7 @@
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        text="Отклонить проверку"
+                        :text="$lang.rejectVerification"
                     )
                     popup-confirm.popup(
                         v-if="popup.cancel.isOpen"
@@ -52,7 +52,7 @@
                 )
                 v-tooltip.tooltip(
                     position="right"
-                    text="Подтвердить сделку"
+                    :text="$lang.confirmDeal"
                 )
                 popup-confirm.popup(
                     v-if="popup.confirm.isOpen"
@@ -67,7 +67,7 @@
                 )
                 v-tooltip.tooltip(
                     position="right"
-                    text="Корректировать заявку"
+                    :text="$lang.correctApplication"
                 )
 </template>
 
@@ -107,18 +107,18 @@ export default {
                 },
             },
             popupConfirmComponentData: {
-                title: 'Подтвердить проверку',
-                subtitle: 'Вы уверены, что хотите подтвердить проверку сделки?',
-                buttonCancel: 'Отменить',
-                buttonConfirm: 'Подтвердить',
+                title: this.$lang.confirmVerification,
+                subtitle: this.$lang.areYouSureYouWantConfirmTransactionVerification,
+                buttonCancel: this.$lang.cancel,
+                buttonConfirm: this.$lang.confirm,
                 callbackConfirm: () => this.confirm(),
                 callbackCancel: () => this.closePopup('confirm'),
             },
             popupDeclineComponentData: {
-                title: 'Отклонить проверку',
-                subtitle: 'Вы уверены, что хотите отклонить проверку сделки?',
-                buttonCancel: 'Отменить',
-                buttonConfirm: 'Отклонить',
+                title: this.$lang.rejectVerification,
+                subtitle: this.$lang.areYouSureYouWantRejectTransactionVerification,
+                buttonCancel: this.$lang.cancel,
+                buttonConfirm: this.$lang.reject,
                 callbackConfirm: () => this.cancel(),
                 callbackCancel: () => this.closePopup('cancel'),
             },
@@ -139,13 +139,13 @@ export default {
                 {
                     key: 'correct',
                     icon: '/icons/edit.svg',
-                    title: 'Корректировать заявку',
+                    title: this.$lang.correctApplication,
                     callback: () => this.openModalCorrection(),
                 },
                 {
                     key: 'correct',
                     icon: '/icons/bill.svg',
-                    title: 'Посмотреть чек',
+                    title: this.$lang.viewCheck,
                     callback: () => () => ({}),
                 },
             ];

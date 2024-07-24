@@ -2,18 +2,18 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title Корректировка заявки
+        .title {{ $lang.correctionApplication }}
         .form
             v-input(
                 v-model="amount"
                 type="number"
-                label="Сумма"
-                placeholder="Укажите сумму с корректировкой"
+                :label="$lang.amount"
+                :placeholder="$lang.indicateAmountWithAdjustment"
             )
         v-button.button(
             :isDisabled="!amount"
             @click="confirm"
-        ) Подтвердить
+        ) {{ $lang.confirm }}
 </template>
 
 <script>

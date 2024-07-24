@@ -6,45 +6,45 @@
         .form
             v-input(
                 v-model="form.name"
-                label="Название"
-                placeholder="Введите название"
+                :label="$lang.nameTitle"
+                :placeholder="$lang.enterNameTitle"
             )
             v-input(
                 v-model="form.email"
-                label="Email"
-                placeholder="Введите email"
+                :label="$lang.email"
+                :placeholder="$lang.enterEmail"
             )
             v-input(
                 v-if="!isEdit"
                 v-model="form.login"
-                label="Логин"
-                placeholder="Введите логин"
+                :label="$lang.login"
+                :placeholder="$lang.enterLogin"
             )
             v-input(
                 v-model="form.password"
-                label="Пароль"
-                placeholder="Введите пароль"
+                :label="$lang.password"
+                :placeholder="$lang.enterPassword"
                 type="password"
                 autocomplete="new-password"
                 isPassword
             )
             v-input(
                 v-model="form.address"
-                label="Адрес кошелька"
-                placeholder="Введите адрес кошелька"
+                :label="$lang.walletAddress"
+                :placeholder="$lang.enterWalletAddress"
             )
             v-dropdown(
                 v-model="form.role"
                 :list="typesAccount"
-                label="Тип аккаунта"
-                placeholder="Выберите тип аккаунта"
+                :label="$lang.typeAccount"
+                :placeholder="$lang.chooseTypeAccount"
                 @onChange="switchAllCheckboxes(switchesCheckboxes.off)"
             )
             .checkboxes(v-if="form.role")
                 v-checkbox(
                     v-model="isFullAccess"
                     id="full-access"
-                    label="Полный доступ"
+                    :label="$lang.fullAccess"
                     @onChange="setFullAccess"
                 )
                 .permissions
@@ -61,7 +61,7 @@
                 v-if="isEdit"
                 type="negative"
                 @click="openModalDeleteUser"
-            ) Деактивировать пользователя
+            ) {{ $lang.deactivateUser }}
             v-button.button(
                 :isLoading="isPending"
                 @click="save"
@@ -69,6 +69,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VDropdown from '@/components/common/VDropdown.vue';
@@ -115,16 +117,20 @@ export default {
     },
 
     computed: {
+        ...mapState({
+            user: ({ auth }) => auth.user,
+        }),
+
         isEdit() {
             return !!this.componentData;
         },
 
         title() {
-            return this.isEdit ? 'Редактирование пользователя' : 'Создание нового пользователя';
+            return this.isEdit ? this.$lang.editingUser : this.$lang.creatingNewUser;
         },
 
         buttonTitle() {
-            return this.isEdit ? 'Сохранить' : 'Создать';
+            return this.isEdit ? this.$lang.save : this.$lang.create;
         },
 
         typesAccount() {
@@ -242,9 +248,9 @@ export default {
                 componentData: {
                     item: this.item,
                     type: 'negative',
-                    title: 'Деактивация пользователя',
-                    subtitle: 'Вы уверены, что хотите деактивировать пользователя Admin?',
-                    buttonConfirm: 'Удалить',
+                    title: this.$lang.deactivationUser,
+                    subtitle: `${this.$lang.areYouSureYouWantDeactivateAdmin} ${this.user?.name}`,
+                    buttonConfirm: this.$lang.delete,
                     callbackConfirm: () => this.deleteUser(),
                 },
             });
