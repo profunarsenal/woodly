@@ -12,7 +12,7 @@ class Card {
         this.fio = getString(params.fio);
         this.bankType = getNumber(params.bankType);
         this.processMethod = getNumber(params.processMethod);
-        this.currency = getNumber(params.currency);
+        this.currency = getString(params.currency);
         this.deviceId = getString(params.deviceId);
         this.slotSim = getNumber(params.slotSim);
         this.isQiwi = getBoolean(params.isQiwi);

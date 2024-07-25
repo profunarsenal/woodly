@@ -31,8 +31,13 @@
                 :isLoading="isLoadingCards"
                 @search="search"
             )
+                template(#cardNumber="{ item }")
+                    .card {{ item.cardNumber }}
                 template(#bankType="{ item }")
-                    .bank {{ setBankType(item.bankType) }}
+                    .bank
+                        .text {{ setBankType(item.bankType) }}
+                        .box(v-if="item.isSbp")
+                            inline-svg.icon(src="/icons/pay/sbp.svg")
                 template(#turnover="{ item }")
                     .turnover {{ `${item.turnoverPaymentsPerDay} / ${item.turnoverTransactionsPerDay}` }}
                 template(#limitToday="{ item }")
@@ -40,13 +45,18 @@
                 template(#transactionsLimit="{ item }")
                     .limit {{ `${item.paymentMin}-${item.paymentMax}` }}
                 template(#status="{ item }")
-                    span.status-text(v-if="item.status === cardStatuses.deleted") Удалена
-                    inline-svg.status(
-                        v-else
-                        :class="setIcon(item.status).class"
-                        :src="setIcon(item.status).src"
+                    .status(
+                        :class="getStatus(item.status, 'class')"
                         @click="changeStatus(item)"
                     )
+                        span.text(v-if="item.status === cardStatuses.deleted") {{ $lang.removed }}
+                        v-loader.loader(v-else-if="isChangingStatus")
+                        template(v-else)
+                            inline-svg.icon(:src="getStatus(item.status, 'src')")
+                            v-tooltip.tooltip(
+                                position="right"
+                                :text="getStatus(item.status, 'tooltip')"
+                            )
                 template(#thead)
                     th.thead-item
                 template(#tbody="{ item }")
@@ -74,6 +84,8 @@ import VButton from '@/components/common/VButton.vue';
 import VTabs from '@/components/common/VTabs.vue';
 import EmptyForm from '@/components/Profile/EmptyForm.vue';
 import CardsControls from '@/components/Profile/Cards/CardsControls.vue';
+import VTooltip from '@/components/common/VTooltip.vue';
+import VLoader from '@/components/common/VLoader.vue';
 
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
 import { BANK_TYPES, CARD_STATUSES } from '@/helpers/catalogs';
@@ -88,6 +100,8 @@ export default {
         VTabs,
         CardsControls,
         EmptyForm,
+        VTooltip,
+        VLoader,
     },
 
     data() {
@@ -101,6 +115,7 @@ export default {
             activeTab: CARD_STATUSES.active,
             isLoadingCards: false,
             isSwitching: false,
+            isChangingStatus: false,
             search: debounce(this.searchOnTable, 500),
         };
     },
@@ -159,23 +174,30 @@ export default {
             }
         },
 
-        setIcon(status) {
-            const STATUSES = {
+        getStatus(status, key) {
+            const keys = {
                 active: {
                     src: '/icons/checkmark-circle.svg',
                     class: 'active',
+                    tooltip: this.$lang.turnOff,
                 },
                 notActive: {
                     src: '/icons/close-circle.svg',
-                    class: 'not-active',
+                    class:'not-active',
+                    tooltip: this.$lang.turnOn,
                 },
+                deleted: {
+                    class:'deleted',
+                }
             };
 
             switch(status) {
                 case CARD_STATUSES.active:
-                    return STATUSES.active;
+                    return keys.active[key];
                 case CARD_STATUSES.notActive:
-                    return STATUSES.notActive;
+                    return keys.notActive[key];
+                case CARD_STATUSES.deleted:
+                    return keys.deleted[key];
             }
         },
 
@@ -227,15 +249,25 @@ export default {
             this.$router.push({ query: this.urlParams });
         },
 
-        changeStatus(card) {
-            const newStatus = card.status === CARD_STATUSES.active ?
-                CARD_STATUSES.notActive :
-                CARD_STATUSES.active;
+        async changeStatus(item) {
+            if (this.isChangingStatus || item.status === CARD_STATUSES.deleted) {
+                return;
+            }
 
-            this.$store.dispatch('cards/changeStatus', {
-                cardId: card.cardId,
-                status: newStatus,
-            });
+            const status = item.status === CARD_STATUSES.active ? CARD_STATUSES.notActive : CARD_STATUSES.active;
+
+            try {
+                this.isChangingStatus = true;
+                await this.$store.dispatch('cards/changeStatus', {
+                    cardId: item.cardId,
+                    status,
+                    urlParams: this.$route.query,
+                });
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isChangingStatus = false;
+            }
         },
     },
 
@@ -274,23 +306,67 @@ export default {
 .table-tabs
     margin-bottom: 0.8rem
 
+.bank
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 0.6rem
+    .box
+        width: 1.8rem
+        height: 1.8rem
+        box-shadow: 0 0 0.8rem 0 rgba(0, 0, 0, 0.12)
+        border-radius: 50%
+        .icon
+            width: 100%
+            height: 100%
+
 .status
-    width: 2rem
-    height: 2rem
+    position: relative
     display: flex
     align-items: center
     justify-content: center
+    border-radius: 0.6rem
+    padding: 0.6rem 0.9rem
     margin: 0 auto
-    cursor: pointer
+    .icon,
+    .loader
+        width: 2rem
+        height: 2rem
     &.active
-        fill: $color-green
+        cursor: pointer
+        background-color: rgba($color-green, 0.08)
+        .icon,
+        .loader
+            fill: $color-green
     &.not-active
-        fill: $color-red-dark
+        cursor: pointer
+        background-color: rgba($color-red-dark, 0.08)
+        .icon,
+        .loader
+            fill: $color-red-dark
+    &.deleted
+        background-color: rgba($color-red-dark, 0.08)
+        .text
+            color: $color-red-dark
+    @media(any-hover:hover)
+        &:hover
+            .tooltip
+                opacity: 1
+                visibility: visible
+                pointer-events: all
+                transition: 0.4s ease 0.4s
 
-.status-text
-    color: $color-red-dark
+.tooltip
+    opacity: 0
+    visibility: hidden
+    pointer-events: none
+    right: 100%
+    top: 0.3rem
+    transition: 0.2s ease
 
 .cards-table
     .tbody-item
         position: relative
+    &:deep(.table-item-status)
+        padding: 0.3rem
 </style>

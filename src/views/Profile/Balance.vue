@@ -187,8 +187,13 @@ export default {
         },
 
         async exportBalance(date) {
+            const params = {
+                dateStart: date.start,
+                dateEnd: date.end,
+            };
+
             try {
-                const { data: blob } = await this.$api.balance.exportBalance(date);
+                const { data: blob } = await this.$api.balance.exportBalance(params);
                 downloadFile(blob, 'balance.xlsx');
             } catch (error) {
                 console.log(error);

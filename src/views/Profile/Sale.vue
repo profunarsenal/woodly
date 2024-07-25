@@ -210,8 +210,13 @@ export default {
         },
 
         async exportTransactions(date) {
+            const params = {
+                dateStart: date.start,
+                dateEnd: date.end,
+            };
+
             try {
-                const { data: blob } = await this.$api.transactions.exportTransactions(date);
+                const { data: blob } = await this.$api.transactions.exportTransactions(params);
                 downloadFile(blob, 'transactions.xlsx');
             } catch (error) {
                 console.log(error);

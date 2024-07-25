@@ -18,13 +18,6 @@ export default class Purchases extends AbstractService {
         });
     };
 
-    async changeStatus(purchaseId, status) {
-        return await this.axios.patch('/purchases/change-status', {
-            purchaseId,
-            status,
-        });
-    };
-
     async acceptPurchase(id) {
         return await this.axios.patch(`/purchases/activate/${id}`);
     };

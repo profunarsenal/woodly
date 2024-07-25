@@ -15,7 +15,9 @@
 <script>
 import VActionMenu from '@/components/common/VActionMenu.vue';
 import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
+
 import { PAGES } from '@/helpers/constants';
+import { CARD_STATUSES } from '@/helpers/catalogs';
 
 export default {
     name: 'CardsControls',
@@ -120,7 +122,7 @@ export default {
                                 title: this.$lang.removingCard,
                                 subtitle: this.$lang.areYouSureYouWandDeleteCard(item.title, item.cardNumber),
                                 buttonConfirm: this.$lang.delete,
-                                callbackConfirm: () => this.deleteCard(),
+                                callbackConfirm: () => this.changeStatus( CARD_STATUSES.deleted),
                             },
                         });
                     },
@@ -141,7 +143,7 @@ export default {
                                 title: this.$lang.recoveringCard,
                                 subtitle: this.$lang.areYouSureYouWandRestoreCard(item.title, item.cardNumber),
                                 buttonConfirm: this.$lang.restore,
-                                callbackConfirm: () => this.recoveryCard(),
+                                callbackConfirm: () => this.changeStatus(CARD_STATUSES.active),
                             },
                         });
                     },
@@ -161,22 +163,12 @@ export default {
             this.isOpen = false;
         },
 
-        async deleteCard() {
-            try {
-                await this.$store.dispatch('cards/deleteCard', this.item?.cardId);
-                await this.$store.dispatch('cards/getCards', this.$route.query);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async recoveryCard() {
-            try {
-                await this.$store.dispatch('cards/activateCard', this.item?.cardId);
-                await this.$store.dispatch('cards/getCards', this.$route.query);
-            } catch (error) {
-                console.log(error);
-            }
+        async changeStatus(status) {
+            await this.$store.dispatch('cards/changeStatus', {
+                cardId: this.item?.cardId,
+                status,
+                urlParams: this.$route.query,
+            });
         },
     },
 };

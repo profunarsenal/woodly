@@ -159,7 +159,7 @@ export default {
 
                 const form = {
                     ...this.form,
-                    cardNumber: this.form.cardNumber.split(' ').join(''),
+                    cardNumber: this.form.cardNumber.replace(/\D/g, ''),
                 };
 
                 if (this.isEdit) {

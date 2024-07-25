@@ -229,4 +229,7 @@ export default {
     deactivationUser: 'Деактивация пользователя',
     areYouSureYouWantDeactivateAdmin: 'Вы уверены, что хотите деактивировать пользователя?',
     editUser: 'Редактировать пользователя',
+    removed: 'Удалена',
+    turnOff: 'Отключить',
+    turnOn: 'Включить',
 };

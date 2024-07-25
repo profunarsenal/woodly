@@ -1,4 +1,5 @@
 import ApiModule from '@/api/apiModule';
+import { CARD_STATUSES } from '@/helpers/catalogs';
 
 const api = new ApiModule();
 
@@ -32,28 +33,17 @@ export default {
             commit('setPagination', pagination);
         },
 
-        async deleteCard(_, cardId) {
-            try {
-                await api.cards.deleteCard(cardId);
-            } catch (error) {
-                console.log(error);
-            }
-        },
+        async changeStatus({ dispatch }, params) {
+            const { cardId, status, urlParams } = params;
+            const requests = {
+                [CARD_STATUSES.active]: (cardId) => api.cards.activateCard(cardId),
+                [CARD_STATUSES.notActive]: (cardId) => api.cards.disableCard(cardId),
+                [CARD_STATUSES.deleted]: (cardId) => api.cards.deleteCard(cardId),
+            };
+            const request = requests[status];
 
-        async activateCard(_, cardId) {
-            try {
-                await api.cards.activateCard(cardId);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async disableCard(_, cardId) {
-            try {
-                await api.cards.disableCard(cardId);
-            } catch (error) {
-                console.log(error);
-            }
+            await request(cardId);
+            await dispatch('getCards', urlParams);
         },
 
         async getTransactionsStatus({ commit }) {
