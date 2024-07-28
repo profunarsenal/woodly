@@ -43,6 +43,7 @@ export default {
         ModalPayoutInfo: defineAsyncComponent(() => import('@/components/Profile/Payouts/ModalInfo.vue')),
         ModalCreatePayout: defineAsyncComponent(() => import('@/components/Profile/Payouts/ModalCreatePayout.vue')),
         ModalCreatePayment: defineAsyncComponent(() => import('@/components/Profile/Payments/ModalCreatePayment.vue')),
+        ModalWithdrawalCash: defineAsyncComponent(() => import('@/components/Profile/Balance/ModalWithdrawalCash.vue')),
     },
 
     computed: {

@@ -139,7 +139,7 @@ export const BALANCE_STATUSES = {
             title: 'Платежи',
             icon: '/icons/arrow.svg',
             color: 'green',
-            transactionTitle: 'Платёж',
+            transactionTitle: 'Платеж / Пополнение',
         },
         {
             key: 'purchaseAdmin',
@@ -147,7 +147,7 @@ export const BALANCE_STATUSES = {
             title: 'Выплаты',
             icon: '/icons/checkbox-mark.svg',
             color: 'green',
-            transactionTitle: 'Выплата',
+            transactionTitle: 'Выплата / Пополнение',
         },
         {
             key: 'sent',
@@ -155,7 +155,7 @@ export const BALANCE_STATUSES = {
             title: 'Отправлено',
             icon: '/icons/arrow.svg',
             color: 'red',
-            transactionTitle: 'Отправлено',
+            transactionTitle: 'Отправлено / Списание',
         },
         {
             key: 'depositTraders',

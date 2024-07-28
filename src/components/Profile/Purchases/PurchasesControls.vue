@@ -111,7 +111,7 @@ export default {
                 subtitle: this.$lang.areYouSureYouWantAcceptDeal,
                 buttonCancel: this.$lang.cancel,
                 buttonConfirm: this.$lang.accept,
-                callbackConfirm: () => this.accept(),
+                callbackConfirm: () => this.changePurchaseStatus('accept'),
                 callbackCancel: () => this.closePopup('accept'),
             },
             popupConfirmComponentData: {
@@ -119,7 +119,7 @@ export default {
                 subtitle: this.$lang.areYouSureYouWantConfirmDeal,
                 buttonCancel: this.$lang.cancel,
                 buttonConfirm: this.$lang.confirm,
-                callbackConfirm: () => this.confirm(),
+                callbackConfirm: () => this.changePurchaseStatus('confirm'),
                 callbackCancel: () => this.closePopup('confirm'),
             },
             popupCancelComponentData: {
@@ -127,7 +127,7 @@ export default {
                 subtitle: this.$lang.areYouSureYouWantCancelDeal,
                 buttonCancel: this.$lang.close,
                 buttonConfirm: this.$lang.cancelDeal,
-                callbackConfirm: () => this.cancel(),
+                callbackConfirm: () => this.changePurchaseStatus('cancel'),
                 callbackCancel: () => this.closePopup('cancel'),
             },
         };
@@ -162,53 +162,20 @@ export default {
             };
         },
 
-        async cancel() {
+        async changePurchaseStatus(popupName) {
+            const statuses = {
+                confirm: PURCHASES_STATUSES.successful.id,
+                accept: PURCHASES_STATUSES.active.id,
+                cancel: PURCHASES_STATUSES.cancelled.id,
+            };
+
             try {
-                await this.$store.dispatch('purchases/cancelPurchase', {
+                await this.$store.dispatch('purchases/changePurchaseStatus', {
                     purchaseId: this.item.purchaseId,
-                    status: PURCHASES_STATUSES.cancelled.id,
+                    status: statuses[popupName],
                 });
 
-                this.closePopup('cancel');
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async confirm() {
-            try {
-                await this.$store.dispatch('purchases/confirmPurchase', {
-                    purchaseId: this.item.purchaseId,
-                    status: PURCHASES_STATUSES.successful.id,
-                });
-
-                this.closePopup('confirm');
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async accept() {
-            try {
-                await this.$store.dispatch('purchases/acceptPurchase', {
-                    purchaseId: this.item.purchaseId,
-                    status: PURCHASES_STATUSES.active.id,
-                });
-
-                this.closePopup('accept');
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async cancel() {
-            try {
-                await this.$store.dispatch('purchases/cancelPurchase', {
-                    purchaseId: this.item.purchaseId,
-                    status: PURCHASES_STATUSES.cancelled.id,
-                });
-
-                this.closePopup('cancel');
+                this.closePopup(popupName);
             } catch (error) {
                 console.log(error);
             }

@@ -8,8 +8,9 @@
                 @click="componentData.callbackCancel"
             ) {{ componentData.buttonCancel }}
             v-button(
+                :isLoading="isLoading"
                 :type="type"
-                @click="componentData.callbackConfirm"
+                @click="callbackConfirm"
             ) {{ componentData.buttonConfirm }}
 </template>
 
@@ -33,6 +34,25 @@ export default {
 
     components: {
         VButton,
+    },
+
+    data() {
+        return {
+            isLoading: false,
+        };
+    },
+
+    methods: {
+        async callbackConfirm() {
+            try {
+                this.isLoading = true;
+                await this.componentData.callbackConfirm();
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isLoading = false;
+            }
+        }
     },
 };
 </script>

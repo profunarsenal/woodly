@@ -38,12 +38,9 @@
                 template(#amount="{ item }")
                     .amount {{ getCurrencyValue(item.amount) }}
                 template(#status="{ item }")
-                    .status
-                        inline-svg.status-icon(
-                            :src="setStatus(item.status, 'icon')"
-                            :class="setStatus(item.status, 'color')"
-                        )
-                        .status-text {{ setStatus(item.status, 'transactionTitle') }}
+                    .status(:class="setStatus(item.status, 'key')")
+                        inline-svg.icon(:src="setStatus(item.status, 'icon')")
+                        .text {{ setStatus(item.status, 'transactionTitle') }}
                 template(#dateCreate="{ item }")
                     table-date(
                         v-if="item.dateCreate"
@@ -256,18 +253,31 @@ export default {
         padding: 1.6rem 1.2rem
     &:deep(.tbody-item)
         vertical-align: top
+    &:deep(.table-item-status)
+        padding: 0.3rem
     .status
         display: flex
         align-items: center
         gap: 0.6rem
-        &-icon
+        border-radius: 0.6rem
+        padding: 0.6rem 0.9rem
+        .icon
             width: 1.6rem
             height: 1.6rem
-            fill: $color-violet-100
-            &.yellow
+        &.active
+            background-color: rgba($color-violet-100, 0.08)
+            .icon
+                fill: $color-violet-100
+        &.review
+            background-color: rgba($color-yellow-dark, 0.08)
+            .icon
                 fill: $color-yellow-dark
-            &.red
+        &.cancelled
+            background-color: rgba($color-red-dark, 0.08)
+            .icon
                 fill: $color-red-dark
-            &.green
+        &.successful
+            background-color: rgba($color-green, 0.08)
+            .icon
                 fill: $color-green
 </style>

@@ -32,7 +32,7 @@
                 @search="search"
             )
                 template(#cardNumber="{ item }")
-                    .card {{ item.cardNumber }}
+                    .card {{ formatCardNumber(item.cardNumber) }}
                 template(#bankType="{ item }")
                     .bank
                         .text {{ setBankType(item.bankType) }}
@@ -50,7 +50,7 @@
                         @click="changeStatus(item)"
                     )
                         span.text(v-if="item.status === cardStatuses.deleted") {{ $lang.removed }}
-                        v-loader.loader(v-else-if="isChangingStatus")
+                        v-loader.loader(v-else-if="item.isChangingStatus")
                         template(v-else)
                             inline-svg.icon(:src="getStatus(item.status, 'src')")
                             v-tooltip.tooltip(
@@ -89,6 +89,7 @@ import VLoader from '@/components/common/VLoader.vue';
 
 import { CARDS_TABLE_HEADERS } from '@/helpers/table';
 import { BANK_TYPES, CARD_STATUSES } from '@/helpers/catalogs';
+import { formatCardNumber } from '@/helpers/string';
 
 export default {
     name: 'ProfileCards',
@@ -117,6 +118,7 @@ export default {
             isSwitching: false,
             isChangingStatus: false,
             search: debounce(this.searchOnTable, 500),
+            formatCardNumber: formatCardNumber,
         };
     },
 
@@ -250,14 +252,14 @@ export default {
         },
 
         async changeStatus(item) {
-            if (this.isChangingStatus || item.status === CARD_STATUSES.deleted) {
+            if (item.isChangingStatus || item.status === CARD_STATUSES.deleted) {
                 return;
             }
 
             const status = item.status === CARD_STATUSES.active ? CARD_STATUSES.notActive : CARD_STATUSES.active;
 
             try {
-                this.isChangingStatus = true;
+                item.isChangingStatus = true;
                 await this.$store.dispatch('cards/changeStatus', {
                     cardId: item.cardId,
                     status,
@@ -266,7 +268,7 @@ export default {
             } catch (error) {
                 console.log(error);
             } finally {
-                this.isChangingStatus = false;
+                delete item.isChangingStatus;
             }
         },
     },

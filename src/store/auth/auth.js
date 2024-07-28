@@ -29,6 +29,14 @@ export default {
         isAdmin(_, getters) {
             return getters.role === ROLES.admin;
         },
+
+        isMerchant(_, getters) {
+            return getters.role === ROLES.merchant;
+        },
+
+        isTrader(_, getters) {
+            return getters.role === ROLES.trader;
+        },
     },
 
     mutations: {

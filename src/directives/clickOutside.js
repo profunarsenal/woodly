@@ -7,11 +7,11 @@ export const clickOutside = {
         };
 
         setTimeout(() => {
-            document.body.addEventListener('click', element.vClickOutside);
+            document.body.addEventListener('mousedown', element.vClickOutside);
         }, 0)
     },
 
     unmounted(element) {
-        document.body.removeEventListener('click', element.vClickOutside);
+        document.body.removeEventListener('mousedown', element.vClickOutside);
     },
 };

@@ -122,7 +122,7 @@ export default {
                                 title: this.$lang.removingCard,
                                 subtitle: this.$lang.areYouSureYouWandDeleteCard(item.title, item.cardNumber),
                                 buttonConfirm: this.$lang.delete,
-                                callbackConfirm: () => this.changeStatus( CARD_STATUSES.deleted),
+                                callbackConfirm: () => this.changeStatus(CARD_STATUSES.deleted),
                             },
                         });
                     },

@@ -1,4 +1,5 @@
 import ApiModule from '@/api/apiModule';
+import { PURCHASES_STATUSES } from '@/helpers/catalogs';
 
 const api = new ApiModule();
 
@@ -41,28 +42,18 @@ export default {
             }
         },
 
-        async confirmPurchase({ commit }, params) {
-            try {
-                await api.purchases.confirmPurchase(params.purchaseId);
-                commit('setChangedPurchases', params);
-            } catch (error) {
-                console.log(error);
-            }
-        },
+        async changePurchaseStatus({ commit }, params) {
+            const { purchaseId, status } = params;
+            const requests = {
+                [PURCHASES_STATUSES.active.id]: (purchaseId) => api.purchases.acceptPurchase(purchaseId),
+                [PURCHASES_STATUSES.successful.id]: (purchaseId) => api.purchases.confirmPurchase(purchaseId),
+                [PURCHASES_STATUSES.cancelled.id]: (purchaseId) => api.purchases.cancelPurchase(purchaseId),
+            };
+            const request = requests[status];
 
-        async acceptPurchase({ commit }, params) {
             try {
-                await api.purchases.acceptPurchase(params.purchaseId);
-                commit('setChangedPurchases', params);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async cancelPurchase({ commit }, params) {
-            try {
-                await api.purchases.cancelPurchase(params.purchaseId);
-                commit('setChangedPurchases', params);
+                await request(purchaseId);
+                await commit('setChangedPurchases', params);
             } catch (error) {
                 console.log(error);
             }

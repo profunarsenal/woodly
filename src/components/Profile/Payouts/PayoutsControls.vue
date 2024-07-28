@@ -75,7 +75,7 @@ import ButtonMini from '@/components/common/Buttons/ButtonMini.vue';
 import VTooltip from '@/components/common/VTooltip.vue';
 import PopupConfirm from '@/components/Popup/PopupConfirm.vue';
 
-import { PAYOUTS_STATUSES } from '@/helpers/catalogs';
+import { PAYOUTS_STATUSES, PURCHASES_STATUSES } from '@/helpers/catalogs';
 
 export default {
     name: 'PayoutsControls',
@@ -108,7 +108,7 @@ export default {
                 subtitle: this.$lang.areYouSureYouWantConfirmPayout,
                 buttonCancel: this.$lang.cancel,
                 buttonConfirm: this.$lang.confirm,
-                callbackConfirm: () => ({}),
+                callbackConfirm: () => this.changePayoutStatus('confirm'),
                 callbackCancel: () => this.closePopup('confirm'),
             },
             popupCancelComponentData: {
@@ -116,7 +116,7 @@ export default {
                 subtitle: this.$lang.areYouSureYouWantCancelPayout,
                 buttonCancel: this.$lang.close,
                 buttonConfirm: this.$lang.cancelPayout,
-                callbackConfirm: () => ({}),
+                callbackConfirm: () => this.changePayoutStatus('cancel'),
                 callbackCancel: () => this.closePopup('cancel'),
             },
         };
@@ -147,6 +147,24 @@ export default {
                 positionCenter: true,
                 componentData: this.item,
             });
+        },
+
+        async changePayoutStatus(popupName) {
+            const statuses = {
+                confirm: PURCHASES_STATUSES.successful.id,
+                cancel: PURCHASES_STATUSES.cancelled.id,
+            };
+
+            try {
+                await this.$store.dispatch('purchases/changePurchaseStatus', {
+                    purchaseId: this.item.purchaseId,
+                    status: statuses[popupName],
+                });
+
+                this.closePopup(popupName);
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         openPopup(popupName) {

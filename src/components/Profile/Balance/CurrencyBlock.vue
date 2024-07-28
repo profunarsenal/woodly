@@ -7,15 +7,25 @@
                 .title {{ $lang.balanceInRubles }}
                 .balance
                     .value {{ getCurrencyValue(balance.balance) }}
-                    .button
-                        button-mini(
-                            type="payout"
-                            @click="openModalTransaction"
-                        )
-                        v-tooltip.table-tooltip.left(
-                            position="left"
-                            :text="$lang.transferFunds"
-                        )
+                    .buttons
+                        .button(v-if="hasWithdrawal")
+                            button-mini(
+                                type="add"
+                                @click="openModalWithdrawalCash"
+                            )
+                            v-tooltip.table-tooltip.left(
+                                position="left"
+                                :text="$lang.createWithdrawalCash"
+                            )
+                        .button(v-if="hasTransfers")
+                            button-mini(
+                                type="payout"
+                                @click="openModalTransaction"
+                            )
+                            v-tooltip.table-tooltip.left(
+                                position="left"
+                                :text="$lang.transferFunds"
+                            )
             .item
                 .title {{ $lang.frozen }}
                 .value {{ getCurrencyValue(balance.freeze) }}
@@ -69,6 +79,16 @@ export default {
             type: Object,
             required: true,
         },
+
+        hasTransfers: {
+            type: Boolean,
+            default: false,
+        },
+
+        hasWithdrawal: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
@@ -91,6 +111,13 @@ export default {
         openModalTransaction() {
             this.$store.commit('modal/open', {
                 component: 'ModalTransaction',
+                positionCenter: true,
+            });
+        },
+
+        openModalWithdrawalCash() {
+            this.$store.commit('modal/open', {
+                component: 'ModalWithdrawalCash',
                 positionCenter: true,
             });
         },
@@ -133,6 +160,11 @@ export default {
     align-items: center
     justify-content: center
     flex: 0 0 5.6rem
+
+.buttons
+    display: flex
+    align-items: center
+    gap: 0.8rem
 
 .button
     position: relative

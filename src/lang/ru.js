@@ -232,4 +232,10 @@ export default {
     removed: 'Удалена',
     turnOff: 'Отключить',
     turnOn: 'Включить',
+    creatingWithdrawalCash: 'Создание вывода',
+    createWithdrawalCash: 'Создать вывод',
+    walletNumber: 'Номер кошелька',
+    enterWalletNumber: 'Введите номер кошелька',
+    withdrawalAmount: 'Сумма вывода',
+    enterWithdrawalAmount: 'Введите сумму вывода',
 };

@@ -45,3 +45,7 @@ export const formatTime = (date) => {
 export const getCurrencyValue = (value, currency = CURRENCIES_SIGNS.rub) => {
     return `${value}${currency}`;
 };
+
+export const formatCardNumber = (cardNumber) => {
+    return cardNumber.match(/.{1,4}/g).join(' ');
+}

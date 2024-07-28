@@ -2,23 +2,23 @@
     .wrapper
         button.close(@click="close")
             inline-svg.icon(src="/icons/close.svg")
-        .title {{ $lang.moneyTransaction }}
+        .title {{ $lang.creatingWithdrawalCash }}
         .form
             v-input(
-                v-model="id"
-                :label="$lang.recipientId"
-                :placeholder="$lang.recipientId"
+                v-model="walletNumber"
+                :label="$lang.walletNumber"
+                :placeholder="$lang.enterWalletNumber"
             )
             v-input(
                 v-model="amount"
                 type="number"
-                :label="$lang.transferAmount"
-                :placeholder="$lang.transferAmount"
+                :label="$lang.withdrawalAmount"
+                :placeholder="$lang.enterWithdrawalAmount"
             )
         v-button.button(
             :isDisabled="isButtonDisabled"
-            @click="transfer"
-        ) {{ $lang.transfer }}
+            @click="create"
+        ) {{ $lang.create }}
 </template>
 
 <script>
@@ -26,7 +26,7 @@ import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 
 export default {
-    name: 'ModalTransaction',
+    name: 'ModalWithdrawalCash',
 
     components: {
         VInput,
@@ -42,14 +42,14 @@ export default {
 
     data() {
         return {
-            id: '',
+            walletNumber: '',
             amount: '',
         };
     },
 
     computed: {
         isButtonDisabled() {
-            return !this.id || !this.amount;
+            return !this.walletNumber || !this.amount;
         },
     },
 
@@ -58,8 +58,8 @@ export default {
             this.$store.commit('modal/close');
         },
 
-        transfer() {
-            console.log('transfer');
+        create() {
+            console.log('create');
         },
     },
 };

@@ -13,6 +13,8 @@
                     v-for="balance in balances"
                     :key="balance.address"
                     :balance="balance"
+                    :hasWithdrawal="operationList.withdrawal"
+                    :hasTransfers="operationList.transfers"
                     imageSrc="/icons/currencies/rouble.svg"
                 )
             .table-header
@@ -130,6 +132,9 @@ export default {
 
         ...mapGetters({
             role: 'auth/role',
+            isAdmin: 'auth/isAdmin',
+            isMerchant: 'auth/isMerchant',
+            isTrader: 'auth/isTrader',
         }),
 
         tableTabs() {
@@ -137,6 +142,13 @@ export default {
                 { key: 'all', title: this.$lang.allTransactions },
                 ...BALANCE_STATUSES[this.role],
             ];
+        },
+
+        operationList() {
+            return {
+                withdrawal: this.isMerchant || this.isTrader,
+                transfers: this.isAdmin || this.isTrader,
+            };
         },
     },
 
@@ -320,7 +332,8 @@ export default {
             fill: $color-red-dark
     &.deposit,
     &.purchase,
-    &.transactionAdmin
+    &.transactionAdmin,
+    &.purchaseAdmin
         background-color: rgba($color-green, 0.08)
         .status-icon
             fill: $color-green
