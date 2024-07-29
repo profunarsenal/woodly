@@ -68,7 +68,8 @@ export default {
     background-color: $color-white
     border-radius: 2rem 0 0 0
     width: 100%
-    flex: 1 1 auto
+    height: 100%
+    overflow-y: auto
 
 .header
     display: flex
@@ -80,6 +81,9 @@ export default {
         font-weight: 600
         font-size: 3.2rem
         line-height: 3.2rem
+
+.content
+    height: 100%
 
 .pagination
     position: absolute

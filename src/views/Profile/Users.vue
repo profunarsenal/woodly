@@ -12,7 +12,7 @@
             ) {{ $lang.add }}
 
         template(#content)
-            v-table.table(
+            v-table.table-users(
                 :headers="tableHeaders"
                 :items="users"
                 :isLoading="isLoading"
@@ -20,7 +20,7 @@
                 template(#role="{ item }")
                     div {{ rolesRussian[item.role] }}
                 template(#thead)
-                    th.thead-item
+                    .thead-item
                         .title {{ $lang.info }}
                 template(#tbody="{ item }")
                     users-controls(:item="item")
@@ -101,9 +101,14 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.thead-item
-    width: 7.2rem
-    .title
+$col-size-1: minmax(12.11%, 1fr)
+$col-size-2: minmax(20.42%, 1fr)
+$col-size-3: minmax(6.23%, 1fr)
+
+.table-users
+    &:deep(.table)
+        grid-template-columns: $col-size-1 repeat(4, $col-size-2) $col-size-3
+    .thead-item .title
         font-weight: 500
         font-size: 1.4rem
         line-height: 2rem

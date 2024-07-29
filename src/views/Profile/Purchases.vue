@@ -26,12 +26,18 @@
                 :tabs="tableTabs"
                 @select="toggleTable"
             )
-            v-table.table(
+            v-table.table-purchases(
                 :headers="tableHeaders"
                 :items="purchases"
                 :isLoading="isLoading"
                 @search="search"
             )
+                template(#paymentSystem="{ item }")
+                    .payment {{ setPaymentSystem(item.paymentSystem) }}
+                template(#requisites="{ item }")
+                    .requisites
+                        .value {{ item.requisites }}
+                        .bank {{ setBankType(item.bankType) }}
                 template(#amount="{ item }")
                     .amount {{ getCurrencyValue(item.amount) }}
                 template(#status="{ item }")
@@ -44,7 +50,7 @@
                         :date="item.dateCreate"
                     )
                 template(#thead)
-                    th.thead-item(colspan="2")
+                    .thead-item
                 template(#tbody="{ item }")
                     purchases-controls(:item="item")
                 template(#empty)
@@ -72,6 +78,8 @@ import { PURCHASES } from '@/helpers/table';
 import { downloadFile } from '@/helpers/url';
 import { getCurrencyValue } from '@/helpers/string';
 import { PURCHASES_STATUSES } from '@/helpers/catalogs';
+import { PAYMENT_SYSTEMS } from '@/helpers/constants';
+import { BANKS } from '@/helpers/testData';
 
 export default {
     name: 'ProfilePurchases',
@@ -193,6 +201,15 @@ export default {
             const statusItem = Object.values(PURCHASES_STATUSES).find(item => item.id === status);
             return statusItem[key] || '';
         },
+
+        setPaymentSystem(id) {
+            const paymentSystem = Object.values(PAYMENT_SYSTEMS).find(item => item.id === id);
+            return paymentSystem?.title || '';
+        },
+
+        setBankType(id) {
+            return BANKS.find(bank => bank.id === id)?.title;
+        },
     },
 
     watch: {
@@ -212,6 +229,11 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+$col-size-1: minmax(13.41%, 1fr)
+$col-size-2: minmax(15.57%, 1fr)
+$col-size-3: minmax(22.15%, 1fr)
+$col-size-4: minmax(8.65%, 1fr)
+
 .purchases
     &:deep(.header)
         justify-content: space-between
@@ -222,12 +244,19 @@ export default {
 .table-tabs
     margin-bottom: 0.8rem
 
+.table-purchases
+    &:deep(.table-item-status)
+        padding: 0.3rem
+    &:deep(.table)
+        grid-template-columns: $col-size-1 $col-size-2 $col-size-3 repeat(3, $col-size-1) $col-size-4
+
 .status
     display: flex
-    align-items: center
+    align-items: flex-start
     gap: 0.6rem
     border-radius: 0.6rem
     padding: 0.6rem 0.9rem
+    height: 100%
     &-icon
         width: 1.6rem
         height: 1.6rem
@@ -253,8 +282,4 @@ export default {
     &:deep(.tab)
         &.red .icon
             transform: rotate(-90deg)
-
-.table
-    &:deep(.table-item-status)
-        padding: 0.3rem
 </style>

@@ -25,7 +25,7 @@
                 :tabs="tableTabs"
                 @select="toggleTable"
             )
-            v-table.cards-table(
+            v-table.table-cards(
                 :headers="tableHeaders"
                 :items="cards"
                 :isLoading="isLoadingCards"
@@ -58,9 +58,9 @@
                                 :text="getStatus(item.status, 'tooltip')"
                             )
                 template(#thead)
-                    th.thead-item
+                    .thead-item
                 template(#tbody="{ item }")
-                    td.tbody-item
+                    .tbody-item
                         cards-controls(
                             :item="item"
                             :isEnabledTabActive="isEnabledTabActive"
@@ -300,6 +300,11 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+$col-size-1: minmax(7.61%, 1fr)
+$col-size-2: minmax(13.61%, 1fr)
+$col-size-3: minmax(6.92%, 1fr)
+$col-size-4: minmax(3.81%, 1fr)
+
 .button-transactions
     margin-left: auto
     width: 16.1rem
@@ -307,6 +312,15 @@ export default {
 
 .table-tabs
     margin-bottom: 0.8rem
+
+.table-cards
+    .tbody-item
+        position: relative
+        padding: 0.7rem 1.2rem
+    &:deep(.table-item-status)
+        padding: 0.3rem
+    &:deep(.table)
+        grid-template-columns: $col-size-1 repeat(6, $col-size-2) $col-size-3 $col-size-4
 
 .bank
     display: flex
@@ -328,7 +342,7 @@ export default {
     align-items: center
     justify-content: center
     border-radius: 0.6rem
-    padding: 0.6rem 0.9rem
+    height: 100%
     margin: 0 auto
     .icon,
     .loader
@@ -365,10 +379,4 @@ export default {
     right: 100%
     top: 0.3rem
     transition: 0.2s ease
-
-.cards-table
-    .tbody-item
-        position: relative
-    &:deep(.table-item-status)
-        padding: 0.3rem
 </style>

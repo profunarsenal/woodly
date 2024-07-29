@@ -37,7 +37,7 @@
                         :applyButton="$lang.unload"
                         @apply="exportBalance"
                     )
-            v-table.table(
+            v-table.table-transactions(
                 :headers="tableHeaders"
                 :items="balanceTransactions"
                 :isLoading="isLoadingTransactions"
@@ -45,9 +45,9 @@
                 @search="search"
             )
                 template(#status="{ item }")
-                    .status(:class="getStatus(item.status).key")
-                        inline-svg.status-icon(:src="getStatus(item.status).icon")
-                        .status-text {{ getStatus(item.status).transactionTitle }}
+                    .status(:class="getStatus(item.status, 'key')")
+                        inline-svg.status-icon(:src="getStatus(item.status, 'icon')")
+                        .status-text {{ getStatus(item.status, 'transactionTitle') }}
                 template(#amount="{ item }")
                     .bank {{ getCurrencyValue(item.amount) }}
                 template(#date="{ item }")
@@ -164,8 +164,9 @@ export default {
             this.$router.push({ query: this.urlParams });
         },
 
-        getStatus(status) {
-            return this.tableTabs.find(item => item.id === status);
+        getStatus(status, key) {
+            const item = this.tableTabs.find(item => item.id === status);
+            return item ? item[key] : '';
         },
 
         async getBalanceTransactions() {
@@ -308,10 +309,11 @@ export default {
 
 .status
     display: flex
-    align-items: center
+    align-items: flex-start
     gap: 0.6rem
     border-radius: 0.6rem
     padding: 0.6rem 0.9rem
+    height: 100%
     &-icon
         width: 1.6rem
         height: 1.6rem
@@ -361,9 +363,11 @@ export default {
             .icon
                 transform: rotate(-90deg)
 
-.table
+.table-transactions
     &:deep(.table-item-status)
         padding: 0.3rem
+    &:deep(.table)
+        grid-template-columns: repeat(5, 1fr)
     .content
         display: flex
         align-items: center

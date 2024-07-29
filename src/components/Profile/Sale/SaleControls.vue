@@ -1,9 +1,52 @@
 <template lang="pug">
     template(v-if="isSuccessfulStatus")
-        td.tbody-item(colspan="2")
+        .tbody-item
     template(v-else-if="isReviewStatus")
-        td.tbody-item
-            .controls
+        .tbody-item
+            .column
+                .controls
+                    .control(:class="setClass('confirm')")
+                        button-mini(
+                            type="confirm"
+                            @click="openPopup('confirm')"
+                        )
+                        v-tooltip.tooltip(
+                            position="right"
+                            :text="$lang.confirmDeal"
+                        )
+                        popup-confirm.popup(
+                            v-if="popup.confirm.isOpen"
+                            :componentData="popupConfirmComponentData"
+                            type="positive"
+                        )
+                    .control(:class="setClass('cancel')")
+                        button-mini(
+                            type="decline"
+                            @click="openPopup('cancel')"
+                        )
+                        v-tooltip.tooltip(
+                            position="right"
+                            :text="$lang.rejectVerification"
+                        )
+                        popup-confirm.popup(
+                            v-if="popup.cancel.isOpen"
+                            :componentData="popupDeclineComponentData"
+                            type="negative"
+                        )
+            .column
+                button-mini(
+                    type="option"
+                    @click="openMenuControls"
+                )
+                v-action-menu(
+                    v-if="isOpenMenuControls"
+                    v-click-outside="closeMenuControls"
+                    :controls="menuControls"
+                    :item="item"
+                )
+    template(v-else)
+        .tbody-item
+            .column
                 .control(:class="setClass('confirm')")
                     button-mini(
                         type="confirm"
@@ -18,57 +61,16 @@
                         :componentData="popupConfirmComponentData"
                         type="positive"
                     )
-                .control(:class="setClass('cancel')")
+            .column
+                .control
                     button-mini(
-                        type="decline"
-                        @click="openPopup('cancel')"
+                        type="edit"
+                        @click="openModalCorrection"
                     )
                     v-tooltip.tooltip(
                         position="right"
-                        :text="$lang.rejectVerification"
+                        :text="$lang.correctApplication"
                     )
-                    popup-confirm.popup(
-                        v-if="popup.cancel.isOpen"
-                        :componentData="popupDeclineComponentData"
-                        type="negative"
-                    )
-        td.tbody-item
-            button-mini(
-                type="option"
-                @click="openMenuControls"
-            )
-            v-action-menu(
-                v-if="isOpenMenuControls"
-                v-click-outside="closeMenuControls"
-                :controls="menuControls"
-                :item="item"
-            )
-    template(v-else)
-        td.tbody-item
-            .control(:class="setClass('confirm')")
-                button-mini(
-                    type="confirm"
-                    @click="openPopup('confirm')"
-                )
-                v-tooltip.tooltip(
-                    position="right"
-                    :text="$lang.confirmDeal"
-                )
-                popup-confirm.popup(
-                    v-if="popup.confirm.isOpen"
-                    :componentData="popupConfirmComponentData"
-                    type="positive"
-                )
-        td.tbody-item
-            .control
-                button-mini(
-                    type="edit"
-                    @click="openModalCorrection"
-                )
-                v-tooltip.tooltip(
-                    position="right"
-                    :text="$lang.correctApplication"
-                )
 </template>
 
 <script>
@@ -213,6 +215,30 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.tbody-item
+    position: relative
+    display: flex
+    padding: 0 !important
+
+.column
+    position: relative
+    padding: 1.6rem 1.2rem
+    display: flex
+    align-items: center
+    justify-content: flex-start
+    &:nth-child(1)
+        flex: 0 0 62.07%
+        &::before
+            content: ''
+            position: absolute
+            top: 0
+            right: 0
+            width: 0.1rem
+            height: 100%
+            background-color: $color-gray-100
+    &:nth-child(2)
+        flex: 0 0 37.93%
+
 .controls
     display: flex
     gap: 0.8rem
@@ -243,9 +269,6 @@ export default {
     z-index: 10
     top: calc( 100% + 0.4rem )
     right: 0
-
-.tbody-item
-    position: relative
 
 .action-menu
     &:deep(.menu)

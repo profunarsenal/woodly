@@ -1,20 +1,18 @@
 <template lang="pug">
-    thead.thead
-        tr.thead-row
-            th.thead-item(
-                v-for="header in headers"
-                :key="header.key"
-                :style="header.style"
+    .thead-row
+        .thead-item(
+            v-for="header in headers"
+            :key="header.key"
+        )
+            slot(
+                :name="`thead-${header.key}`"
+                :item="header"
             )
-                slot(
-                    :name="`thead-${header.key}`"
-                    :item="header"
-                )
-                    .content
-                        .title {{ header.title }}
-                        .subtitle(v-if="header.subtitle") {{ header.subtitle }}
+                .content
+                    .title {{ header.title }}
+                    .subtitle(v-if="header.subtitle") {{ header.subtitle }}
 
-            slot(name="thead")
+        slot(name="thead")
 </template>
 
 <script>

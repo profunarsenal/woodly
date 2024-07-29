@@ -88,7 +88,7 @@
                 :tabs="tableTabs"
                 @select="toggleTable"
             )
-            v-table.table(
+            v-table.table-payouts(
                 :headers="tableHeaders"
                 :items="payouts"
                 :isLoading="isLoading"
@@ -98,6 +98,10 @@
                     .status(:class="setStatus(item.status, 'color')")
                         inline-svg.status-icon(:src="setStatus(item.status, 'icon')")
                         .status-text {{ setStatus(item.status, 'title') }}
+                template(#requisites="{ item }")
+                    .requisites
+                        .value {{ item.requisites }}
+                        .bank {{ setBankType(item.bankType) }}
                 template(#dateCreate="{ item }")
                     table-date(
                         v-if="item.dateCreate"
@@ -315,6 +319,10 @@ export default {
             const paymentSystem = Object.values(PAYMENT_SYSTEMS).find(item => item.id === id);
             return paymentSystem?.title || '';
         },
+
+        setBankType(id) {
+            return BANKS.find(bank => bank.id === id)?.title;
+        },
     },
 
     watch: {
@@ -342,6 +350,15 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+$col-size-1: minmax(9.34%, 1fr)
+$col-size-2: minmax(6.92%, 1fr)
+$col-size-3: minmax(5.62%, 1fr)
+$col-size-4: minmax(9%, 1fr)
+$col-size-5: minmax(12.11%, 1fr)
+$col-size-6: minmax(14.88%, 1fr)
+$col-size-7: minmax(9.95%, 1fr)
+$col-size-8: minmax(11.07%, 1fr)
+
 .header-controls
     display: flex
     justify-content: space-between
@@ -355,6 +372,11 @@ export default {
 .table-tabs
     margin-bottom: 0.8rem
 
+.table-payouts
+    &:deep(.table-item-status)
+        padding: 0.3rem
+    &:deep(.table)
+        grid-template-columns: $col-size-1 $col-size-2 $col-size-3 repeat(2, $col-size-4) $col-size-5 $col-size-6 $col-size-7 $col-size-5 $col-size-8
 .filters-block
     position: absolute
     z-index: 50
@@ -378,10 +400,11 @@ export default {
 
 .status
     display: flex
-    align-items: center
+    align-items: flex-start
     gap: 0.6rem
     border-radius: 0.6rem
     padding: 0.6rem 0.9rem
+    height: 100%
     &-icon
         width: 1.6rem
         height: 1.6rem
@@ -402,8 +425,4 @@ export default {
         background-color: rgba($color-green, 0.08)
         .status-icon
             fill: $color-green
-
-.table
-    &:deep(.table-item-status)
-        padding: 0.3rem
 </style>

@@ -26,7 +26,7 @@
                 :tabs="tableTabs"
                 @select="toggleTable"
             )
-            v-table.transactions-table(
+            v-table.table-transactions(
                 :headers="tableHeaders"
                 :items="transactions"
                 :isLoading="isLoading"
@@ -52,7 +52,7 @@
                         :date="item.dateClose"
                     )
                 template(#thead)
-                    th.thead-item(colspan="2")
+                    .thead-item(colspan="2")
                 template(#tbody="{ item }")
                     sale-controls(:item="item")
                 template(#empty)
@@ -238,6 +238,12 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+$col-size-1: minmax(12.11%, 1fr)
+$col-size-2: minmax(22.15%, 1fr)
+$col-size-3: minmax(14.99%, 1fr)
+$col-size-4: minmax(10.73%, 1fr)
+$col-size-5: minmax(10.03%, 1fr)
+
 .sale
     &:deep(.header)
         justify-content: space-between
@@ -248,19 +254,18 @@ export default {
 .table-tabs
     margin-bottom: 0.8rem
 
-.transactions-table
-    .tbody-item
-        padding: 1.6rem 1.2rem
-    &:deep(.tbody-item)
-        vertical-align: top
+.table-transactions
     &:deep(.table-item-status)
         padding: 0.3rem
+    &:deep(.table)
+        grid-template-columns: $col-size-1 $col-size-2 $col-size-3 $col-size-4 repeat(2, $col-size-3) $col-size-5
     .status
         display: flex
-        align-items: center
+        align-items: flex-start
         gap: 0.6rem
         border-radius: 0.6rem
         padding: 0.6rem 0.9rem
+        height: 100%
         .icon
             width: 1.6rem
             height: 1.6rem

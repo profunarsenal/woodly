@@ -12,7 +12,7 @@
             ) {{ $lang.add }}
 
         template(#content)
-            v-table.table(
+            v-table.table-cashboxes(
                 :headers="tableHeaders"
                 :items="cashboxes"
                 :isLoading="isLoading"
@@ -30,7 +30,7 @@
                         .amount {{ balance[1] }}
                         .currency {{ balance[0] }}
                 template(#thead)
-                    th.thead-item
+                    .thead-item
                         .title {{ $lang.info }}
                 template(#tbody="{ item }")
                     cashboxes-controls(:item="item")
@@ -130,12 +130,16 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.table
-    &:deep(.tbody-item)
-        height: 7rem
-        vertical-align: top
+$col-size-1: minmax(7.61%, 1fr)
+$col-size-2: minmax(19.79%, 1fr)
+$col-size-3: minmax(7.01%, 1fr)
+$col-size-4: minmax(6.23%, 1fr)
+
+.table-cashboxes
     &:deep(.table-item-status)
         padding: 0.3rem
+    &:deep(.table)
+        grid-template-columns: $col-size-1 repeat(2, $col-size-2) $col-size-3 repeat(2, $col-size-2) $col-size-4
     .status
         display: flex
         align-items: center
@@ -162,7 +166,6 @@ export default {
         .currency
             color: $color-gray-dark
     .thead-item
-        width: 6.23%
         .title
             font-weight: 500
             font-size: 1.4rem

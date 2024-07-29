@@ -90,7 +90,8 @@ export default {
         left: 0
         z-index: 11
         height: 100%
-        width: 22.2rem
+        min-width: 22.2rem
+        width: 100%
         box-shadow: 0.6rem 0.6rem 1.6rem 0 rgba(0, 0, 0, 0.12)
         display: flex
         align-items: center

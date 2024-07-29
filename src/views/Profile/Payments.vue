@@ -72,7 +72,7 @@
                     ) {{ $lang.export }}
 
         template(#content)
-            v-table.table(
+            v-table.table-payments(
                 :headers="tableHeaders"
                 :items="payments"
                 :isLoading="isLoading"
@@ -96,9 +96,9 @@
                 template(#amountMinusCommission="{ item }")
                     .amount {{ getCurrencyValue(item.amountMinusCommission) }}
                 template(#thead)
-                    th.thead-item
+                    .thead-item
                 template(#tbody="{ item }")
-                    td.tbody-item
+                    .tbody-item
                         .control
                             button-mini(
                                 type="info"
@@ -319,6 +319,17 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+$col-size-1: minmax(9.34%, 1fr)
+$col-size-2: minmax(6.92%, 1fr)
+$col-size-3: minmax(5.62%, 1fr)
+$col-size-4: minmax(9%, 1fr)
+$col-size-5: minmax(max-content, 1fr)
+$col-size-6: minmax(12.46%, 1fr)
+$col-size-7: minmax(11.42%, 1fr)
+$col-size-8: minmax(10.38%, 1fr)
+$col-size-9: minmax(11.25%, 1fr)
+$col-size-10: minmax(5.28%, 1fr)
+
 .header-controls
     display: flex
     align-items: center
@@ -329,12 +340,23 @@ export default {
         align-items: center
         gap: 0.8rem
 
+.table-payments
+    .tbody-item
+        display: flex
+        align-items: center
+        justify-content: center
+    &:deep(.table-item-status)
+        padding: 0.3rem
+    &:deep(.table)
+        grid-template-columns: $col-size-1 $col-size-2 $col-size-3 repeat(2, $col-size-4) $col-size-5 $col-size-6 $col-size-7 $col-size-8 $col-size-9 $col-size-10
+
 .status
     display: flex
-    align-items: center
+    align-items: flex-start
     gap: 0.6rem
     border-radius: 0.6rem
-    padding: 0.6rem 0.9rem
+    padding: 0.5rem 0.9rem
+    height: 100%
     &-icon
         width: 1.6rem
         height: 1.6rem
@@ -356,10 +378,6 @@ export default {
         background-color: rgba($color-green, 0.08)
         .icon
             fill: $color-green
-
-.table
-    &:deep(.table-item-status)
-        padding: 0.3rem
 
 .control
     width: 2rem

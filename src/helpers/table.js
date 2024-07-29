@@ -60,12 +60,12 @@ export const USERS = [
 ];
 
 export const CASHBOXES = [
-    { title: 'ID кассы', key: 'cashboxId', style: 'width: 7.61%' },
-    { title: 'Название', key: 'title', style: 'width: 19.81%' },
-    { title: 'URL', key: 'url', style: 'width: 19.81%' },
-    { title: 'Активен', key: 'status', style: 'width: 7.01%' },
-    { title: 'Баланс', key: 'balance', style: 'width: 19.81%' },
-    { title: 'API', key: 'apiKey', style: 'width: 19.81%' },
+    { title: 'ID кассы', key: 'cashboxId' },
+    { title: 'Название', key: 'title' },
+    { title: 'URL', key: 'url' },
+    { title: 'Активен', key: 'status' },
+    { title: 'Баланс', key: 'balance' },
+    { title: 'API', key: 'apiKey' },
 ];
 
 export const PAYOUTS = [

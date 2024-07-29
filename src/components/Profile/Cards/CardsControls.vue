@@ -173,3 +173,9 @@ export default {
     },
 };
 </script>
+
+<style lang="sass" scoped>
+.control
+    width: 2rem
+    height: 2rem
+</style>

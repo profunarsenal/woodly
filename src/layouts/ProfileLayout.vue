@@ -39,16 +39,12 @@ export default {
 
 <style lang="sass" scoped>
 .profile
-    display: flex
     height: 100vh
     background-color: $color-violet-100
     overflow: hidden
     .content
-        display: flex
-        flex-direction: column
-        width: 100%
         margin-left: 22rem
-        overflow-y: auto
+        height: 100%
     .sidebar
         position: fixed
         top: 0

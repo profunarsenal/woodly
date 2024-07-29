@@ -1,5 +1,5 @@
 <template lang="pug">
-    td.tbody-item
+    .tbody-item
         .controls
             .control
                 button-mini(

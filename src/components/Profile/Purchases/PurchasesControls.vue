@@ -1,6 +1,6 @@
 <template lang="pug">
     template(v-if="isAvailableStatus")
-        td.tbody-item
+        .tbody-item
             .controls
                 .control(:class="setClass('accept')")
                     button-mini(
@@ -16,7 +16,7 @@
                         :componentData="popupAcceptComponentData"
                     )
     template(v-else-if="isActiveStatus")
-        td.tbody-item
+        .tbody-item
             .controls
                 .control(:class="setClass('confirm')")
                     button-mini(
@@ -56,7 +56,7 @@
                         :text="$lang.attachCheck"
                     )
     template(v-else-if="isSuccessfulStatus")
-        td.tbody-item
+        .tbody-item
             .controls
                 .control
                     button-mini(
@@ -68,7 +68,7 @@
                         :text="$lang.viewCheck"
                     )
     template(v-else)
-        td.tbody-item
+        .tbody-item
 </template>
 
 <script>
@@ -202,6 +202,9 @@ export default {
 <style lang="sass" scoped>
 .tbody-item
     position: relative
+    display: flex
+    align-items: center
+    justify-content: flex-end
 
 .controls
     display: flex

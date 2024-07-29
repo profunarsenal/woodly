@@ -1,6 +1,6 @@
 <template lang="pug">
-    tr.tbody-row
-        td.tbody-item(
+    .tbody-row
+        .tbody-item(
             v-for="header in headers"
             :key="header.key"
             :class="`table-item-${header.key}`"
