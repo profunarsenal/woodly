@@ -67,6 +67,8 @@ export default {
     border-radius: 1.2rem
     white-space: nowrap
     transition: background-color 0.3s ease
+    &:disabled
+        cursor: auto
     .icon
         width: 2rem
         height: 2rem
@@ -88,6 +90,7 @@ export default {
         height: 2.4rem
         font-size: 1rem
         line-height: 1.4rem
+        border-radius: 0.6rem
     &.primary
         background-color: $color-violet-100
         color: $color-white

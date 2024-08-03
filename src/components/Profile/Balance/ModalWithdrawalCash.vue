@@ -1,24 +1,35 @@
 <template lang="pug">
     .wrapper
-        button.close(@click="close")
-            inline-svg.icon(src="/icons/close.svg")
-        .title {{ $lang.creatingWithdrawalCash }}
-        .form
-            v-input(
-                v-model="walletNumber"
-                :label="$lang.walletNumber"
-                :placeholder="$lang.enterWalletNumber"
-            )
-            v-input(
-                v-model="amount"
-                type="number"
-                :label="$lang.withdrawalAmount"
-                :placeholder="$lang.enterWithdrawalAmount"
-            )
-        v-button.button(
-            :isDisabled="isButtonDisabled"
-            @click="create"
-        ) {{ $lang.create }}
+        template(v-if="isCreated")
+            .success
+                inline-svg(src="/icons/check.svg")
+                .title {{ $lang.withdrawalCompletedSuccessfully }}
+            v-button.button(
+                size="large"
+                type="secondary"
+                @click="close"
+            ) {{ $lang.ready }}
+        template(v-else)
+            button.close(@click="close")
+                inline-svg.icon(src="/icons/close.svg")
+            .title {{ $lang.creatingWithdrawalCash }}
+            .form
+                v-input(
+                    v-model="address"
+                    :label="$lang.walletNumber"
+                    :placeholder="$lang.enterWalletNumber"
+                )
+                v-input(
+                    v-model="amount"
+                    type="number"
+                    :label="$lang.withdrawalAmount"
+                    :placeholder="$lang.enterWithdrawalAmount"
+                )
+            v-button.button(
+                :isDisabled="isButtonDisabled"
+                :isLoading="isLoading"
+                @click="create"
+            ) {{ $lang.create }}
 </template>
 
 <script>
@@ -42,14 +53,16 @@ export default {
 
     data() {
         return {
-            walletNumber: '',
+            address: '',
             amount: '',
+            isLoading: false,
+            isCreated: false,
         };
     },
 
     computed: {
         isButtonDisabled() {
-            return !this.walletNumber || !this.amount;
+            return !this.address || !this.amount;
         },
     },
 
@@ -58,8 +71,19 @@ export default {
             this.$store.commit('modal/close');
         },
 
-        create() {
-            console.log('create');
+        async create() {
+            try {
+                this.isLoading = true;
+                await this.$api.withdrawals.createWithdrawal({
+                    address: this.address,
+                    amount: +this.amount,
+                });
+                this.isCreated = true;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isLoading = false;
+            }
         },
     },
 };
@@ -97,4 +121,14 @@ export default {
         margin-bottom: 4rem
     .button
         width: 100%
+
+.success
+    padding: 8rem 0
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    gap: 1.6rem
+    .title
+        margin: 0
 </style>

@@ -42,6 +42,7 @@
                 :items="balanceTransactions"
                 :isLoading="isLoadingTransactions"
                 :isActiveFilters="isActiveFilters"
+                :class="{ ordered: isOrderedPayments }"
                 @search="search"
             )
                 template(#status="{ item }")
@@ -70,6 +71,20 @@
                         :value="[filters.amountStart, filters.amountEnd]"
                         @apply="prepareFilterByAmount"
                     )
+                template(#thead)
+                    .thead-item
+                template(#tbody="{ item }")
+                    .tbody-item
+                        .controls
+                            v-button(
+                                type="positive"
+                                size="mini"
+                            ) {{ $lang.confirm }}
+                            v-button(
+                                type="negative"
+                                size="mini"
+                            ) {{ $lang.reject }}
+
 </template>
 
 <script>
@@ -85,7 +100,7 @@ import VButton from '@/components/common/VButton.vue';
 import PopupRange from '@/components/Popup/PopupRange.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
 
-import { BALANCE_TRANSACTIONS } from '@/helpers/table';
+import { BALANCE_TRANSACTIONS, ORDERED_PAYMENTS } from '@/helpers/table';
 import { BALANCE_STATUSES } from '@/helpers/catalogs';
 import { getCurrencyValue } from '@/helpers/string';
 import { downloadFile } from '@/helpers/url';
@@ -115,7 +130,6 @@ export default {
                 dateEnd: '',
             },
             urlParams: Object.assign({}, this.$route.query),
-            tableHeaders: BALANCE_TRANSACTIONS,
             getCurrencyValue: getCurrencyValue,
             activeTab: 'all',
             search: debounce(this.searchOnTable, 500),
@@ -140,7 +154,7 @@ export default {
         tableTabs() {
             return [
                 { key: 'all', title: this.$lang.allTransactions },
-                ...BALANCE_STATUSES[this.role],
+                ...Object.values(this.transactionsStatuses),
             ];
         },
 
@@ -149,6 +163,21 @@ export default {
                 withdrawal: this.isMerchant || this.isTrader,
                 transfers: this.isAdmin || this.isTrader,
             };
+        },
+
+        transactionsStatuses() {
+            return BALANCE_STATUSES[this.role].reduce((statuses, item) => {
+                statuses[item.key] = item;
+                return statuses;
+            }, {});
+        },
+
+        isOrderedPayments() {
+            return this.activeTab === this.transactionsStatuses.ordered.key;
+        },
+
+        tableHeaders() {
+            return this.isOrderedPayments ? ORDERED_PAYMENTS : BALANCE_TRANSACTIONS;
         },
     },
 
@@ -368,6 +397,9 @@ export default {
         padding: 0.3rem
     &:deep(.table)
         grid-template-columns: repeat(5, 1fr)
+    &.ordered
+        &:deep(.table)
+            grid-template-columns: repeat(4, 1fr)
     .content
         display: flex
         align-items: center
@@ -375,4 +407,12 @@ export default {
             font-weight: 500
             font-size: 1.4rem
             line-height: 2rem
+    .tbody-item
+        padding: 0.5rem
+        .controls
+            display: flex
+            align-items: center
+            gap: 0.4rem
+            &:deep(.button)
+                flex: 1
 </style>

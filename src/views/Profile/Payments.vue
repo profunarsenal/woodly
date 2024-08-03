@@ -360,15 +360,18 @@ $col-size-10: minmax(5.28%, 1fr)
     &-icon
         width: 1.6rem
         height: 1.6rem
-    &.created,
-    &.review
+    &.created
         background-color: rgba($color-violet-100, 0.1)
         .icon
             fill: $color-violet-100
-    &.waiting
+    &.review
         background-color: rgba($color-yellow-dark, 0.1)
         .icon
             fill: $color-yellow-dark
+    &.waiting
+        background-color: $color-gray-light
+        .icon
+            fill: $color-gray-dark
     &.cancelled
         background-color: rgba($color-red-dark, 0.08)
         .icon

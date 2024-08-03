@@ -238,4 +238,7 @@ export default {
     enterWalletNumber: 'Введите номер кошелька',
     withdrawalAmount: 'Сумма вывода',
     enterWithdrawalAmount: 'Введите сумму вывода',
+    transferCompletedSuccessfully: 'Перевод успешно выполнен',
+    ready: 'Готово',
+    withdrawalCompletedSuccessfully: 'Вывод успешно создан',
 };

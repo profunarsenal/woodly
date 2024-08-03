@@ -1,24 +1,37 @@
 <template lang="pug">
     .wrapper
-        button.close(@click="close")
-            inline-svg.icon(src="/icons/close.svg")
-        .title {{ $lang.moneyTransaction }}
-        .form
-            v-input(
-                v-model="id"
-                :label="$lang.recipientId"
-                :placeholder="$lang.recipientId"
-            )
-            v-input(
-                v-model="amount"
-                type="number"
-                :label="$lang.transferAmount"
-                :placeholder="$lang.transferAmount"
-            )
-        v-button.button(
-            :isDisabled="isButtonDisabled"
-            @click="transfer"
-        ) {{ $lang.transfer }}
+        template(v-if="isSent")
+            .success
+                inline-svg(src="/icons/check.svg")
+                .title {{ $lang.transferCompletedSuccessfully }}
+            v-button.button(
+                size="large"
+                type="secondary"
+                @click="close"
+            ) {{ $lang.ready }}
+        template(v-else)
+            button.close(@click="close")
+                inline-svg.icon(src="/icons/close.svg")
+            .title {{ $lang.moneyTransaction }}
+            .form
+                v-input(
+                    v-model="recipientId"
+                    type="number"
+                    :label="$lang.recipientId"
+                    :placeholder="$lang.recipientId"
+                )
+                v-input(
+                    v-model="amount"
+                    type="number"
+                    :label="$lang.transferAmount"
+                    :placeholder="$lang.transferAmount"
+                )
+            v-button.button(
+                :isDisabled="isButtonDisabled"
+                :isLoading="isLoading"
+                size="large"
+                @click="transfer"
+            ) {{ $lang.transfer }}
 </template>
 
 <script>
@@ -42,14 +55,16 @@ export default {
 
     data() {
         return {
-            id: '',
+            recipientId: '',
             amount: '',
+            isSent: false,
+            isLoading: false,
         };
     },
 
     computed: {
         isButtonDisabled() {
-            return !this.id || !this.amount;
+            return !this.recipientId || !this.amount;
         },
     },
 
@@ -58,8 +73,19 @@ export default {
             this.$store.commit('modal/close');
         },
 
-        transfer() {
-            console.log('transfer');
+        async transfer() {
+            try {
+                this.isLoading = true;
+                await this.$api.internalTransfers.send({
+                    recipientId: +this.recipientId,
+                    amount: +this.amount,
+                });
+                this.isSent = true;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isLoading = false;
+            }
         },
     },
 };
@@ -97,4 +123,14 @@ export default {
         margin-bottom: 4rem
     .button
         width: 100%
+
+.success
+    padding: 8rem 0
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    gap: 1.6rem
+    .title
+        margin: 0
 </style>
