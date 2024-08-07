@@ -241,4 +241,8 @@ export default {
     transferCompletedSuccessfully: 'Перевод успешно выполнен',
     ready: 'Готово',
     withdrawalCompletedSuccessfully: 'Вывод успешно создан',
+    confirmationPayment: 'Подтверждение выплаты',
+    confirmationPaymentSubtitleModal: (id, amount) => `Вы уверены, что хотите подтвердить выплату пользователя ${id} на сумму ${amount}?`,
+    rejectionPayment: 'Отклонение выплаты',
+    rejectionPaymentSubtitleModal: (id, amount) => `Вы уверены, что хотите отклонить выплату пользователя ${id} на сумму ${amount}?`,
 };

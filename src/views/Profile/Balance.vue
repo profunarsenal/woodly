@@ -2,7 +2,7 @@
     profile-wrapper.balance(
         :title="$lang.balance"
         :pagination="pagination"
-        :items="balanceTransactions"
+        :items="items"
         :isLoading="isLoading"
     )
         template(#header)
@@ -21,6 +21,7 @@
                 v-tabs.table-tabs(
                     v-model="activeTab"
                     :tabs="tableTabs"
+                    :counters="tabsCounters"
                     @select="toggleTable"
                 )
                 .export
@@ -37,8 +38,23 @@
                         :applyButton="$lang.unload"
                         @apply="exportBalance"
                     )
+            v-table.table-withdrawals(
+                v-if="isOrderedPayments"
+                :headers="tableHeadersWithdrawals"
+                :items="withdrawals"
+                :isLoading="isLoadingTransactions"
+                @search="search"
+            )
+                template(#amount="{ item }")
+                    .bank {{ getCurrencyValue(item.amount) }}
+                template(#thead)
+                    .thead-item
+                template(#tbody="{ item }")
+                    .tbody-item
+                        ordered-payments-controls(:payment="item")
             v-table.table-transactions(
-                :headers="tableHeaders"
+                v-else
+                :headers="tableHeadersTransactions"
                 :items="balanceTransactions"
                 :isLoading="isLoadingTransactions"
                 :isActiveFilters="isActiveFilters"
@@ -71,19 +87,6 @@
                         :value="[filters.amountStart, filters.amountEnd]"
                         @apply="prepareFilterByAmount"
                     )
-                template(#thead)
-                    .thead-item
-                template(#tbody="{ item }")
-                    .tbody-item
-                        .controls
-                            v-button(
-                                type="positive"
-                                size="mini"
-                            ) {{ $lang.confirm }}
-                            v-button(
-                                type="negative"
-                                size="mini"
-                            ) {{ $lang.reject }}
 
 </template>
 
@@ -99,6 +102,7 @@ import VTabs from '@/components/common/VTabs.vue';
 import VButton from '@/components/common/VButton.vue';
 import PopupRange from '@/components/Popup/PopupRange.vue';
 import TableDate from '@/components/common/Table/TableDate.vue';
+import OrderedPaymentsControls from '@/components/Profile/Balance/OrderedPaymentsControls.vue';
 
 import { BALANCE_TRANSACTIONS, ORDERED_PAYMENTS } from '@/helpers/table';
 import { BALANCE_STATUSES } from '@/helpers/catalogs';
@@ -117,6 +121,7 @@ export default {
         VButton,
         PopupRange,
         TableDate,
+        OrderedPaymentsControls,
     },
 
     data() {
@@ -133,6 +138,8 @@ export default {
             getCurrencyValue: getCurrencyValue,
             activeTab: 'all',
             search: debounce(this.searchOnTable, 500),
+            tableHeadersWithdrawals: ORDERED_PAYMENTS,
+            tableHeadersTransactions: BALANCE_TRANSACTIONS,
         };
     },
 
@@ -141,7 +148,9 @@ export default {
             user: ({ auth }) => auth.user,
             balances: ({ balance }) => balance.balances,
             balanceTransactions: ({ balance }) => balance.balanceTransactions,
-            pagination: ({ balance }) => balance.pagination,
+            paginationTransactions: ({ balance }) => balance.pagination,
+            withdrawals: ({ withdrawals }) => withdrawals.withdrawals,
+            paginationWithdrawals: ({ withdrawals }) => withdrawals.pagination,
         }),
 
         ...mapGetters({
@@ -176,8 +185,18 @@ export default {
             return this.activeTab === this.transactionsStatuses.ordered.key;
         },
 
-        tableHeaders() {
-            return this.isOrderedPayments ? ORDERED_PAYMENTS : BALANCE_TRANSACTIONS;
+        pagination() {
+            return this.isOrderedPayments ? this.paginationWithdrawals : this.paginationTransactions;
+        },
+
+        items() {
+            return this.isOrderedPayments ? this.withdrawals : this.balanceTransactions;
+        },
+
+        tabsCounters() {
+            return {
+                ordered: this.withdrawals.length,
+            };
         },
     },
 
@@ -213,6 +232,17 @@ export default {
             try {
                 this.isLoading = true;
                 await this.$store.dispatch('balance/getBalance');
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        async getWithdrawals() {
+            try {
+                this.isLoading = true;
+                await this.$store.dispatch('withdrawals/getWithdrawals');
             } catch (error) {
                 console.log(error);
             } finally {
@@ -297,10 +327,16 @@ export default {
     },
 
     async created() {
-        await Promise.allSettled([
+        const responses = [
             this.getBalance(),
             this.getBalanceTransactions(),
-        ]);
+        ];
+
+        if (this.isAdmin) {
+            responses.push(this.getWithdrawals())
+        }
+
+        await Promise.allSettled(responses);
 
         this.initFilters();
     },
@@ -397,9 +433,6 @@ export default {
         padding: 0.3rem
     &:deep(.table)
         grid-template-columns: repeat(5, 1fr)
-    &.ordered
-        &:deep(.table)
-            grid-template-columns: repeat(4, 1fr)
     .content
         display: flex
         align-items: center
@@ -407,12 +440,10 @@ export default {
             font-weight: 500
             font-size: 1.4rem
             line-height: 2rem
+
+.table-withdrawals
+    &:deep(.table)
+        grid-template-columns: repeat(4, 1fr)
     .tbody-item
         padding: 0.5rem
-        .controls
-            display: flex
-            align-items: center
-            gap: 0.4rem
-            &:deep(.button)
-                flex: 1
 </style>

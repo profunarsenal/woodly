@@ -8,6 +8,7 @@ import balance from '@/store/balance/balance';
 import purchases from '@/store/purchases/purchases';
 import users from '@/store/users/users';
 import cashboxes from '@/store/cashboxes/cashboxes';
+import withdrawals from '@/store/withdrawals/withdrawals';
 
 export default createStore({
     state: {
@@ -28,5 +29,6 @@ export default createStore({
         purchases,
         users,
         cashboxes,
+        withdrawals,
     },
 });

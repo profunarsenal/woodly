@@ -6,6 +6,7 @@
             :class="[tab.color, tab.key, { selected: modelValue === tab.key }]"
             @click="selectTab(tab.key)"
         )
+            .count(v-if="tab.isCounter") {{ counters[tab.key] }}
             .text {{ tab.title }}
             inline-svg.icon(
                 v-if="tab.icon"
@@ -28,6 +29,11 @@ export default {
         modelValue: {
             type: [String, Number],
             default: '',
+        },
+
+        counters: {
+            type: Object,
+            default: () => ({}),
         },
     },
 
@@ -89,4 +95,16 @@ export default {
             width: 1.6rem
             height: 1.6rem
             fill: $color-violet-100
+        .count
+            width: 1.6rem
+            height: 1.6rem
+            display: flex
+            align-items: center
+            justify-content: center
+            border-radius: 50%
+            background-color: $color-violet-100
+            color: $color-white
+            font-weight: 500
+            font-size: 1rem
+            line-height: 1.2rem
 </style>

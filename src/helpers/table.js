@@ -103,6 +103,6 @@ export const PAYMENTS_TABLE_HEADERS = [
 
 export const ORDERED_PAYMENTS = [
     { title: 'ID пользователя', key: '' },
-    { title: 'Адрес вывода', key: 'paymentId' },
+    { title: 'Адрес вывода', key: 'address' },
     { title: 'Сумма', key: 'amount' },
 ];

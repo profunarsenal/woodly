@@ -121,9 +121,10 @@ export const BALANCE_STATUSES = {
             key: 'ordered',
             id: 8,
             title: 'Заказанные выплаты',
-            icon: '/icons/spinner.svg',
-            color: 'yellow',
-            transactionTitle: 'Заказанные выплата',
+            isCounter: true,
+            icon: '',
+            color: '',
+            transactionTitle: '',
         },
         {
             key: 'internal',
