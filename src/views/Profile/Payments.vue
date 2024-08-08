@@ -105,7 +105,7 @@
                             )
                             v-tooltip.tooltip(
                                 position="right"
-                                :text="$lang.payoutInformation"
+                                :text="$lang.informationAboutPayment"
                             )
 </template>
 
